@@ -89,4 +89,4 @@ npm run test:unit
 ```  
 
 ### quick-start    
-[快速新增功能页面](doc/quickstart/quickstart.md)
+[快速新增功能页面](doc/quickstart/quickstart.md) 2312123
