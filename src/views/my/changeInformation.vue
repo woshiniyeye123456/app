@@ -67,9 +67,9 @@
             editMineInfo
             .editMineInfo(para)
             .then(function(response) {
-              console.log(response.data.status);
+              console.log(response.data.editMineInfo.status);
               console.log(response.status);
-              if(response.data.status ==200){
+              if(response.data.editMineInfo.status ==200){
                 (that as any).$toast({ message: '修改成功', position: 'bottom', duration: 1000 });
                 that.$emit('close',that.infoStr);
                 

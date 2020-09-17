@@ -19,7 +19,7 @@
      <mt-cell class="listBox" @click.native="beginSelectSex" title="性别" >{{sexName}}
        <img class="jtIcon" @click="beginSelectSex" src="@/assets/images/right_jt.png">
      </mt-cell>
-     <mt-cell class="listBox" title="单位及职务" value="淮北市应急局值班人员"></mt-cell>
+     <mt-cell class="listBox" title="单位及职务" value="中卫市应急局值班人员"></mt-cell>
      <mt-cell class="listBox" @click.native="changeInformationPage('tel')" title="联系方式" >{{user.telephone}}
        <img class="jtIcon" @click="changeInformationPage('tel')" src="@/assets/images/right_jt.png">
      </mt-cell>

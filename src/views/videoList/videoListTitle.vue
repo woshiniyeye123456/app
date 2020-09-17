@@ -238,13 +238,13 @@ export default class videoListTitle extends Vue {
             if (that.pageNo == 1) {
               //每次更新筛选数据  置顶
 
-              that.listData = [response.data.info[0], response.data.info[1]];
+              that.listData = [response.data.data.info[0], response.data.data.info[1]];
               setTimeout(() => {
-                that.listData = response.data.info;
+                that.listData = response.data.data.info;
               }, 100);
             } else {
-              that.listData = [...that.listData, ...response.data.info];
-              that.allLoaded = response.data.info.length < 10 ? true : false;
+              that.listData = [...that.listData, ...response.data.data.info];
+              that.allLoaded = response.data.data.info.length < 10 ? true : false;
             }
           }
           resolve();

@@ -15,7 +15,9 @@ const getMineInfo = (data) => {
     console.log("请求接口中的的token是：",window.localStorage.getItem('token'));
     return axios({
         method: 'post',
-        url: window['g'].IP + 'gemp-user/api/gemp/user/baseuser/id/v1',
+        // url: window['g'].IP + 'gemp-user/api/gemp/user/baseuser/id/v1',
+        // 中卫演示数据
+        url: 'http://localhost:8080/json/information/editMineInfo.json',
         headers:{'token':token},
         data: data
     })
@@ -25,7 +27,9 @@ const editMineInfo = (data) => {
     let token = localStorage.getItem("token");
     return axios({
         method: 'post',
-        url: window['g'].IP  + 'gemp-user/api/user/manage/modify/v1',
+        // url: window['g'].IP  + 'gemp-user/api/user/manage/modify/v1',
+        // 中卫演示数据
+        url: 'http://localhost:8080/json/information/editMineInfo.json',
         headers:{'token':token},
         data:data
     })

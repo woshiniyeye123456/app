@@ -196,7 +196,9 @@ export default class nonCoalMine extends Vue {
         .industrytable(parma)
         .then(function(response) {
           if (response.data.data) {
-            that.tableArr = response.data.data;
+            // that.tableArr = response.data.data;
+            // 中卫演示数据
+            that.tableArr = response.data.data.getStatiscalInfo;
           }
         })
         .catch(function(error) {

@@ -121,20 +121,20 @@ import mytitle from "../common/mytitle.vue";
 })
 export default class EnterpriseDetails extends Vue {
   private listArr = {
-    entShort: 'adfdf',
-    enterpId: '340600080002003',
-    enterpName: '淮北宝相气体有限公司',
-    address: 'objIds',
-    tel: '',
-    industryCode: '02',
-    industryName: '危化行业',
-    statusCode: '1',
-    statusName: '',
-    standardlevel: '',
-    regdate: '2019-11-01',
-    updatetime: '2019-11-01',
-    enterpriseTypeCode: '1',
-    enterpriseTypeName: '',
+    entShort: '鑫三元',
+    enterpId: '1006007',
+    enterpName: '中卫市鑫三元化工有限公司',
+    address: '中卫市沙坡头区XXXX',
+    tel: '15225487896',
+    industryCode: 'B',
+    industryName: '采煤业',
+    statusCode: '0',
+    statusName: '正常营运',
+    standardlevel: '2级',
+    regdate: '2017-1-11',
+    updatetime: '2015-07-07 01:00:00',
+    enterpriseTypeCode: '0',
+    enterpriseTypeName: '生产',
     gasGrade: '',
     exploitation: '',
     productionAdress: '危险化工测试111',
@@ -177,6 +177,7 @@ export default class EnterpriseDetails extends Vue {
         .enterpriseDetails(parma)
         .then(function(response) {
           if (response.data.data) {
+            debugger
             console.log(response.data.data);
             that.listArr = response.data.data;
             console.warn("listArr",that.listArr)

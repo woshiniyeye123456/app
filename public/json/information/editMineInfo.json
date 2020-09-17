@@ -1,0 +1,31 @@
+{
+    "data": {
+        "baseuser": [
+            {
+                "appId": "string", 
+                "cellphone": "39645125",
+                "email": "string",
+                "idNumber": "2c919a3860da8a7f0160daaaca2254512",
+                "loginName": "qyweihu",
+                "name": "企业维护",
+                "orgCode": "1006007",
+                "parentCode": "1006",
+                "personId": "1006",
+                "registerDate": "2015-07-07 01:00:00",
+                "sex": "男",
+                "telephone": "152265485654",
+                "tenantId": "2c919a3860da8a7f0160daaaca990020",
+                "userId": "2c919a3860da8a7f0160daaaca990019"
+		    }
+        ],
+        "editMineInfo": [
+            {
+                "data": "string",
+                "msg": "string",
+                "requesttime": "2015-07-07 01:00:00",
+                "status": 0
+            }
+        
+        ]
+    }
+}

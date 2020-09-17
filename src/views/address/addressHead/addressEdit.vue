@@ -17,7 +17,7 @@
       <mt-cell class="listBox" title="手机" value="无">
         <input type="text" placeholder="手机" v-model="phone">
       </mt-cell>
-      <mt-cell class="listBox" title="座机" value="淮北市应急局值班人员">
+      <mt-cell class="listBox" title="座机" value="中卫市应急局值班人员">
         <input type="text" placeholder="座机" v-model="landline">
       </mt-cell>
       <mt-cell class="listBox" title="联系地址" value="17689876567">

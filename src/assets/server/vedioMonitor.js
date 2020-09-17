@@ -14,7 +14,8 @@ import qs from 'qs'
 // },100)
     //视频监列表
 const videoMonitorList = (data) => {
-    let requestUrl=window['g'].IP+"hbjc/mobile/enterprise/getVideoMonitorList.mvc"
+    // let requestUrl=window['g'].IP+"hbjc/mobile/enterprise/getVideoMonitorList.mvc"
+    let requestUrl= 'http://localhost:8080/json/videoList/videoMonitor.json'
     return axios({
         method: 'get',
         url: requestUrl + jsonjoin(data),

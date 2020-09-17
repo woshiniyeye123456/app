@@ -197,7 +197,8 @@
             .then(function(response) {
               if(response.status ==200){
                 console.log("获取用户信息成功");
-                that.userObj = response.data.data;
+                // that.userObj = response.data.data;
+                that.userObj = response.data.data.baseuser;
               }
             })
             .catch(function(error) {

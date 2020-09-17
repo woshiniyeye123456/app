@@ -1,0 +1,33 @@
+{
+    "data": {
+        "info":[{
+			"monitorId": "1006007001G0101",
+			"deviceName": "测试设备",
+			"deviceCode": "1006007001G0101",
+			"industryEnterp": "1006007",
+			"industryEnterpName": "中卫市鑫三元化工有限公司",
+			"videoAzimuth": "",
+			"videoAzimuthName": "",
+			"monitorArea": "未知",
+			"installatonSite": "未知",
+			"dangerId": "danger1",
+			"dangerSource": "硝酸罐区",
+			"longitude": 105.175869,
+			"latitude": 37.522068,
+			"respper": "点点",
+			"respTel": "15226589546",
+			"mainParameTer": "",
+			"deleFlag": "0",
+			"createOrgCode": "1006007",
+			"createTime": "2015-07-07 01:00:00",
+			"parentOrgCode": "1006",
+			"updateTime": "2015-07-07 01:00:00",
+			"deviceStatus": "0",
+			"deviceStatusName": "正常",
+			"enterpType": "",
+			"appearanceTypeCode": "",
+			"appearanceTypeName": "",
+			"videoCount": 9     
+		   }]
+    }
+}

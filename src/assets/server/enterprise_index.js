@@ -21,7 +21,9 @@ const districts = (data) => {
 const industry = (data) => {
         return axios({
             method: "get",
-            url: window['g'].IP + "hbjc/mobile/enterprise/getIndustry.mvc",
+            // url: window['g'].IP + "hbjc/mobile/enterprise/getIndustry.mvc",
+            // 中卫演示数据
+            url: 'http://localhost:8080/json/enterprise/enterpriseList.json',
             data: qs.stringify(data),
             // params: qs.stringify(data)
         })
@@ -30,7 +32,9 @@ const industry = (data) => {
 const enterpriseStatus = (data) => {
         return axios({
             method: "get",
-            url: window['g'].IP + "hbjc/mobile/enterprise/getEnterpriseStatus.mvc",
+            // url: window['g'].IP + "hbjc/mobile/enterprise/getEnterpriseStatus.mvc",
+            // 中卫演示数据
+            url: 'http://localhost:8080/json/enterprise/enterpriseList.json',
             data: qs.stringify(data),
             // params: qs.stringify(data)
         })
@@ -39,7 +43,9 @@ const enterpriseStatus = (data) => {
 const enterpriseList = (data,_this) => {
         return axios({
             method: "get",
-            url: window['g'].IP + "hbjc/mobile/enterprise/getEnterpriseList.mvc" + jsonjoin(data),
+            // url: window['g'].IP + "hbjc/mobile/enterprise/getEnterpriseList.mvc" + jsonjoin(data),
+            // 中卫演示数据
+            url: 'http://localhost:8080/json/enterprise/enterpriseList.json',
         })
     }
     //企业列表详情页

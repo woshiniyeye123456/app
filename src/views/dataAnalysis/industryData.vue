@@ -52,6 +52,7 @@ export default class industryData extends Vue {}
   align-items: center;
   padding: 0 0 0 20px;
   background: #fff;
+  display: none;
 }
 .dataSecond_checkBtn {
   height: 40px;

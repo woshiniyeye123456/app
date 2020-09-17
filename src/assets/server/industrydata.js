@@ -16,7 +16,9 @@ const baseurl2 = "http://192.168.228.190:8086"
 const industrytable = (data) => {
     return axios({
         method: 'get',
-        url: window['g'].IP  + '/hbjc/mobile/getStatiscalInfo.mvc' + jsonjoin(data),
+        // url: window['g'].IP  + '/hbjc/mobile/getStatiscalInfo.mvc' + jsonjoin(data),
+        // 中卫演示数据
+        url: 'http://localhost:8080/json/dataAnalysis/industrydata.json',
     })
 }
 //报警数量统计
@@ -80,14 +82,17 @@ const industrybottomTypeData = (data) => {
 const enterpriseTopTypeData = (data) => {
     return axios({
         method: 'get',
-        url: window['g'].IP  + 'hbjc/mobile/getStatiscalInfo.mvc'+jsonjoin(data),
+        // url: window['g'].IP  + 'hbjc/mobile/getStatiscalInfo.mvc'+jsonjoin(data),
+        // 中卫演示数据
+        url: 'http://localhost:8080/json/dataAnalysis/industrydata.json',
     })
 }
 //企业数据 级联企业字典表
 const enterpriseTypeList = (data) => {
     return axios({
         method: 'get',
-        url: window['g'].IP  + 'hbjc/mobile/enterprise/getIndustry.mvc',
+        // url: window['g'].IP  + 'hbjc/mobile/enterprise/getIndustry.mvc',
+        url: 'http://localhost:8080/json/enterprise/enterpriseList.json',
     })
 }
 

@@ -430,22 +430,23 @@ export default class EnterpriseList extends Vue {
               //每次更新筛选数据  置顶
               that.listArr = [];
               setTimeout(() => {
-                that.listArr = response.data.data;
+                // that.listArr = response.data.data;
+                that.listArr = response.data.data.getEnterpriseList;
               }, 100);
-              if (response.data.data.length < 10 && response.data.data.length > 0) {
+              if (response.data.data.getEnterpriseList.length < 10 &&response.data.data.getEnterpriseList.length > 0) {
                 that.allLoaded = true;
                 that.firstRender = true;
                 that.bottom = false;
-              } else if (response.data.data.length == 0) {
+              } else if (response.data.data.getEnterpriseList.length == 0) {
                 that.bottom = false;
                 that.firstRender = false;
               }
             } else {
-              that.listArr = [...that.listArr, ...response.data.data];
+              that.listArr = [...that.listArr, ...response.data.data.getEnterpriseList];
               that.firstRender = true;
             }
             //模拟数据加载完毕 禁用上拉加载
-            that.allLoaded = response.data.data.length < 10 ? true : false;
+            that.allLoaded = response.data.data.getEnterpriseList.length < 10 ? true : false;
           }
           // console.log(that.listArr)
           resolve();
@@ -485,8 +486,9 @@ export default class EnterpriseList extends Vue {
         .industry()
         .then(function(response) {
           if (response.data.data) {
-            // console.log(response.data.data);
-            that.industryArr = response.data.data;
+            // that.industryArr = response.data.data;
+            // 中卫演示数据
+            that.industryArr = response.data.data.getIndustry;
           }
           resolve();
         })
@@ -504,8 +506,9 @@ export default class EnterpriseList extends Vue {
         .enterpriseStatus()
         .then(function(response) {
           if (response.data.data) {
-            // console.log(response.data.data);
-            that.statusArr = response.data.data;
+            // that.statusArr = response.data.data;
+            // 中卫演示数据
+            that.statusArr = response.data.data.getEnterpriseStatus;
           }
           resolve();
         })

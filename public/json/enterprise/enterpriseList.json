@@ -5,6 +5,80 @@
           "name": "沙坡头区",  
           "code": "640502"
           }
+      ],
+      "getIndustry": [
+        {
+           "name": "采煤业", 
+           "code": "B", 
+           "listArr":[
+                  {
+                    "industryName": "石油和天然气开采", 
+                    "code": "1"
+                 },
+                 {
+                    "industryName": "石油化工", 
+                    "code": "46"
+                  }
+                ]
+           }
+      ],
+      "getEnterpriseStatus": [{
+				"name": "正常营业", 
+				"code": "0"
+      }],
+      "getEnterpriseList": [
+        {		 
+				"entShort": "鑫三元",		 
+				"enterpId": "1006007",		 
+				"enterpName": "中卫市鑫三元化工有限公司",		 
+				"address": "中卫市沙坡头区XXXX", 
+				"tel": "15225487896", 
+				"industryCode": "1",	 
+				"industryName": "经营",	 
+				"statusCode": "0",		 
+			   "statusName": "正常营运",	 
+			   "standardlevel": "2级"
+      }],
+      "getEnterpriseById": [
+        {
+				"entShort": "鑫三元", 
+				"enterpId": "1006007", 
+				"enterpName": "中卫市鑫三元化工有限公司", 
+				"address": "中卫市沙坡头区XXXX", 
+				"tel": "15225487896", 
+				"industryCode": "B", 
+				"industryName": "采煤业", 
+				"statusCode": "0", 
+        "statusName": "正常营运", 
+				"regdate": "2017-1-11", 
+				"enterpriseTypeCode": "0", 
+				"enterpriseTypeName": "生产", 
+				"standardlevel": "2级", 
+				"gasGrade": "",  
+        "exploitation": "",
+        "productionAdress": " ",  
+				"updatetime": "2015-07-07 01:00:00 " ,
+			    "dutyPerson": {
+					 "barmaster": "豆豆", 
+					 "telephone": "15225452125",
+					 "dutyTelephone": "13565874526" 
+					},
+			    "dangerous": {
+					"chemical": "粗苯、乙醇、丙二醇", 
+					"technology": "点解工艺",  
+					"gdsource": "液氢罐区1#"  
+					},
+			    "alarmStatus":[{
+					"alarmStatus": "一级报警",
+					"gdsource": "液氢罐区1#" ,
+					"alarmTime":"2015-07-07 01:00:00"
+					}],
+			    "dangermess":  {
+					"total": 20, 
+					"gdcount": 12,  
+					"commonly": 8  
+           }
+        }
       ]
     }
 }
