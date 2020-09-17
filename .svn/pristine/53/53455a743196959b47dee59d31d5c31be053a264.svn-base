@@ -1,0 +1,58 @@
+<template>
+    <div id="app">
+    <!-- keep-alive 页面缓存组件 -->
+      <!--<keep-alive :include="['Sticky', 'Home']">-->
+        <router-view></router-view>
+      <!--</keep-alive>-->
+    </div>
+</template>
+
+<style lang="scss">
+@import './assets/styles/index.scss'; // 全局自定义的css样式
+
+</style>
+<script lang="ts">
+import { Component, Vue, Watch } from 'vue-property-decorator';
+// import Home from '@/view/cubedemo/home.vue';
+@Component
+export default class App extends Vue {
+  beforeCreate(){
+  }
+  created(){
+    
+    let isAndroid=this.$isAndroid();
+    console.log(isAndroid)
+    let userInfo;
+    if(isAndroid){
+    }else{
+     userInfo= {
+      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzeWpnbGoiLCJleHAiOjE1ODcxMzQ5ODIsImlhdCI6MTU4NzEwOTg5OX0.b0fw3wPQFVFmWKPS8AhW5Wrevd1otYukhFFTAvJ2QnM",
+      "role": {
+        "userId": "8d59a49c4b5a43d3be13589cc5efef54",
+        "name": "市应急管理局-测试",
+        "loginName": "syjglj",
+        "sex": "1",
+        "adminFlag": null,
+        "regionCode": null,
+        "telephone": "13444444444",
+        "cellphone": "",
+        "email": "",
+        "orgCode": "S010001",
+        "orgName": "市应急局",
+        "isYjb": true,
+        "tenantId": "HBS",
+        "roleType": null,
+        "imToken": "30786cb82b89f70f7809e9e355d33b5d"
+      },
+      "gauthToken": "8c5c8218-b378-4c22-baf7-28d6d743a8d0"
+    }
+    }
+    //window['g'].IP="55555555"
+    this.$store.commit("SET_USER_INFO",userInfo)
+    //this.$commonAjax();
+  }
+  mounted(){
+  }
+
+}
+</script>

@@ -1,0 +1,16 @@
+@import './variables.scss';
+// 登录背景色
+html,body{
+    font-weight: $font-weight;
+}
+.login-container {
+    background-color: $--color-white;
+    // background-color: #2d3a4b;
+}
+.body,.main,.sider{
+    background-color: $--color-white;
+}
+.logo-box{
+    background:  $logo-background;
+    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}

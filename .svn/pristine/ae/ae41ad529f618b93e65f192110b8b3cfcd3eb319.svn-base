@@ -1,0 +1,25 @@
+import axios from 'axios';
+import qs from 'qs'
+// 请求常用分组
+const baseurl = 'http://10.3.10.116:3000/gemp-app';
+const getGroup = (data) => {
+        return axios({
+            method: 'post',
+            url: baseurl + '/api/maillist/group/list/v1',
+            data: data
+        })
+    }
+    // 根据分组查询联系人
+const getPeople = (data) => {
+        return axios({
+            method: 'post',
+            url: baseurl + '/api/maillist/group/person/list/v1',
+            data: qs.stringify(data)
+        })
+    }
+    //导出
+const useGroup = {
+    getGroup,
+    getPeople
+}
+export default useGroup;

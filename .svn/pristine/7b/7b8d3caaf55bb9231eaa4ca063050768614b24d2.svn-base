@@ -1,0 +1,406 @@
+<template>
+  <div id="contingency-plan">
+    <!--头部-->
+    <mt-header :title="msg" style="z-index:9999">
+      <router-link to="/knowledgeList" slot="left">
+        <mt-button icon="back"></mt-button>
+      </router-link>
+      <mt-button icon="more" slot="right" @click="drawer = !drawer"></mt-button>
+    </mt-header>
+    <div @click="search">
+      <mt-search v-model.trim="value" placeholder="搜索" cancel-text></mt-search>
+    </div>
+
+    <el-radio-group v-model="direction" style="display:none">
+      <el-radio label="rtl"></el-radio>
+    </el-radio-group>
+
+    <el-drawer :visible.sync="drawer" :direction="direction">
+      <div class="typesearch">
+        <p>事故类型</p>
+        <ul>
+          <li
+            v-for="(item,index) in typeArr"
+            :key="index"
+            :class="{ gray_active: index == index1 }"
+            @click="index1 == index?index1 =-1:index1 = index;
+            index1 == index?code='':code=item.code"
+          >{{item.name}}</li>
+        </ul>
+        <div>
+          <span @click="reset">重置</span>
+          <span @click="determine">确认</span>
+        </div>
+      </div>
+    </el-drawer>
+    <!-- -------------------------------------------------------------------------------------- -->
+    <div class="list_box">
+      <div class="page-loadmore-wrapper" :style="{ height: wrapperHeight + 'px'
+        }">
+        <mt-spinner
+          type="fading-circle"
+          v-show="knowlist.length <1 && InitialLoading"
+          color="#26a2ff"
+          class="center"
+        ></mt-spinner>
+        <mt-loadmore
+          :top-method="loadTop"
+          @top-status-change="handleTopChange"
+          :bottom-method="loadBottom"
+          @bottom-status-change="handleBottomChange"
+          :bottom-all-loaded="allLoaded"
+          :auto-fill="false"
+          ref="loadmore"
+        >
+          <div style="min-height:560px;padding:8px 0 0 0;">
+            <ul v-for="(item,index) in knowlist" :key="index" @click="jumpdetail(item)">
+              <li>{{item?item.caseName:""}}</li>
+              <li>{{item?item.createTime:""}}</li>
+              <li>
+                <span>知识</span>
+              </li>
+            </ul>
+            <!-- 无数据状态 -->
+            <div v-show="knowlist.length <1 && InitialLoading == false" class="list_item_empty"></div>
+          </div>
+
+          <!-- 模拟数据 -->
+          <!-- :auto-fill="true" 时页面加载完毕时 默认执行loadBottom 值为false时 自己写一个加载 -->
+          <div slot="top" class="mint-loadmore-top" style="text-align:center">
+            <span
+              v-show="topStatus !== 'loading'"
+              :class="{ 'is-rotate':
+              topStatus === 'drop' }"
+            >↓</span>
+            <mt-spinner type="fading-circle" v-show="topStatus == 'loading'" color="#9e9e9e"></mt-spinner>
+          </div>
+          <div v-if="allLoaded" style="text-align:center;" class="data-none">没有更多数据了</div>
+          <div slot="bottom" class="mint-loadmore-bottom">
+            <span
+              v-show="bottomStatus !== 'loading'"
+              :class="{ 'is-rotate': bottomStatus === 'drop' }"
+            >↑</span>
+            <span v-show="bottomStatus === 'loading'">
+              <mt-spinner type="fading-circle" v-show="bottomStatus == 'loading'" color="#9e9e9e"></mt-spinner>
+            </span>
+          </div>
+        </mt-loadmore>
+      </div>
+      <!-- -------------------------------------------------------------------------------------- -->
+    </div>
+    <!-- -------------------------------------------------------------------------------------- -->
+  </div>
+</template>
+
+<script lang="ts">
+import plan from '../../../assets/server/knowledge_base.js';
+//loading效果
+import { Indicator } from 'mint-ui';
+import { Vue, Component } from 'vue-property-decorator';
+@Component({
+  name: 'Case'
+})
+export default class Case extends Vue {
+  private msg = '案例';
+  //侧栏
+  private drawer = false;
+  private direction = 'rtl';
+  private typeArr = '';
+  private code = ''; //事故类型code
+  private index1 = -1;
+  //循选中下标
+  private act = 0;
+  private value = '';
+  private timer = '';
+  private flag = false;
+  //上拉加载下拉刷新
+  private pageNo = 1; //页码
+  private moredata = false;
+  private list = 0; //数据
+  private InitialLoading = true;
+  private allLoaded = false; //数据是否加载完毕
+  private bottomStatus = ''; //底部上拉加载状态
+  private wrapperHeight = 560; //容器高度
+  private topStatus = ''; //顶部下拉加载状态
+  //请求数据
+  private planTypeCode = '61A00'; //'61B00''61C00''61D00'
+  //预案数据
+  private knowlist = [];
+  //重置按钮
+  private reset() {
+    this.code = '';
+  }
+  //确定按钮
+  private determine() {
+    this.drawer = false;
+    this.knowledge();
+  }
+
+  //搜索关键字
+  private search() {
+    this.$router.push({
+      name: 'Casesearch',
+      path: '/Casesearch'
+    });
+  }
+  //跳转详情
+  private jumpdetail(data) {
+    this.$router.push({
+      name: 'Casedetail',
+      path: '/Casedetail',
+      params: {
+        item: data
+      }
+    });
+  }
+  //知识列表
+  private knowledge() {
+    let that = this;
+    let parma = {
+      caseType: '1',
+      eventParentTypeCode: this.code,
+      eventTypeCode: '',
+      keyWord: '',
+      orgCode: '',
+      pageNo: 1,
+      pageSize: 10,
+      userId: ''
+    };
+    console.log(parma);
+    // Indicator.open({
+    //   text: '加载中...',
+    //   spinnerType: 'fading-circle'
+    // });
+    setTimeout(() => {
+      //页面挂载完毕 模拟数据请求 这里为了方便使用一次性定时器
+    }, 1000);
+    return new Promise(function(resolve, reject) {
+      plan
+        .knowlist(parma)
+        .then(function(response) {
+          //解除loading
+          // Indicator.close();
+          if (response.data.data) {
+            // let arr = response.data.data.list;
+            // if (that.pageNo > 2) {
+            //   for (let i = 0; i < 5; i++) {
+            //     response.data.data.list.push(arr[0]);
+            //   }
+            // } else {
+            //   for (let i = 0; i < 9; i++) {
+            //     response.data.data.list.push(arr[0]);
+            //   }
+            // }
+            console.log(response.data.data.list);
+            if (that.pageNo == 1) {
+              //每次更新筛选数据  置顶
+              setTimeout(() => {
+                that.knowlist = response.data.data.list;
+              }, 100);
+            } else {
+              console.log(that.knowlist);
+              that.knowlist = [...that.knowlist, ...response.data.data.list];
+              console.log(response.data.data.list);
+              // that.firstRender = true;
+              that.allLoaded = response.data.data.list.length < 10 ? true : false;
+            }
+          }
+          resolve();
+        })
+        .catch(function(error) {
+          // Indicator.close();
+          reject(error);
+        });
+    });
+  }
+  //事故类型
+  private plantype() {
+    let that = this;
+    return new Promise(function(resolve, reject) {
+      plan
+        .knowType()
+        .then(function(response) {
+          if (response.data.data) {
+            console.log(response.data.data);
+            that.typeArr = response.data.data;
+          }
+          resolve();
+        })
+        .catch(function(error) {
+          reject(error);
+        });
+    });
+  }
+
+  // 下拉刷新上拉加载
+  private handleBottomChange(status) {
+    this.bottomStatus = status;
+  }
+  private loadBottom() {
+    this.handleBottomChange('loading'); //上拉时 改变状态码
+    this.pageNo += 1;
+    setTimeout(() => {
+      //上拉加载更多 模拟数据请求这里为了方便使用一次性定时器
+      //调接口
+      this.knowledge();
+      this.handleBottomChange('loadingEnd'); //数据加载完毕 修改状态码
+      (this.$refs.loadmore as any).onBottomLoaded();
+    }, 1000);
+  }
+  private handleTopChange(status) {
+    this.topStatus = status;
+  }
+  private loadTop() {
+    //下拉刷新 模拟数据请求这里为了方便使用一次性定时器
+    this.handleTopChange('loading'); //下拉时 改变状态码
+    this.pageNo = 1; //页数
+    this.allLoaded = false; //下拉刷新时解除上拉加载的禁用
+    setTimeout(() => {
+      this.handleTopChange('loadingEnd'); //数据加载完毕 修改状态码
+      (this.$refs.loadmore as any).onTopLoaded();
+      //调接口
+      this.knowledge();
+    }, 1000);
+  }
+  private mounted() {
+    setTimeout(() => {
+      //页面挂载完毕 模拟数据请求 这里为了方便使用一次性定时器
+      this.InitialLoading = false;
+    }, 2000);
+  }
+  private created() {
+    this.knowledge();
+    this.plantype();
+  }
+}
+</script>
+
+<style scoped lang="scss">
+.tab {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-bottom: 1px solid #c0ccda;
+  .tabList {
+    font-size: 14px;
+    height: 28px;
+  }
+  .active {
+    color: #0bb20c;
+    border-bottom: 2px solid #0bb20c;
+    /*padding-top: 10px;*/
+  }
+}
+.list_box {
+  height: 560px;
+  background: #eee;
+  width: 100%;
+  overflow: hidden;
+  ul {
+    background: #fff;
+    width: 100%;
+    // height: 90px;
+    padding: 10px 15px 15px 15px;
+    border-top: 1px solid #eee;
+    li {
+      width: 100%;
+      font-size: 14px;
+    }
+    li:nth-of-type(1) {
+      font-weight: bold;
+      height: 25px;
+      line-height: 25px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    li:nth-of-type(2) {
+      height: 25px;
+      line-height: 25px;
+    }
+    li:nth-of-type(3) {
+      margin-top: 6px;
+      height: 22px;
+      line-height: 22px;
+      span {
+        height: 22px;
+        border-radius: 10px;
+        display: inline-block;
+        text-align: center;
+        padding: 0 10px;
+        font-size: 13px;
+        border: 1px solid #7093db;
+        color: #7093db;
+        margin: 0 10px 0 0;
+      }
+    }
+  }
+}
+.mint-search {
+  height: 45px;
+}
+ul::after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.mint-loadmore .mint-loadmore-content {
+  min-height: 560px;
+}
+.typesearch {
+  height: 100%;
+  width: 100%;
+  padding: 65px 0 0 0;
+  background: #eee;
+  position: relative;
+  p {
+    font-size: 15px;
+    font-weight: bold;
+    height: 25px;
+    line-height: 25px;
+    padding: 0 0 0 10px;
+  }
+  ul {
+    margin-bottom: 20px;
+  }
+  li {
+    float: left;
+    padding: 0 8px;
+    height: 25px;
+    line-height: 25px;
+    text-align: center;
+    background: #fff;
+    border-radius: 5px;
+    font-size: 13px;
+    margin: 8px;
+  }
+  .gray_active {
+    background: rgb(194, 194, 194);
+  }
+  div {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 40px;
+    display: flex;
+    justify-content: flex-start;
+    span:nth-of-type(1) {
+      width: 50%;
+      line-height: 40px;
+      text-align: center;
+      background: gray;
+    }
+    span:nth-of-type(2) {
+      border-left: 1px solid #fff;
+      width: 49.8%;
+      line-height: 40px;
+      text-align: center;
+      color: white;
+      background: green;
+    }
+  }
+}
+</style>

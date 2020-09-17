@@ -1,0 +1,298 @@
+<template>
+  <div id="useGroup">
+    <div class="shadeDiv" v-show="ifShade"></div>
+    <div class="useGroupTitle">
+      <span
+        @click="goStart()"
+        :class="{lastSpan : JSON.stringify($store.state.useGroupTitle) != '{}'}"
+      >常用群组</span>
+      <span
+        v-if="JSON.stringify($store.state.useGroupTitle) != '{}'"
+      >＞ {{ $store.state.useGroupTitle.typeName }}</span>
+    </div>
+    <p class="useGroupline"></p>
+    <div class="haveData" v-if="mainList.length != 0">
+      <div
+        class="useGroupMain"
+        v-for="(item, index) in mainList"
+        :key="index"
+        @click="rowClick(item)"
+      >
+        <!-- <div class="mechanism">
+            测试组织样式
+            <img class="jtIcon" src="@/assets/images/right_jt.png">
+        </div>-->
+        <!-- <div class="people">
+            <div class="firstWord">测</div>
+            <div class="peopleTop">测试联系人样式</div>
+            <div class="telIcon"></div>
+            <div class="peopleBottom">指挥中心/应急部值班员</div>
+        </div>-->
+        <div class="mechanism" v-if="isMechanism" @touchstart="gtouchstart(item)" @touchend="gtouchend(item)">
+          {{ item.typeName }}
+          <img class="jtIcon" src="@/assets/images/right_jt.png" />
+        </div>
+        <div class="people" v-if="!isMechanism">
+          <div class="firstWord">{{ item.personName.substr(0, 1) }}</div>
+          <div class="peopleTop">{{ item.personName }}</div>
+          <div class="telIcon" v-if="item.officetel != ''"></div>
+          <div
+            class="peopleBottom"
+          >{{ item.orgName + (item.headship == null ? '' : '/' + item.headship) }}</div>
+        </div>
+      </div>
+    </div>
+    <div class="noMainData" v-else-if="mainList.length == 0"></div>
+    <actionsheet
+      v-model="showAction"
+      :menus="actionMenu"
+      theme="android"
+      @on-click-menu="clickMenu">
+    </actionsheet>
+    <popup v-model="showEdit" v-if="showEdit" height="100%">
+        <editGroup :groupName="selectedGroupName" :perTypeId="selectedGroupID" @close='closeEdit' />
+    </popup>
+  </div>
+</template>
+
+<script lang='ts'>
+import useServer from '../../../assets/server/useGroup.js';
+import { Vue, Component } from 'vue-property-decorator';
+import editGroup from './editGroup.vue';
+import {Actionsheet,Popup} from 'vux'
+@Component({
+  name: 'useGroup',
+  components:{
+    Actionsheet,
+    Popup,
+    editGroup
+  }
+})
+export default class useGroup extends Vue {
+  
+  private initialList = [];
+  private mainList = [];
+  private ifShade = false;
+  private isMechanism = true;
+  private timeOutEvent;
+  private showAction = false;
+  private actionMenu = {menu1: '编辑此群组',menu2: '删除此群组'};
+  private showEdit = false;
+  private selectedGroup = {};
+  private selectedGroupName = "";
+  private selectedGroupID = "";
+  private created() {
+    this.getIndexGroup();
+  }
+  // 机构节点长按事件
+  private gtouchstart (item) {
+    // 开始触摸
+    this.timeOutEvent = setTimeout(() => {
+      // 长按3秒
+      this.timeOutEvent = 0
+      this.selectedGroup = item;
+      this.showAction = true;
+    }, 400)
+  }
+  private gtouchend (item) {
+    clearTimeout(this.timeOutEvent)
+    this.timeOutEvent = 0
+  }
+  // 封装请求数据方法
+  private getData(parma) {
+    let that = this;
+    return new Promise(function(resolve, reject) {
+      useServer
+        .getUserGroup(parma)
+        .then(function(response) {
+          // console.log(response);
+          if (response.data.data) {
+            that.initialList = response.data.data;
+            that.mainList = that.initialList;
+          }
+          resolve();
+        })
+        .catch(function(error) {
+          reject(error);
+        });
+    });
+  }
+  // 初始化列表
+  private getIndexGroup() {
+    let parma = {
+      // "userId":"8d59a49c4b5a43d3be13589cc5efef54"
+    };
+    let useGroupTitle = this.$store.state.useGroupTitle;
+    let timeOutEvent;
+    if (JSON.stringify(useGroupTitle) == '{}') {
+      this.getData(parma);
+    } else {
+      this.rowClick(useGroupTitle);
+    }
+  }
+  // 回到初始
+  private goStart() {
+    let parma = {};
+    this.isMechanism = true;
+    this.$store.state.useGroupTitle = {};
+    this.getData(parma);
+  }
+  // 列表点击事件
+  private rowClick(item) {
+    let that = this;
+    if (that.isMechanism) {
+      that.$store.state.useGroupTitle = item;
+      //that.mainList = item.list;
+      let parma = {
+        perTypeId: item.perTypeId
+      };
+      return new Promise(function(resolve, reject) {
+        useServer
+          .getPeople(parma)
+          .then(function(response) {
+            // console.log(response);
+            if (response.data.data) {
+              that.isMechanism = false;
+              that.mainList = response.data.data;
+            }
+            resolve();
+          })
+          .catch(function(error) {
+            reject(error);
+          });
+      });
+    } else { 
+      //判断是否为常用群组模块
+      item.jumptype = 1;
+      //跳转
+      this.$router.push({
+        path: '/linkmanDetail',
+        name: 'linkmanDetail',
+        params: {
+          item: item,
+        }
+      });
+    }
+  }
+  private clickMenu(key){
+    console.log(key)
+    let that = this;
+    let item = that.selectedGroup;
+    if(key == 'menu1'){
+      that.selectedGroupName = item['typeName'];
+      that.selectedGroupID = item['perTypeId'];
+      
+      that.showEdit = true;
+    }else{
+
+    }
+  }
+  closeEdit(){
+    this.showEdit = false;
+  }
+}
+</script>
+<style lang="scss" scoped>
+#useGroup {
+  width: 100%;
+  height: calc(100% - 102px);
+  .shadeDiv {
+    width: 100%;
+    height: calc(100% + 100px);
+    background: rgba(0,0,0,0.6);
+    position: absolute;
+    top: 0;
+  }
+  .useGroupTitle {
+    width: 94%;
+    height: 43px;
+    line-height: 40px;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin: 0 3%;
+    span {
+      font-size: 14px;
+      font-weight: bold;
+      color: #000;
+    }
+    .lastSpan {
+      color: #67a551;
+    }
+  }
+  .useGroupline {
+    width: 100%;
+    border-bottom: 3px solid #dcdddc;
+  }
+  .haveData {
+    width: 100%;
+    height: calc(100% - 50px);
+    overflow-x: hidden;
+    overflow-y: scroll;
+    .useGroupMain {
+      width: 100%;
+      background: #ffffff;
+      .mechanism {
+        width: 100%;
+        border-bottom: 1px solid #dcdddc;
+        height: 45px;
+        line-height: 44px;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 0 15px;
+        .jtIcon {
+          float: right;
+          width: 14px;
+          height: 14px;
+          margin-top: 12px;
+        }
+      }
+      .people {
+        width: 100%;
+        height: 60px;
+        padding: 10px 15px;
+        border-bottom: 1px solid #dcdddc;
+        div {
+          float: left;
+        }
+        .firstWord {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: #dcdddc;
+          margin-right: 15px;
+          line-height: 40px;
+          text-align: center;
+        }
+        .peopleTop,
+        .peopleBottom {
+          width: calc(100% - 150px);
+          height: 20px;
+          line-height: 20px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-size: 14px;
+        }
+        .peopleBottom {
+          color: #dcdddc;
+        }
+        .telIcon {
+          width: 30px;
+          height: 30px;
+          background: url('../../../assets/images/telIcon.jpg') no-repeat 50% center;
+          background-size: 100% 100%;
+          float: right;
+          margin: 5px;
+        }
+      }
+    }
+  }
+  .noMainData {
+    width: 100%;
+    height: 300px;
+    background: url('../../../assets/images/noData.png') no-repeat 50% center;
+    background-size: 60% 60%;
+  }
+}
+</style>

@@ -1,0 +1,40 @@
+import axios from 'axios';
+import qs from 'qs'
+// 请求常用分组
+// const baseurl = 'http://10.3.10.116:3000/gemp-app';
+const baseurl = 'http://220.179.173.29:8000/gemp-user';
+const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzeWpnbGoiLCJleHAiOjE1ODU4MzQ5NjYsImlhdCI6MTU4NTgwOTg4M30.qfVwk0kNh4oS0zoaVEaN1pDeLw8mZ_G9pRTc6iQ5jsE';
+const getGroup = (data) => {
+        return axios({
+            method: 'post',
+            url: baseurl + '/api/maillist/group/list/v1',
+            data: data
+        })
+    }
+    // 根据分组查询联系人
+const getPeople = (data) => {
+        return axios({
+            method: 'post',
+            url: baseurl + '/api/gemp/user/maillist/mail/gorup/person/list/v1',
+            headers:{'token':token},
+            data: qs.stringify(data)
+        })
+    }
+    
+const getUserGroup = (data) => {
+    return axios({
+        method: 'post',
+        url: baseurl + '/api/gemp/user/maillist/mail/gorup/list/v1',
+        headers:{'token':token},
+        data: data
+    })
+}
+
+    //导出
+const useGroup = {
+    getGroup,
+    getPeople,
+    getUserGroup
+}
+
+export default useGroup;

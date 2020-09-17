@@ -1,0 +1,266 @@
+<template>
+  <div id="organization">
+    <div class="organizationTitle">
+      <span
+        :class="{lastSpan : $store.state.organizationTitle.length == 0}"
+        @click="goChose(-1)"
+      >组织机构</span>
+      <span
+        v-for="(item, index) in $store.state.organizationTitle"
+        :key="index"
+        :class="{lastSpan : $store.state.organizationTitle.length == (index + 1)}"
+        @click="goChose(index, item)"
+      >＞ {{ item.orgName }}</span>
+    </div>
+    <p class="organizationline"></p>
+    <div class="haveData" v-if="mechanismList.length + peopleList.length != 0">
+      <div class="organizationMain">
+        <!-- <div class="mechanism">
+            测试组织样式
+            <img class="jtIcon" src="@/assets/images/right_jt.png">
+        </div>-->
+        <!-- <div class="people">
+            <div class="firstWord">测</div>
+            <div class="peopleTop">测试联系人样式</div>
+            <div class="telIcon"></div>
+            <div class="peopleBottom">指挥中心/应急部值班员</div>
+        </div>-->
+        <div class="mechanism" v-for="(item, index) in mechanismList" :key="index" @click="rowClick(1, item)">
+          {{ item.orgName }}
+          <img class="jtIcon" src="@/assets/images/right_jt.png" />
+        </div>
+        <div class="people" v-for="(item, index) in peopleList" :key="index" @click="rowClick(2, item)">
+          <div class="firstWord">{{ item.personName.substr(0, 1) }}</div>
+          <div class="peopleTop">{{ item.personName }}</div>
+          <div class="telIcon" v-if="item.officetel != ''" @click.stop="makePhoneCall(item.officetel)"></div>
+          <div class="peopleBottom">{{item.orgName}}</div>
+        </div>
+      </div>
+    </div>
+    <div class="noMainData" v-else></div>
+  </div>
+</template>
+
+<script lang='ts'>
+import groupServer from '../../../assets/server/organization.js';
+import { Vue, Component } from 'vue-property-decorator';
+import { parse } from 'path';
+@Component({
+  name: 'organization'
+})
+export default class organization extends Vue {
+  private mechanismList = [];
+  private peopleList = [];
+  private totalList = [];//全部的联系人
+  private nowOrgcode = "";//现在页面展示的orgCode
+  private created() {
+    this.totalList = this.$store.getters.total_message;
+    this.getIndexGroup();
+  }
+  private mounted(){
+    let titleArr = this.$store.state.organizationTitle;
+    this.nowOrgcode = titleArr[titleArr.length-1].orgCode;
+    if(this.nowOrgcode != "" && this.totalList.length > 0){
+      this.totalList.forEach(element => {
+        element.items.forEach(people => {
+          if(people.orgCode == this.nowOrgcode){
+            this.peopleList.push(people);
+          }
+        });
+      });
+    }
+  }
+  // 封装请求数据方法
+  private getData (parma) {
+    let that = this;
+    return new Promise(function(resolve, reject) {
+      groupServer
+        .getAllGroup(parma)
+        .then(function(response) {
+          console.log(response.data.data);
+          if (response.data.data) {
+            that.mechanismList = response.data.data;
+            // that.peopleList = response.data.data;
+          }
+          resolve();
+        })
+        .catch(function(error) {
+          reject(error);
+        });
+    });
+  }
+  // 初始化列表
+  private getIndexGroup() {
+    let parma = {
+      "orgCode": "0"
+    };
+    let titleList = this.$store.state.organizationTitle;
+    if (titleList.length == 0) {
+      parma.orgCode = "0";
+    } else {
+      parma.orgCode = titleList[titleList.length - 1].orgcode;
+    }
+    this.nowOrgcode = parma.orgCode;
+    this.getData(parma);
+  }
+  // 顶部节点点击事件
+  private goChose(index, item) {
+    let parma = {
+      orgCode: item==undefined?"":item.orgCode
+    };
+    if (index == -1) {
+      parma.orgCode = '0';
+      this.$store.state.organizationTitle = [];
+    } else {
+      parma.orgCode = item.orgCode;
+      this.$store.state.organizationTitle = this.$store.state.organizationTitle.slice(0, index + 1);
+    }
+    if(this.totalList.length > 0){
+      this.peopleList = [];
+      this.totalList.forEach(element => {
+          element.items.forEach(people => {
+            if(people.orgCode == parma.orgCode){
+              this.peopleList.push(people);
+            }
+          });
+      });
+    }
+    this.nowOrgcode = parma.orgCode;
+    this.getData(parma);
+  }
+  private makePhoneCall(tel){
+    window['gsmdp'].makePhoneCall({
+      phoneNumber: tel
+    });
+  }
+  // 列表点击事件
+  private rowClick(type, item) {
+    let parma = {
+      orgCode: item.orgCode
+    };
+    if (type == 1) {
+      this.$store.state.organizationTitle.push(item);
+      this.peopleList = [];
+      if(this.totalList.length > 0){
+        this.totalList.forEach(element => {
+          element.items.forEach(people => {
+            if(people.orgCode == parma.orgCode){
+              this.peopleList.push(people);
+            }
+          });
+        });
+      }
+      this.nowOrgcode = parma.orgCode;
+      this.getData(parma);
+    } else {
+      //判断是否为常用群组模块
+      item.jumptype = 1;
+      //跳转
+      this.$router.push({
+        path: '/linkmanDetail',
+        name: 'linkmanDetail',
+        params: {
+          item: item,
+        }
+      });
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+#organization {
+  width: 100%;
+  height: calc(100% - 102px);
+  .organizationTitle {
+    width: 94%;
+    height: 43px;
+    line-height: 40px;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    margin: 0 3%;
+    span {
+      font-size: 14px;
+      font-weight: bold;
+      color: #67a551;
+    }
+    .lastSpan {
+      color: #000;
+    }
+  }
+  .organizationline {
+    width: 100%;
+    border-bottom: 3px solid #dcdddc;
+  }
+  .haveData {
+    width: 100%;
+    height: calc(100% - 48px);
+    overflow-x: hidden;
+    overflow-y: scroll;
+    .organizationMain {
+      width: 100%;
+      background: #ffffff;
+      .mechanism {
+        width: 100%;
+        border-bottom: 1px solid #dcdddc;
+        height: 45px;
+        line-height: 44px;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 0 15px;
+        .jtIcon {
+          float: right;
+          width: 14px;
+          height: 14px;
+          margin-top: 12px;
+        }
+      }
+      .people {
+        width: 100%;
+        height: 60px;
+        padding: 10px 15px;
+        border-bottom: 1px solid #dcdddc;
+        div {
+          float: left;
+        }
+        .firstWord {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: #dcdddc;
+          margin-right: 15px;
+          line-height: 40px;
+          text-align: center;
+        }
+        .peopleTop,
+        .peopleBottom {
+          width: calc(100% - 150px);
+          height: 20px;
+          line-height: 20px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-size: 14px;
+        }
+        .peopleBottom {
+          color: #dcdddc;
+        }
+        .telIcon {
+          width: 30px;
+          height: 30px;
+          background: url('../../../assets/images/telIcon.jpg') no-repeat 50% center;
+          background-size: 100% 100%;
+          float: right;
+          margin: 5px;
+        }
+      }
+    }
+  }
+  .noMainData {
+    width: 100%;
+    height: 300px;
+    background: url('../../../assets/images/noData.png') no-repeat 50% center;
+    background-size: 60% 60%;
+  }
+}
+</style>

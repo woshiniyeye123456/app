@@ -1,0 +1,11 @@
+{
+  "Dashboard": {
+		"Welcome": "Welcome"
+  },
+  "Public Alarming Software System": "Public Alarming Software System",
+  "language": "change-language",
+  "languageSucess": "change language success",
+  "resource-capacity-management": {
+		"resource-capacity-management": "resource capacity management"
+	}
+}

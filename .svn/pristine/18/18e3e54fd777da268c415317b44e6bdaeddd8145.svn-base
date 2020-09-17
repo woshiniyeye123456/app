@@ -1,0 +1,127 @@
+import Cookies from 'js-cookie';
+
+const app = {
+  state: {
+    sidebar: {
+      opened: !Number(Cookies.get('sidebarStatus'))
+    },
+    language: Cookies.get('language') || 'zh',
+    configs: {},
+    //监控视频列表详情code
+    video_details : "",
+    //联系人总数据
+    total_message: "",
+    //新建联系人选择机构
+    org_message: "",
+    //联系人信息
+    linkman_message: "",
+    //监控视频选中状态
+    vedioindex: "",
+    //知识库页面跳转记录选中状态
+    planindex:  "",
+    lawindex:  "",
+    caseindex:  "",
+  },
+  mutations: {
+    TOGGLE_SIDEBAR: (state: any) => {
+      if (state.sidebar.opened) {
+        Cookies.set('sidebarStatus', String(1));
+      } else {
+        Cookies.set('sidebarStatus', String(0));
+      }
+      state.sidebar.opened = !state.sidebar.opened;
+    },
+    SET_LANGUAGE: (state: any, language: any) => {
+      state.language = language;
+      Cookies.set('language', language);
+    },
+    SET_CONFIGS: (state: any, configs: any) => {
+      state.configs = configs;
+    },
+    //监控视频数据
+    VIDEO_DETA:(state: any, video_details: any) => {
+      state.video_details = video_details;
+    },
+    //联系人总数据
+    TOTAL_MESSAGE: (state: any, total_message: any) => {
+      state.total_message = total_message;
+    },
+    //新建联系人组组织机构
+    ORG_MESSAGEADD: (state: any, org_message: any) => {
+      state.org_message = org_message;
+    },
+    //联系人详情
+    LINkMAN_MESSAGE: (state: any, linkman_message: any) => {
+      state.linkman_message = linkman_message;
+    },
+    //预案下标
+    PLAN: (state: any, planindex: any) => {
+      state.planindex = planindex;
+    },
+    //知识下标
+    VEDIO: (state: any, vedioindex: any) => {
+      state.vedioindex = vedioindex;
+    },
+    //法律下标
+    LAW: (state: any, lawindex: any) => {
+      state.lawindex = lawindex;
+    },
+    //案例下标
+    CASE: (state: any, caseindex: any) => {
+      state.caseindex = caseindex;
+    },
+    //用户头像
+    HEADERIMG: (state: any, headerimg: any) => {
+      state.headerimg = headerimg;
+    },
+  },
+  actions: {
+    ToggleSideBar: ({ commit }: any) => {
+      commit('TOGGLE_SIDEBAR');
+    },
+    setLanguage({ commit }: any, language: any) {
+      commit('SET_LANGUAGE', language);
+    },
+    setConfigs({ commit }: any, configs: any) {
+      commit('SET_CONFIGS', configs);
+    },
+    //监控详情
+    video_deta({ commit }: any, video_details: any) {
+      commit('VIDEO_DETA', video_details);
+    },
+    //联系人总数据
+    total_message({ commit }: any, total_message: any) {
+      commit('TOTAL_MESSAGE', total_message);
+    },
+    //新建联系人组组织机构
+    org_messageadd({ commit }: any, org_message: any) {
+      commit('ORG_MESSAGEADD', org_message);
+    },
+    //联系人详情
+    linkman_message({ commit }: any, linkman_message: any) {
+      commit('LINkMAN_MESSAGE', linkman_message);
+    },
+    // 预案下标
+    plan({ commit }: any, planindex: any) {
+      commit('PLAN', planindex);
+    },
+     // 知识下标
+     vedio({ commit }: any, vedioindex: any) {
+      commit('VEDIO', vedioindex);
+    },
+     // 法律下标
+     law({ commit }: any, lawindex: any) {
+      commit('LAW', lawindex);
+    },
+     // 案例下标
+     case({ commit }: any, caseindex: any) {
+      commit('CASE', caseindex);
+    },
+    //联系人总数据
+    headerimg({ commit }: any, headerimg: any) {
+      commit('HEADERIMG', headerimg);
+    },
+  }
+};
+
+export default app;

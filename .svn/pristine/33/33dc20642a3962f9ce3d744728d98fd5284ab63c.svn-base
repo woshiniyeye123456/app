@@ -1,0 +1,229 @@
+<template>
+  <div class="addressAdd">
+    <!--头部-->
+    <mt-header :title="title" class="commonHeader">
+      <!--<router-link to="/addSearch" >-->
+      <mt-button icon="back" slot="left" @click="$router.go(-1)"></mt-button>
+      <!--</router-link>-->
+      <mt-button icon="save" slot="right" @click="addLinkman">保存</mt-button>
+    </mt-header>
+    <div class="addressAdd-content">
+      <mt-cell title="姓名" class="listBox">
+        <!-- <img src="../../../assets/images/danger.png" width="80" height="80"> -->
+        <input type="text"  placeholder="请输入姓名" v-model="namemessage">
+      </mt-cell>
+      <mt-cell class="listBox" title="职位" value="zhangsan">
+        <input type="text" placeholder="请输入职位" v-model="jobmessage">
+      </mt-cell>
+      <mt-cell class="listBox" title="组织机构" value="张三">
+        <input type="text" placeholder="请选择组织机构" v-model="organization_name" @click="chooseorg">
+      </mt-cell>
+      <mt-cell class="listBox" title="手机" value="无">
+        <input type="text" placeholder="手机" v-model="phone">
+      </mt-cell>
+      <mt-cell class="listBox" title="座机" value="淮北市应急局值班人员">
+        <input type="text" placeholder="座机" v-model="landline">
+      </mt-cell>
+      <mt-cell class="listBox" title="联系地址" value="17689876567">
+        <input type="text" placeholder="联系地址" v-model="linkAddress">
+      </mt-cell>
+      <mt-cell class="listBox" title="单位地址" value="兼职人员">
+        <input type="text" placeholder="单位地址" v-model="unitAddress">
+      </mt-cell> 
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import linkmail from '../../../assets/server/mailList_index.js';
+//中文转拼音
+import PinYin from '../../../utils/linkmanList/cechange.js';
+import { Component, Vue } from 'vue-property-decorator';
+@Component({
+  name: 'personalInformation'
+})
+export default class personalInformation extends Vue {
+  private title = '添加联系人';
+  private type = 0; //0为新建 1为编辑
+  private jobmessage = ''; //工作
+  private namemessage = ''; //姓名
+  private phone = ''; //电话
+  private organization_name = ''; //组织机构
+  private organization_code = '378420e3b12d4b3784525abbc5431666'; //组织机构
+  private personId = '';
+  private landline = ''; //座机
+  private linkAddress = ''; //联系地址
+  private unitAddress = ''; //单位地址
+  private dataList = ''; //更改联系人已有的内容
+  private totalList = '';
+  //选择机构
+  private chooseorg() {
+    //本页面数据做存储
+    let parma = {
+      contactAddress: this.linkAddress,
+      dutyNumber: this.landline,
+      // orgCode: this.organization_code,// 组织机构
+      personId: '',
+      personJob: this.jobmessage,
+      personName: this.namemessage, //姓名
+      telNumber: this.phone, //电话
+      unitAddress: this.unitAddress
+    };
+    localStorage.setItem('addparma', JSON.stringify(parma as any));
+    (this as any).$router.push({
+      name: 'chooseorg',
+      path: '/chooseorg'
+    });
+  }
+  //保存
+  private addLinkman() {
+     if (this.jobmessage) {
+      if (this.jobmessage.length > 10) {
+        (this as any).$toast({ message: '职位信息过长!', position: 'middle', duration: 3000 });
+        return;
+      }
+    }
+    if (this.landline) {
+      if (this.landline.length > 20) {
+        (this as any).$toast({ message: '座机号格式错误!', position: 'middle', duration: 3000 });
+        return;
+      }
+    }
+    if (this.unitAddress) {
+      if (this.unitAddress.length > 20) {
+        (this as any).$toast({ message: '单位地址字数过长!', position: 'middle', duration: 3000 });
+        return;
+      }
+    }
+    if ((this as any).linkAddress) {
+      if ((this as any).linkAddress.length > 20) {
+        (this as any).$toast({ message: '联系地址字数过长!', position: 'middle', duration: 3000 });
+        return;
+      }
+    }
+    if (this.namemessage == '') {
+      (this as any).$toast({ message: '姓名不能为空', position: 'middle', duration: 3000 });
+      return;
+    } else {
+      let regex = new RegExp('^[\u4e00-\u9fa5]|[a-zA-Z_]$');
+      if (!regex.test(this.namemessage)) {
+        (this as any).$toast({ message: '姓名请填写有效字符!', position: 'middle', duration: 3000 });
+        return;
+      } else {
+        if (this.namemessage.length > 10) {
+          (this as any).$toast({ message: '姓名过长!', position: 'middle', duration: 3000 });
+          return;
+        }
+      }
+    }
+    if (this.organization_code == '') {
+      (this as any).$toast({ message: '组织机构不能为空!', position: 'middle', duration: 3000 });
+      return;
+    }
+    if (this.phone == '') {
+      (this as any).$toast({ message: '手机号不能为空!', position: 'middle', duration: 3000 });
+      return;
+    } else {
+      let tests = /^\d{11}$/;
+      if (!tests.test(this.phone)) {
+        (this as any).$toast({ message: '手机号格式有误!', position: 'middle', duration: 3000 });
+        return;
+      }
+    }
+    let jobArr = this.jobmessage.split(' ');
+    let that = this,
+      parma = {
+        contactAddress: that.linkAddress,
+        dutyNumber: that.landline,
+        // orgCode: '378420e3b12d4b3784525abbc5431666', // 组织机构
+        orgCode: that.organization_code,
+        personId: '',
+        personJob: that.jobmessage,
+        personName: that.namemessage, //姓名
+        telNumber: that.phone, //电话
+        unitAddress: that.unitAddress,
+        personJobArr:jobArr
+      };
+    console.log(parma);
+    console.log(
+      PinYin.chineseToPinYin(that.namemessage.slice(0, 1))
+        .slice(0, 1)
+        .toUpperCase()
+    );
+    return new Promise(function(resolve, reject) {
+      linkmail
+        .addlinkman(parma)
+        .then(function(response) {
+          console.log(response);
+          if (response.data.data) {
+            (that as any).$toast({ message: '保存成功', position: 'bottom', duration: 3000 });
+            //遍历联系人列表
+            let n = PinYin.chineseToPinYin(that.namemessage.slice(0, 1)).slice(0, 1);
+            for (let item of that.totalList) {
+              if ((item as any).name == n) {
+                (item as any).items.push({
+                  contactAddress: that.linkAddress,
+                  deleflag: '',
+                  email: null,
+                  fax: null,
+                  personJob: that.jobmessage,
+                  telNumber: that.phone,
+                  dutyNumber: that.landline,
+                  orgCode: that.organization_code,
+                  orgName: that.organization_name,
+                  parentorgcode: '',
+                  personId: '',
+                  personName: that.namemessage, //姓名
+                  unitAddress: that.unitAddress,
+                  updateTime: '',
+                  remark:null
+                });
+              }
+            }
+            //本地保存
+            that.$store.dispatch('total_message', that.totalList);
+            that.$store.dispatch('org_messageadd', '');
+            localStorage.removeItem('addparma');
+          }
+          that.$router.go(-1);
+          resolve();
+        })
+        .catch(function(error) {
+          (that as any).$toast({ message: '保存失败', position: 'bottom', duration: 3000 });
+          reject(error);
+        });
+    });
+  }
+  private mounted() {
+    this.totalList = this.$store.getters.total_message;
+    console.log(this.totalList);
+    //获取组织机构
+    if (localStorage.getItem('addparma')) {
+      let addparma = JSON.parse(localStorage.getItem('addparma'));
+      this.jobmessage = addparma.personJob; //工作
+      this.namemessage = addparma.personName; //姓名
+      // this.personId =addparma.person_id;
+      this.phone = addparma.telNumber; //电话
+      this.landline = addparma.dutyNumber; //座机
+      this.linkAddress = addparma.contactAddress; //联系地址
+      this.unitAddress = addparma.unitAddress; //单位地址
+    }
+    this.organization_name = this.$store.getters.org_message.orgName;
+    this.organization_code = this.$store.getters.org_message.orgCode;
+  }
+  private destroyed() {
+    this.$store.dispatch('org_messageadd', '');
+  }
+}
+</script>
+
+<style scoped lang="scss">
+input {
+  border: none;
+  outline: none;
+}
+</style>
+    
+    
+    
+    

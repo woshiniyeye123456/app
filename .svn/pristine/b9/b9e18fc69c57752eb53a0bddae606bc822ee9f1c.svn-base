@@ -1,0 +1,14 @@
+import axios from 'axios';
+import qs from 'qs'
+// 请求组织机构与人员信息
+const baseurl = 'http://10.3.10.107:8085/hg/mobile';
+const getGroup = (data) => {
+    return axios({
+        method: 'get',
+        url: baseurl + '/getOrgandPersonInfo.mvc?userid=' + data.userid + '&orgcode=' + data.orgcode + '&parentid=' + data.parentid,
+    })
+}
+const organization = {
+    getGroup
+}
+export default organization;

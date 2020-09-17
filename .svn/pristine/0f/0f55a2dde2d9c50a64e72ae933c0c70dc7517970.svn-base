@@ -1,0 +1,258 @@
+<template>
+   <div id="personalInformation">
+     <!--头部-->
+     <!-- <mt-header :title="title" class="commonHeader">
+       <mt-button icon="back" slot="left" @click="GoBack"></mt-button>
+     </mt-header> -->
+     <mytitle :title="title" :showRight="false" :isNotRoute="true" @close="GoBack" ></mytitle>
+     <!--头像-->
+     <mt-cell title="头像" class="listBox">
+       <img :src="headerUrl" width="60" height="60"  @click="changeImg">
+       <img class="jtIcon" src="@/assets/images/right_jt.png" @click="changeImg">
+       <!-- <input class="imgInp" ref="imgFile" type="file" @input="changeImg" /> -->
+     </mt-cell>
+     <mt-cell class="listBox" title="用户名" v-model="user.loginName">
+     </mt-cell>
+     <mt-cell class="listBox" title="姓名" >{{user.name}}
+       <img class="jtIcon" @click="changeInformationPage('name')" src="@/assets/images/right_jt.png">
+     </mt-cell>
+     <mt-cell class="listBox" title="性别" >{{sexName}}
+       <img class="jtIcon" @click="beginSelectSex" src="@/assets/images/right_jt.png">
+     </mt-cell>
+     <mt-cell class="listBox" title="单位及职务" value="淮北市应急局值班人员"></mt-cell>
+     <mt-cell class="listBox" title="联系方式" >{{user.telephone}}
+       <img class="jtIcon" @click="changeInformationPage('tel')" src="@/assets/images/right_jt.png">
+     </mt-cell>
+     <mt-cell class="listBox" title="备注" value="兼职人员">
+       <img class="jtIcon" @click="changeInformationPage('notes')" src="@/assets/images/right_jt.png">
+     </mt-cell>
+    <popup v-model="showChangePersonInfo" v-if="showChangePersonInfo" height="100%" position="right" width="100%">
+        <ChangePersonalInfo  @close='closeChangePersonnalInfo' :changeType="changeType" :info="infoStr"/>
+    </popup>
+    <actionsheet v-model="showSelectSex" :menus="sexMenus"  show-cancel @on-click-menu="selectedSex" cancel-text="取消"></actionsheet>
+   </div>
+</template>
+
+<script lang="ts">
+  import {Component, Vue} from 'vue-property-decorator'
+  import {Popup,Actionsheet} from 'vux'
+  import ChangePersonalInfo from './changeInformation.vue'
+  import mytitle from "../common/mytitle.vue";
+  import editMineInfo from '../../assets/server/editMineInfo.js';
+import { constants } from 'fs';
+  @Component({
+    name:'headImgval',
+    components:{
+      Popup,
+      Actionsheet,
+      ChangePersonalInfo,
+      mytitle
+    },
+    props:{
+      userObj:{}
+    }
+  })
+    export default class personalInformation extends Vue {
+      private title = '个人信息';
+      private headImgval = '';
+      private user = {};
+      private sexName = "";
+      private showChangePersonInfo = false;
+      private showSelectSex = false;
+      private changeType="";
+      private infoStr="";
+      private userID = this.$store.state.userInfo.userId;
+      private headerUrl = window.localStorage.getItem('headerImg');
+      private headerlocalPath = "";
+      private sexMenus = {
+        menu1: "男",
+        menu2: "女"
+      };
+      // private changeInformationPage(type:string){
+      //   console.log(type);
+      //   this.$router.push({
+      //     name:'changeInformation',
+      //     path:'/changeInformation',
+      //     params: {
+      //       type: type
+      //     }
+      //   })
+      // };
+      private created(){
+        this.user = this['userObj'];
+        this.sexName = this.user['sex']==1?"男":"女";
+        this.$enJsBack(true)//true 为使用h5返回操作 false为使用android原生
+        console.log(this.user)
+      }
+      private changeInformationPage(type:string){
+        if(type == "name"){
+          this.infoStr = this.user['name'];  
+        }else if(type == "tel"){
+          this.infoStr = this.user['telephone'];  
+        }else{
+          this.infoStr = this.user['notes'];   
+        }
+        this.changeType = type;
+        this.showChangePersonInfo = true;
+      };
+      private closeChangePersonnalInfo(infoStr){
+        if(infoStr){
+          if(this.changeType == "name"){
+            this.user['name']=infoStr;  
+          }else if(this.changeType == "tel"){
+            this.user['telephone']=infoStr;  
+          }else{
+            this.user['notes']=infoStr;   
+          }
+        }
+        this.showChangePersonInfo = false;
+      }
+      private changeImg(e){
+        let that = this;
+        window['gsmdp'].chooseImage({
+        key: {
+          count: 1,
+          sizeType: ['original', 'compressed'],
+          sourceType: ['album', 'camera']
+        },
+        success(res){
+          console.log("选取的图片是："+res);
+          that.headerlocalPath = res.tempFiles[0].path;
+          console.log("选取的图片字符串是："+ that.headerlocalPath);
+          that.getLocalImg();
+        }
+      }) 
+      }
+      private getLocalImg(){
+        let that = this;
+        window['gsmdp'].getLocalImgData({
+          localId:that.headerlocalPath,
+          success(res){
+            let localData = res.localData;
+            console.log("拿到了本地数据"+localData)
+            that.headerUrl = localData;
+            console.log("现在的src是",that.headerUrl);
+            window.localStorage.setItem('headerImg',localData);
+            that.uploadFile();
+          }
+        })
+        
+      }
+      uploadFile(){
+        let that = this;
+        let token = window.localStorage.getItem('token');
+        if(that.headerlocalPath == "" || that.headerlocalPath == undefined) return;
+        let urlStr = window['g'].IP + "gemp-file/api/attachment/upload/v1";
+        console.log("开始上传了");
+        // const tempFilePaths = res.tempFilePaths
+        window['gsmdp'].uploadFile({
+        key: {
+          url: urlStr,
+          filePath: that.headerlocalPath,
+          name: 'file',
+          header:{"token":token},
+        },
+          taskRunning(result) {
+          },
+          taskFail(err) {
+            // alert('upload err' + err);
+            console.log("上传失败了");
+          },
+          taskComplete(result) {
+            console.log("上传失败了");
+            console.log("上传完成后的URL"+result.responseStr.url);
+            //alert('upload taskComplete: ' + JSON.stringify(result));
+            //http://220.179.173.29:8000/upload/uploadFile/duty/93a91cd5af574016aa4e72b76cd05feb.jpg实例
+            let header = result.responseStr.url.split("/upload/");
+            let headerStr = window['g'].IP + "upload/" + header[1];
+            // that.$store.dispatch('now_headerImg', headerStr);
+            window.localStorage.setItem('headerImg',headerStr);
+            that.uploadHeaderInfo(headerStr,result.responseStr.attachId)
+          }
+        });
+      }
+      private uploadHeaderInfo(url,attachId){
+        ///api/gemp/app/duty/info/user/userheadiconinfo/modify/v1
+        let that = this;
+          return new Promise(function(resolve, reject) {
+            let para={
+              "attachId": attachId,
+              "headIconUrl": url,
+              "userId": that.$store.state.userInfo.userId
+            }
+            editMineInfo
+            .editHeaderInfo(para)
+            .then(function(response) {
+              if(response.status ==200){
+                (that as any).$toast({ message: '修改成功', position: 'bottom', duration: 1000 });
+              }
+            })
+            .catch(function(error) {
+              (that as any).$toast({ message: '修改失败', position: 'bottom', duration: 3000 });
+              reject(error);
+            });
+          });
+      }
+      private beginSelectSex(){
+        this.showSelectSex = true;
+      }
+      private selectedSex(key,item){
+        console.log(key,item);
+       
+        this.sexName = item;
+       
+        this.saveInfo();
+      }
+      private saveInfo(){
+         let that = this;
+         let sexCode = this.sexName=="男"?"1":"0";
+          return new Promise(function(resolve, reject) {
+            let para={
+              "sex":sexCode,
+              "userId": that.userID
+            };
+            editMineInfo
+            .editMineInfo(para)
+            .then(function(response) {
+              if(response.status ==200){
+                (that as any).$toast({ message: '修改成功', position: 'bottom', duration: 1000 });
+              }
+            })
+            .catch(function(error) {
+              (that as any).$toast({ message: '修改失败', position: 'bottom', duration: 3000 });
+              reject(error);
+            });
+          });
+      }
+      private GoBack(){
+        this.$emit('close');
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+  #personalInformation{
+    .listBox{
+      margin-top: 10px;
+      font-size: 14px;
+      border:0px ;
+      .mint-cell-wrapper{
+        background-image: none;
+      }
+      .jtIcon{
+        width: 14px;
+        height: 14px;
+      }
+      .imgInp{
+        width: 80px;
+        height: 60px;
+        position: absolute;
+        opacity: 0;
+        border: 1px solid red;
+      }
+    }
+  }
+</style>
+
+
+

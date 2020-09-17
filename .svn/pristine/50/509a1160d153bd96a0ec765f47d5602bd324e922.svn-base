@@ -1,0 +1,183 @@
+<template>
+  <div id="contingency-plan">
+    <!--头部-->
+    
+     <mytitle title="预案详情" :showRight="false" :titleObj="{icon:'more'}" :whetherNotParent="false"></mytitle>
+    <p>{{datadetail.planName}}</p>
+    <p>
+      发布时间:
+      <span>{{datadetail.createTime}}</span>
+    </p>
+    <ul>
+      <p>附件</p>
+      <li @click="openFileItem(item)" v-for="(item,index) in datadetail.attachmentList " :key="index">
+        {{item?item.name:""}}
+        <img class="jtIcon" src="@/assets/images/right_jt.png">
+      </li>
+    </ul>
+    <p>编制或修订说明</p>
+    <p v-html="datadetail.notes"></p>
+  </div>
+</template>
+
+<script lang="ts">
+import plan from '../../../assets/server/knowledge_base.js';
+import mytitle from "../../common/mytitle.vue";
+import { Vue, Component } from 'vue-property-decorator';
+@Component({
+  name: 'ContingencyPlanSearch',
+  components:{mytitle}
+})
+export default class ContingencyPlanSearch extends Vue {
+  private datadetail = {
+    createTime: '2019-05-01 00:00:00',
+    fileList: [
+      {
+        fileId: '',
+        fileName: '',
+        saveTime: '2019-10-04 14:06:53',
+        filepath: 'http://61.183.117.29:18202/gemp_file/8a83939e6d94be79016d9563055c0160.doc'
+      }
+    ],
+    planstructuring: {
+      docname: '',
+      id: ''
+    },
+    orgCode: '',
+    orgName: '',
+    planId: '',
+    planName: '',
+    updateTime: '2019-10-20 16:15:43',
+    notes: ''
+  };
+  //点击附件
+  private build() {
+    (this as any).$toast({ message: '正在建设中...', position: 'bottom', duration: 3000 });
+  }
+  private openFileItem(_item){
+    console.log(_item)
+    let replaceStr="http://172.20.1.17:8868/";
+    if(_item.url&&_item.url.indexOf(replaceStr)>=0){
+      _item.url=_item.url.replace(replaceStr,window['g'].IP)
+    }
+    console.log(JSON.stringify(_item))
+   window['gsmdp'].downloadFile({
+    // 示例 url，并非真实存在
+    url: _item.url,
+    success: function(res) {
+      const filePath = res.tempFilePath
+      window['gsmdp'].openFile({
+        filePath: filePath,
+        success: function(res) {
+          console.log('打开文档成功')
+        }
+      })
+    },taskComplete(result) {
+      this.toast = this.$createToast({
+        txt: JSON.stringify(result),
+        type: 'txt'
+      })
+      this.toast.show()
+        alert('Download taskComplete: ' + JSON.stringify(result));
+    }
+  })
+  }
+  private details() {
+    console.log(this.$route['params'].item as any)
+    let _this=this;
+    let id = (this as any).$route.params.item.planId;
+    return new Promise(function(resolve, reject) {
+      plan
+        .planDetails(id)
+        .then(function(response) {
+          console.log("planDetails==",response);
+          if (response.data.data) {
+            _this.datadetail=response.data.data
+          }
+          resolve();
+        })
+        .catch(function(error) {
+          reject(error);
+        });
+    });
+  }
+  private created() {
+    //this.datadetail=(this.$route['params'].item as any);
+     //console.log(this.datadetail)
+    this.details();
+    this.$enJsBack(true)//true 为使用h5返回操作 false为使用android原生
+  }
+}
+</script>
+
+<style scoped lang="scss">
+#contingency-plan {
+  height: 100%;
+  background: #eee;
+  > p:nth-of-type(1) {
+    width: 100%;
+    // height: 70px;
+    // line-height: 70px;
+    text-align: center;
+    padding: 10px 15px;
+    // overflow: hidden;
+    // text-overflow: ellipsis;
+    // white-space: nowrap;
+    margin-right: 10px;
+    font-size: 28px;
+    color: blue;
+    background: #fff;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  > p:nth-of-type(2) {
+    height: 35px;
+    line-height: 36px;
+    padding: 0 15px;
+    background: #fff;
+    span {
+      margin-left: 20px;
+    }
+  }
+  > p:nth-of-type(3) {
+    height: 30px;
+    line-height: 30px;
+    padding: 0 15px;
+    margin-top: 10px;
+    color: #999;
+  }
+  > p:nth-of-type(4) {
+    overflow: auto;
+    padding: 10px 10px;
+    background: #fff;
+    margin-bottom: 20px;
+  }
+  > ul {
+    background: #fff;
+    > p {
+      height: 35px;
+      line-height: 36px;
+      padding: 0 15px;
+      margin-top:10px;
+      background: #fff;
+      color: #8f8f94;
+    }
+    li {
+      position: relative;
+      height: 40px;
+      line-height: 40px;
+      padding: 0 40px 0 15px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      color: #8f8f94;
+      .jtIcon {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        width: 16px;
+      }
+    }
+  }
+}
+</style>

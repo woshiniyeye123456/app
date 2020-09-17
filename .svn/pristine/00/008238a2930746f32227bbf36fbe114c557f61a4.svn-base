@@ -1,0 +1,83 @@
+<template>
+   <div id="personalInformation">
+     <!--头部-->
+     <mt-header :title="title" class="commonHeader">
+       <router-link to="/" slot="left">
+         <mt-button icon="back"></mt-button>
+       </router-link>
+     </mt-header>
+     <!--头像-->
+     <mt-cell title="头像" class="listBox">
+       <img src="../../assets/images/danger.png" width="60" height="60">
+       <img class="jtIcon" src="@/assets/images/right_jt.png">
+       <input class="imgInp" ref="imgFile" type="file" @input="changeImg" />
+     </mt-cell>
+     <mt-cell class="listBox" title="用户名1" value="zhangsan">
+     </mt-cell>
+     <mt-cell class="listBox" title="姓名"   value="张三">
+       <img class="jtIcon" @click="changeInformationPage('inp')" src="@/assets/images/right_jt.png">
+     </mt-cell>
+     <mt-cell class="listBox" title="性别"   value="无">
+       <img class="jtIcon" @click="changeInformationPage('radio')" src="@/assets/images/right_jt.png">
+     </mt-cell>
+     <mt-cell class="listBox" title="单位及职务" value="淮北市应急局值班人员"></mt-cell>
+     <mt-cell class="listBox" title="联系方式" value="17689876567">
+       <img class="jtIcon" @click="changeInformationPage('inp')" src="@/assets/images/right_jt.png">
+     </mt-cell>
+     <mt-cell class="listBox" title="备注" value="兼职人员">
+       <img class="jtIcon" @click="changeInformationPage('inp')" src="@/assets/images/right_jt.png">
+     </mt-cell>
+   </div>
+</template>
+
+<script lang="ts">
+  import {Component, Vue} from 'vue-property-decorator'
+  @Component({
+    name:'headImgval'
+  })
+    export default class personalInformation extends Vue {
+      private title = '个人信息';
+      private headImgval = '';
+      private changeInformationPage(type:string){
+        console.log(type);
+        this.$router.push({
+          name:'changeInformation',
+          path:'/changeInformation',
+          params: {
+            type: type
+          }
+        })
+      };
+      private changeImg(e){
+        console.log(e.target.files[0]);
+        alert(e.target.files[0]);
+      }
+    }
+</script>
+
+<style scoped lang="scss">
+  #personalInformation{
+    .listBox{
+      margin-top: 10px;
+      font-size: 14px;
+      border:0px ;
+      .mint-cell-wrapper{
+        background-image: none;
+      }
+      .jtIcon{
+        width: 14px;
+        height: 14px;
+      }
+      .imgInp{
+        width: 80px;
+        height: 60px;
+        position: absolute;
+        opacity: 0;
+        border: 1px solid red;
+      }
+    }
+  }
+</style>
+
+
+

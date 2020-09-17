@@ -1,0 +1,14 @@
+.el-cascader-node.in-active-path, .el-cascader-node.is-active, .el-cascader-node.is-selectable.in-checked-path{
+  color: #0bb20c!important;
+}
+.el-cascader__dropdown {
+  background-color: #f3f5e5!important;
+  padding-left: 10px!important;
+}
+.el-cascader .el-input .el-input__inner:focus, .el-cascader .el-input.is-focus .el-input__inner {
+  border-color: transparent!important;
+}
+.el-input__inner {
+  background-color: transparent!important;
+
+}

@@ -1,0 +1,193 @@
+<template>
+  <div id="linkmanDetail">
+    
+    <mytitle :title="title" :showRight="true" :titleObj="{icon:'',rightText:'修改'}" :isNotRoute="false" @handleRight="changeDetail" ></mytitle>
+    <div class="headBox">
+      <img class="headImg" src="@/assets/images/KHCFDC_white.png">
+      <div class="headName">负责人</div>
+      <div class="headType">{{dataList.jumptype == 1?dataList.personName:dataList.personName}}</div>
+    </div>
+    <ul class="detailList">
+      <li>
+        <div class="detailLeft">
+          <img src="@/assets/images/phone.png">
+          <div class="phone">
+            <span>手机</span>
+            <span class="num">{{dataList.telNumber}}</span>
+          </div>
+        </div>
+        <div class="iconBox">
+          <img src="@/assets/images/phone.png" class="phone" @click="call_phone(dataList.telNumber)">
+          <img src="@/assets/images/message.png" class="mes" @click ="send_message(dataList.telNumber)">
+        </div>
+      </li>
+      <li>
+        <div class="detailLeft">
+          <img src="@/assets/images/phone.png">
+          <div class="phone">
+            <span>座机</span>
+            <span class="num">{{dataList.dutyNumber}}</span>
+          </div>
+        </div>
+        <div class="iconBox">
+          <img src="@/assets/images/phone.png" class="phone"  @click="call_phone(dataList.dutyNumber)">
+        </div>
+      </li>
+      <li>
+        <div class="detailLeft">
+          <img src="@/assets/images/phone.png">
+          <div class="phone">
+            <span>单位地址</span>
+            <span class="num">{{dataList.unitAddress}}</span>
+          </div>
+        </div>
+        <div class="iconBox"></div>
+      </li>
+      <li>
+        <div class="detailLeft">
+          <img src="@/assets/images/phone.png">
+          <div class="phone">
+            <span>联系地址</span>
+            <span class="num">{{dataList.contactAddress}}</span>
+          </div>
+        </div>
+        <div class="iconBox"></div>
+      </li>
+    </ul>
+  </div>
+</template>
+
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+import mytitle from "../../common/mytitle.vue";
+@Component({
+  name: 'linkmanDetail',
+  components:{mytitle}
+})
+export default class linkmanDetail extends Vue {
+  private title = '联系人详情';
+  private type = 0;
+  private dataList = {
+    personName: '',
+    telNumber: '',
+    dutyNumber: '',
+    unitAddress: '',
+    contactAddress: ''
+  };
+  private changeDetail() {
+    //清空新建联系人组织机构选项记录
+    this.$store.dispatch('org_messageadd', '');
+    (this as any).$router.push({
+      name: 'addressEdit',
+      path: '/addressEdit',
+      params: {
+        item: this.dataList
+      }
+    });
+  }
+  //拨打电话
+  private call_phone(tel) {
+    // gsmdp.makePhoneCall({
+    //   phoneNumber: '1340000' //仅为示例，并非真实的电话号码
+    // });
+    if(tel == "" || tel == undefined){
+      return;
+    }
+    window['gsmdp'].makePhoneCall({
+      phoneNumber: tel
+    });
+  }
+  //发送短信
+    private send_message(tel) {
+      if(tel == "" || tel == undefined){
+      return;
+    }
+      window['gsmdp'].sendMessage({
+        data: {
+          phoneNumber:tel,
+          message: '',  //仅为示例，并非真实的短信内容
+          sms: false
+      }
+    });
+  }
+  private created() {
+    //存储联系人信息
+    let that = this as any;
+    if (this.$route.params.item) {
+      that.dataList = this.$route.params.item;
+      // that.type = this.$route.params.item.;
+      this.$store.dispatch('linkman_message', that.dataList);
+    } else {
+      that.dataList = this.$store.getters.linkman_message;
+    }
+    this.$enJsBack(true)//true 为使用h5返回操作 false为使用android原生
+    console.log(that.dataList);
+  }
+}
+</script>
+
+<style scoped lang="scss">
+#linkmanDetail {
+  width: 100%;
+  .detailList {
+    width: 100%;
+    padding-left: 10px;
+    li {
+      border-bottom: 1px solid #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 10px 10px 0px;
+      .detailLeft {
+        display: flex;
+        align-items: center;
+        img {
+          width: 25px;
+          height: 25px;
+          border-radius: 50%;
+        }
+        .phone {
+          display: flex;
+          flex-direction: column;
+          height: 40px;
+          justify-content: space-between;
+          margin-left: 10px;
+          .num {
+            color: #fe9f00;
+          }
+        }
+      }
+      img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+      }
+      .iconBox {
+        .mes {
+          margin-left: 20px;
+        }
+      }
+    }
+  }
+  .headBox {
+    width: 100%;
+    padding: 20px 0px 20px 0px;
+    background: #67a551;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #fff;
+    .headImg {
+      width: 80px;
+      height: 80px;
+      // border-radius: 50%;
+    }
+    .headName {
+      margin-top: 70px;
+    }
+    .headType {
+      margin-top: 14px;
+    }
+  }
+}
+</style>

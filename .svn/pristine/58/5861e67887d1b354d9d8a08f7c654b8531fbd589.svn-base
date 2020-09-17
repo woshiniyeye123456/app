@@ -1,0 +1,45 @@
+import axios from 'axios';
+import qs from 'qs'
+const baseurl = 'http://10.3.10.116:3000';
+//const baseurl ="http://220.179.173.29:8000"
+//联系人列表
+const linkmanList = (data) => {
+        return axios({
+            method: 'post',
+            url: baseurl + "/gemp-app/api/maillist/getallmaillist/v1",
+            data: data
+        })
+    }
+    // 添加通讯录人员
+const addlinkman = (data) => {
+        return axios({
+            method: 'post',
+            url: baseurl + "/gemp-app/api/maillist/add/v1",
+            data: data
+        })
+    }
+    // 联系人信息更改保存
+const editSave = (data) => {
+        return axios({
+            method: 'post',
+            url: baseurl + "/gemp-app/api/maillist/modify/v1",
+            data: data
+        })
+    }
+    // 联系人信息更改保存
+const getGroup = (data) => {
+        return axios({
+            method: 'post',
+            url: baseurl + "/gemp-app/api/maillist/getallorgslist/v1",
+            data: data
+        })
+    }
+    //导出
+const linkmail = {
+    linkmanList,
+    addlinkman,
+    editSave,
+    getGroup
+
+}
+export default linkmail;

@@ -1,0 +1,66 @@
+<template>
+    <div id="changeInformation">
+      <!--头部-->
+      <mt-header :title="msg" class="commonHeader">
+        <router-link to="/personalInformation" slot="left">
+          <mt-button icon="back"></mt-button>
+        </router-link>
+        <span slot="right" @click="returnPage">保存</span>
+      </mt-header>
+      <input v-if="parentType === 'inp'" type="text" class="inp" placeholder="请输入" ></input>
+      <mt-radio
+        class="sexRadio"
+        v-else
+        title="11"
+        v-model="value"
+        :options="['男', '女']">
+      </mt-radio>
+    </div>
+</template>
+
+<script lang="ts">
+  import {Vue, Component} from 'vue-property-decorator'
+  @Component({
+    name:'changeInformation'
+  })
+    export default class changeInformation extends Vue{
+        private name= "changeInformation";
+        private options = [
+          {
+            label: '男',
+            value: '1'
+          },
+          {
+            label: '女',
+            value: '2'
+          }
+        ];
+        private parentType = '';
+        private created(){
+          this.parentType = this.$route.params.type;
+          console.log(this.parentType)
+        }
+        private returnPage(){
+          this.$router.go(-1);
+        }
+    }
+</script>
+
+<style scoped lang="scss">
+  #changeInformation{
+    width: 100vw;
+    .sexRadio{
+      margin-top: 20px;
+    }
+    .inp{
+      width: 80%;
+      border: none;
+      border-bottom: 1px solid #a7a7a7;
+      display: block;
+      font-size: 14px;
+      margin: 20px auto;
+      background-color: #fafafa;
+      padding: 10px 0;
+    }
+  }
+</style>

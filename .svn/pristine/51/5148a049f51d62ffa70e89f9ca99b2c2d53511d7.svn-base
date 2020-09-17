@@ -1,0 +1,371 @@
+<template>
+  <div id="EnterpriseVideo">
+    <!--头部-->
+    <div class="header_box">
+      <!-- <mt-header title="企业视频">
+        <router-link to="/videoListTitle" slot="left">
+          <mt-button icon="back"></mt-button>
+        </router-link>
+        <mt-button icon="search" slot="right" @click="search"></mt-button>
+      </mt-header> -->
+      <mytitle title="企业视频" :showRight="false" :titleObj="{icon:'search'}" @handleRight="search"></mytitle>
+      <!-- 时间选择器 -->
+      <!-- <span class="timepicker" @click="showDateTimePicker"></span> -->
+    </div>
+    <!-- 视频列表主题 -->
+    <div class="vdeio_main_list">
+      <ul class="vdeio_main_title">
+        <li>{{ enterName}}</li>
+        <li>总接入: {{ totalAccess }}</li>
+        
+      </ul>
+      <ul class="vdeio_main_body">
+        <div class="page-loadmore-wrapper" :style="{ height: wrapperHeight + 'px'
+        }">
+          <mt-spinner
+            type="fading-circle"
+            v-show="workArr.length <1 && InitialLoading"
+            color="#26a2ff"
+            class="center"
+          ></mt-spinner>
+          <mt-loadmore
+            :top-method="loadTop"
+            @top-status-change="handleTopChange"
+            :bottom-method="loadBottom"
+            @bottom-status-change="handleBottomChange"
+            :bottom-all-loaded="allLoaded"
+            :auto-fill="false"
+            ref="loadmore"
+          >
+            <!-- 单个 -->
+            <div style="min-height:527px;  background: #fff;">
+              <li v-for="(item, index) in workArr" :Key="index" @click="openVideo(item)">
+                <span></span>
+                {{ item?item.deviceName:"" }}
+              </li>
+              <!-- 无数据状态 -->
+              <div v-show="workArr.length <1 && InitialLoading == false" class="list_item_empty"></div>
+            </div>
+            <!-- 模拟数据 -->
+            <!-- :auto-fill="true" 时页面加载完毕时 默认执行loadBottom 值为false时 自己写一个加载 -->
+            <div slot="top" class="mint-loadmore-top" style="text-align:center">
+              <span
+                v-show="topStatus !== 'loading'"
+                :class="{ 'is-rotate':
+              topStatus === 'drop' }"
+              >↓</span>
+              <mt-spinner type="fading-circle" v-show="topStatus == 'loading'" color="#9e9e9e"></mt-spinner>
+            </div>
+            <div v-if="allLoaded" style="text-align:center;" class="data-none">没有更多数据了</div>
+            <div slot="bottom" class="mint-loadmore-bottom">
+              <span
+                v-show="bottomStatus !== 'loading'"
+                :class="{ 'is-rotate': bottomStatus === 'drop' }"
+              >↑</span>
+              <span v-show="bottomStatus === 'loading'">
+                <mt-spinner type="fading-circle" v-show="bottomStatus == 'loading'" color="#9e9e9e"></mt-spinner>
+              </span>
+            </div>
+          </mt-loadmore>
+        </div>
+        <!-- ----------------------------------------------------------- -->
+      </ul>
+    </div>
+  </div>
+</template>
+
+<script lang="ts">
+import { Vue, Component } from 'vue-property-decorator';
+import videoMonitor from '../../assets/server/vedioMonitor.js';
+import mytitle from "../common/mytitle.vue";
+@Component({
+  name: 'EnterpriseVideo',
+  components:{mytitle}
+})
+export default class EnterpriseVideo extends Vue {
+  private pageNo = 1;
+  private InitialLoading = true; //初始加载
+  private allLoaded = false; //数据是否加载完毕
+  private bottomStatus = ''; //底部上拉加载状态
+  private wrapperHeight = 527; //容器高度
+  private topStatus = ''; //顶部下拉加载状态
+  // 按钮样式
+  private openimg = 'openimg';
+  private closeimg = 'closeimg';
+  // 时间
+  private dateTimePicker: any;
+  private value = '';
+  private searchTime = '';
+  // 数据
+  private enterName = '企业';
+  private enterCode = '';
+  private totalAccess = 0;
+  //视频数组
+  private workArr = [0];
+  private slots: [
+    {
+      flex: 1;
+      values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'];
+      className: 'slot1';
+      textAlign: 'right';
+    },
+    {
+      divider: true;
+      content: '-';
+      className: 'slot2';
+    },
+    {
+      flex: 1;
+      values: ['2015-01', '2015-02', '2015-03', '2015-04', '2015-05', '2015-06'];
+      className: 'slot3';
+      textAlign: 'left';
+    }
+  ];
+  //获取列表数据
+  private videoList() {
+    let that = this;
+    console.log(this.$store.state.app.video_details)
+    let details=this.$store.state.app.video_details;
+    let id=details.industryEnterp;
+    let parma = {
+      id: id, 
+      pageNo: this.pageNo,
+      pageSize: 100
+    };
+    console.log(parma)
+    return new Promise(function(resolve, reject) {
+      videoMonitor
+        .videoDetails(parma)
+        .then(function(response) {
+          if (response.data.data) {
+              if (that.pageNo == 1) {
+                  that.workArr =response.data.data;
+                  that.totalAccess= that.workArr.length;
+              } else {
+                that.workArr = [...that.workArr, ...response.data.data];
+                that.allLoaded = response.data.data.length < 10 ? true : false;
+              }
+          } 
+        })
+        .catch(function(error) {
+          that.workArr = [];
+          reject(error);
+        });
+    });
+  }
+  //时间选择器
+  // private showDateTimePicker() {
+  //   if (!this.dateTimePicker) {
+  //     this.dateTimePicker = this.$createDatePicker({
+  //       title: '请选择时间',
+  //       min: new Date(2008, 7, 8, 8, 0, 0, 0),
+  //       max: new Date(2022, 9, 20, 20, 59, 59, 59),
+  //       value: new Date(),
+  //       columnCount: 6,
+  //       onSelect: this.selectHandle,
+  //       onCancel: this.cancelHandle
+  //     });
+  //   }
+  //   this.dateTimePicker.show();
+  // }
+  // private selectHandle(date, selectedVal, selectedText) {
+  //   console.log(date);
+  //   console.log(selectedVal);
+  //   console.log(selectedText);
+  //   this.searchTime =
+  //     selectedText[0] +
+  //     '-' +
+  //     selectedText[1] +
+  //     '-' +
+  //     selectedText[2] +
+  //     ' ' +
+  //     selectedText[3] +
+  //     ':' +
+  //     selectedText[4] +
+  //     ':' +
+  //     selectedText[5];
+  //   console.log(this.searchTime);
+  //   // this.$createDialog({
+  //   //   type: 'warn',
+  //   //   content: `Selected Item: <br/> - date: ${date} <br/> - value: ${selectedVal.join(', ')} <br/> - text: ${selectedText.join(' ')}`,
+  //   //   icon: 'cubeic-alert'
+  //   // }).show();
+  // }
+  // private cancelHandle() {
+  //   this.$createToast({
+  //     type: 'correct',
+  //     txt: '已取消日期选择',
+  //     time: 1000
+  //   }).show();
+  // }
+  private search() {
+    this.$router.push({
+      path: '/vSearch'
+    });
+  }
+  private created() {
+    this.enterName = this.$store.getters.video_details.industryEnterpName;
+    this.enterCode = this.$store.getters.video_details.deviceCode;
+    this.$enJsBack(true)//true 为使用h5返回操作 false为使用android原生
+    this.videoList();
+  }
+  private openVideo(_item){
+    let _this=this;
+    console.log(_item)
+    return new Promise(function(resolve, reject) {
+      videoMonitor
+        .showVideo({"cameraIndexCode":_item.deviceCode})
+        .then(function(response) {
+          console.log("videoMonitor==>",response)
+          if (response.data) {
+              console.log(response.data)
+              let url=response.data;
+              if(url.indexOf("http")>=0){
+                //测试海康连接 
+                //url="http://10.3.10.157:83/openUrl/yE47KSI/live.m3u8";
+                _this.$createDialog({
+                  type: 'alert',
+                  // icon: 'cubeic-alert',
+                  content:'<iframe style="width:100%;height:40vh" src="'+url+'" frameborder="0"></iframe>',
+                  showClose: true,
+                  title: '',
+                  confirmBtn:{ text: '', active: false, href: 'javascript:;' },
+                  onClose: () => {
+                    // this.$createToast({
+                    //   type: 'warn',
+                    //   time: 1000,
+                    //   txt: '点击关闭按钮'
+                    // }).show()
+                  }
+                }).show()
+              }else{
+                _this.$createToast({
+                    type: 'warn',
+                    time: 1000,
+                    txt: '视频地址有误'
+                  }).show()
+              }
+              
+          } 
+        })
+        .catch(function(error) {
+          console.log("请求海康视频失败")
+           _this.$createToast({
+                    type: 'warn',
+                    time: 1000,
+                    txt: '视频地址请求失败'
+                  }).show()
+          reject(error);
+        });
+    });
+    
+  }
+  // 下拉刷新上拉加载
+  private handleBottomChange(status) {
+    this.bottomStatus = status;
+  }
+  private loadBottom() {
+    this.handleBottomChange('loading'); //上拉时 改变状态码
+    this.pageNo += 1;
+    setTimeout(() => {
+      //上拉加载更多 模拟数据请求这里为了方便使用一次性定时器
+      //调接口
+      this.videoList();
+      this.handleBottomChange('loadingEnd'); //数据加载完毕 修改状态码
+      (this.$refs.loadmore as any).onBottomLoaded();
+    }, 1000);
+  }
+  private handleTopChange(status) {
+    this.topStatus = status;
+  }
+  private loadTop() {
+    //下拉刷新 模拟数据请求这里为了方便使用一次性定时器
+    this.handleTopChange('loading'); //下拉时 改变状态码
+    this.pageNo = 1; //页数
+    this.allLoaded = false; //下拉刷新时解除上拉加载的禁用
+    setTimeout(() => {
+      this.handleTopChange('loadingEnd'); //数据加载完毕 修改状态码
+      (this.$refs.loadmore as any).onTopLoaded();
+      //调接口
+      this.videoList();
+    }, 1000);
+  }
+  private mounted() {
+    setTimeout(() => {
+      //页面挂载完毕 模拟数据请求 这里为了方便使用一次性定时器
+      this.InitialLoading = false;
+    }, 2000);
+  }
+}
+</script>
+
+<style scoped>
+#EnterpriseVideo .mint-header {
+  height: 60px;
+  background: #5d944a;
+  font-size: 18px !important;
+}
+.header_box {
+  position: relative;
+}
+.timepicker {
+  position: absolute;
+  top: 17px;
+  right: 40px;
+  width: 25px;
+  height: 25px;
+  background: url('../../assets/images/clock.png') no-repeat left;
+  background-size: 25px 25px;
+}
+#EnterpriseVideo .vdeio_main_list {
+  width: 100%;
+  height: 607px;
+  background: #eee;
+}
+#EnterpriseVideo .vdeio_main_list .vdeio_main_title {
+  width: 100%;
+  height: 80px;
+  padding: 10px 15px;
+  border-bottom: 1px solid #dddddd;
+  background: #fff;
+}
+.vdeio_main_title li:nth-of-type(1) {
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+.vdeio_main_title li:nth-of-type(2) {
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  font-size: 14px;
+}
+.vdeio_main_body {
+  height: 527px;
+  margin-top: 1px;
+  padding: 0 0 30px 0;
+  background: #eee;
+}
+.vdeio_main_body li {
+  height: 40px;
+  line-height: 40px;
+  padding-left: 40px;
+  font-size: 14px;
+  color: #666666;
+  background: #fff;
+  border-top: 1px solid #ddd;
+}
+.vdeio_main_body li span {
+  display: inline-block;
+  height: 20px;
+  width: 25px;
+  background: url('../../assets/images/Monitor.png') no-repeat left;
+  background-size: 25px 20px;
+  background-position: 0px 0px;
+  margin: 0 10px 0 0;
+  vertical-align: middle;
+}
+</style>
+

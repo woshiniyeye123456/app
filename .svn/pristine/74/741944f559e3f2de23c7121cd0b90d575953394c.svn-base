@@ -1,0 +1,128 @@
+<template>
+  <div id="app">
+    <!-- keep-alive 页面缓存组件 -->
+    <!--<keep-alive :include="['Sticky', 'Home']">-->
+    <router-view></router-view>
+    <!--</keep-alive>-->
+  </div>
+</template>
+
+<style lang="scss">
+@import './assets/styles/index.scss'; // 全局自定义的css样式
+</style>
+<script lang="ts">
+import { Component, Vue, Watch } from 'vue-property-decorator';
+// import Home from '@/view/cubedemo/home.vue';
+@Component
+export default class App extends Vue {
+  beforeCreate() {}
+  created() {
+    let _this=this;
+    let isAndroid = this.$isAndroid();
+    console.log(isAndroid);
+    let userInfo;
+    let resultObj:any={};
+    if (isAndroid) {
+      window['gsmdp'].getStorage({
+        key: 'store',
+        success(res) {
+          console.log('store======>');
+          console.log(res.data);
+          if(res.data){
+            let resultObj=JSON.parse(res.data);
+            window['gsmdp'].showToast(res.data);
+            _this.setUserObj(resultObj);
+          }
+        }
+      });
+    } else {
+      let resultStr = {
+        IP: 'http://220.179.173.29:8000/',
+        govern: true,
+        loginSystemInfo: {
+          gauthMenuArr: [
+            {
+              children: [
+                { children: null, code: 'safety_risk', name: '安监风险' },
+                {
+                  children: [
+                    { children: null, code: 'gas_risk', name: '燃气风险' },
+                    { children: null, code: 'drainage_risk', name: '排水风险' }
+                  ],
+                  code: 'lifeline_risk',
+                  name: '生命线风险'
+                }
+              ],
+              code: 'risk_management',
+              name: '风险管理'
+            },
+            {
+              children: [
+                { children: null, code: 'safety_alarm', name: '安监报警' },
+                { children: null, code: 'lifeline_alarm', name: '生命线报警' }
+              ],
+              code: 'alarm_monitor',
+              name: '报警监测'
+            },
+            {
+              children: [
+                { children: null, code: 'contingency_plan', name: '应急预案' },
+                { children: null, code: 'event_manager_instructions', name: '领导批示' },
+                { children: null, code: 'event_management_report', name: '信息上报' }
+              ],
+              code: 'event_management',
+              name: '事件管理'
+            },
+            {
+              children: [
+                { children: null, code: 'enterprise_data', name: '企业数据' },
+                { children: null, code: 'industry_data', name: '行业数据' }
+              ],
+              code: 'data_analysis',
+              name: '数据分析'
+            },
+            { children: null, code: 'enterprise_information', name: '企业信息' },
+            { children: null, code: 'knowledge', name: '知识库' },
+            { children: null, code: 'emergency_resources', name: '应急资源' },
+            { children: null, code: 'monitor', name: '监控视频' }
+          ],
+          gauthRoleArr: [
+            { code: '001', description: '市级应急局领导', id: '4ee73287-14ab-47a6-a61c-026876680f99', name: '市级应急局领导' }
+          ],
+          gauthToken: '3cf0f732-ebcb-429f-b05e-5f164ac0a2a5',
+          role: {
+            adminFlag: null,
+            cellphone: '',
+            email: '',
+            imToken: '30786cb82b89f70f7809e9e355d33b5d',
+            isYjb: true,
+            loginName: 'syjglj',
+            name: '市应急管理局-测试',
+            orgCode: 'S010001',
+            orgName: '市应急局',
+            telephone: '13444444555',
+            userId: '8d59a49c4b5a43d3be13589cc5efef54'
+          },
+          token:'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzeWpnbGoiLCJleHAiOjE1ODc0NTc4NTcsImlhdCI6MTU4NzQzMjc3NH0.Kw-SHXiHo3ohaXJfm-r7Sj52qFBcXoxQTEnaoVc5hTI'
+        }
+      };
+      console.log('store==', resultStr);
+      _this.setUserObj(resultStr);
+    }
+    //this.$commonAjax();
+  }
+  private setUserObj(resultObj){
+    if(resultObj.IP){
+      window['g'].IP=resultObj.IP;
+      console.log("IP setObj==>"+window['g'].IP)
+    }
+    //console.log(resultObj)
+    let loginObj=resultObj.loginSystemInfo;
+    console.log(loginObj)
+    this.$store.commit('SET_USER_INFO', loginObj);
+  } 
+  mounted() {
+
+  }
+}
+</script>

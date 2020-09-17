@@ -1,0 +1,24 @@
+import axios from 'axios';
+import qs from 'qs'
+// 请求组织机构与人员信息
+// const baseurl = 'http://10.3.10.107:8085/hg/mobile';
+const baseurl = 'http://220.179.173.29:8000/gemp-user';
+const getGroup = (data) => {
+    return axios({
+        method: 'get',
+        url: baseurl + '/getOrgandPersonInfo.mvc?userid=' + data.userid + '&orgcode=' + data.orgcode + '&parentid=' + data.parentid,
+    })
+}
+const getAllGroup = (data) => {
+    return axios({
+        method: 'post',
+        url: baseurl + '/api/gemp/user/org/findEmsOrgListByOrgCode/v1',
+        headers:{'token':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzeWpnbGoiLCJleHAiOjE1ODU3NTA2NTEsImlhdCI6MTU4NTcyNTU2OH0._meUG0QO-KgC3rf5MKSOSfcBd3QGn4VL3SczylRBnN0'},
+        data: qs.stringify(data)
+    })
+}
+const organization = {
+    getGroup,
+    getAllGroup
+}
+export default organization;

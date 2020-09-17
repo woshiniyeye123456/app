@@ -1,0 +1,98 @@
+<template>
+  <div id="dataFirst">
+    <div class="dataFirst_title">
+      <div class="dataFirst_back" @click="$router.push('/')"></div>
+      <div class="dataFirst_check">
+        <div class="dataFirst_checkBtn">
+          <span
+            :class="{dataFirst_activity : $store.state.dataFirstPage==1}"
+            @click="goToPage(1, '/industryData')"
+          >行业数据</span>
+        </div>
+        <div class="dataFirst_checkBtn">
+          <span
+            class
+            :class="{dataFirst_activity : $store.state.dataFirstPage==2}"
+            @click="goToPage(2, '/enterpriseData')"
+          >企业数据</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script lang='ts'>
+import { Vue, Component } from 'vue-property-decorator';
+@Component({
+  name: 'firstTitle'
+})
+export default class firstTitle extends Vue {
+  private created() {
+    const currentPage = this.$route.fullPath;
+    switch (currentPage) {
+      case '/industryData':
+        this.$store.state.dataFirstPage = 1;
+        break;
+      case '/industryData/collieryIndustry':
+        this.$store.state.dataFirstPage = 1;
+        break;
+      case '/industryData/collieryIndustry':
+        this.$store.state.dataFirstPage = 1;
+        break;
+      case '/industryData/collieryIndustry':
+        this.$store.state.dataFirstPage = 1;
+        break;
+      case '/enterpriseData':
+        this.$store.state.dataFirstPage = 2;
+        break;
+    }
+  }
+  // 行业数据和企业数据切换
+  private goToPage(type, page) {
+    this.$store.state.dataFirstPage = type;
+    this.$router.push({ path: page });
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+#dataFirst {
+  .dataFirst_title {
+    width: 100%;
+    height: 60px;
+    background: url('../../../assets/images/dataTitle.png') no-repeat 50% center;
+    background-size: 100% 100%;
+    position: relative;
+    padding-top: 0.1px;
+  }
+  .dataFirst_back {
+    width: 30px;
+    height: 26px;
+    background: url('../../../assets/images/whiteBack.png') no-repeat 50% center;
+    background-size: 100% 100%;
+    position: absolute;
+    top: 18px;
+    left: 12px;
+  }
+  .dataFirst_check {
+    width: 200px;
+    height: 40px;
+    margin: 10px auto;
+  }
+  .dataFirst_checkBtn {
+    width: 40%;
+    height: 40px;
+    text-align: center;
+    margin: 0 5%;
+    float: left;
+    line-height: 40px;
+    font-size: 18px;
+    color: #fff;
+  }
+  .dataFirst_activity {
+    color: #fff757;
+    border-bottom: 2px solid #fff757;
+    padding-bottom: 5px;
+  }
+}
+</style>

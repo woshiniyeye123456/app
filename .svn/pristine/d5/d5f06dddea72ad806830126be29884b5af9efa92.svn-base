@@ -1,0 +1,45 @@
+<template>
+  <div id="app">
+    <div class="next" @click="clicks('/enterpriseList')">企业列表</div>
+    <div class="next" @click="clicks('/industryData')">数据分析</div>
+    <div class="next" @click="clicks('/personalInformationHandle')">我的--个人信息</div>
+    <div class="next" @click="clicks('/videoListTitle')">视频列表</div>
+    <div class="next" @click="clicks('/addSearch')">通讯录-添加搜索</div>
+    <div class="next" @click="clicks('/linkmanDetail')">通讯录-联系人详情</div>
+    <div class="next" @click="clicks('/knowledgeList')">知识库</div>
+    <div class="next" @click="clicks('/dynamic')">值排班</div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "App",
+  data() {
+    return {};
+  },
+  methods: {
+    clicks(url) {
+      this.$router.push({
+        path: url
+      });
+    }
+  }
+};
+</script>
+
+<style>
+#app{
+  overflow: hidden;
+}
+.next {
+  width: 40%;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  background: blue;
+  float: left;
+  color: #fff;
+  margin: 50px 5%;
+  overflow: hidden;
+}
+</style>

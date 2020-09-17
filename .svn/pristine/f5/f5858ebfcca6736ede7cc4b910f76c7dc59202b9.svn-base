@@ -1,0 +1,200 @@
+<template>
+  <div id="linkmanList">
+    <div class="list_item_empty" v-if="empty"></div>
+    <mt-index-list>
+      <mt-index-section v-for="(i,index) in listData" :key="index" :index="i.name">
+        <div v-for="(j,jndex) in i.items" class="custom-item" @click="clickLinkman(j)" :key="jndex">
+          <div
+            class="nameFirstText"
+            :style="'background-color:'+ i.color"
+          >{{firstName(j.personName)}}</div>
+          <div class="textBox">
+            <span>{{j.personName}}</span>
+            <span>{{j.orgName}}</span>
+          </div>
+        </div>
+      </mt-index-section>
+    </mt-index-list>
+  </div>
+</template>
+
+<script lang="ts">
+//接口
+import linkmail from '../../../assets/server/mailList_index.js';
+//中文转拼音
+import PinYin from '../../../utils/linkmanList/cechange.js';
+// import {mapMutations,mapActions,mapGetters} from "vuex";
+//loading效果
+import { Indicator } from 'mint-ui';
+// ts
+import { Vue, Component } from 'vue-property-decorator';
+@Component({
+  name: 'linkmanList'
+})
+export default class linkmanList extends Vue {
+  private color = '#666';
+  //联系人数据
+  private listData = [];
+  //暂无数据状态
+  private empty = false;
+  //检索内容
+  //点击联系人
+  private clickLinkman(item: any) {
+    this.$router.push({
+      name: 'linkmanDetail',
+      path: '/linkmanDetail',
+      params: {
+        item: item
+      }
+    });
+  }
+  //联系人根据拼音归类
+  private sort(data) {
+    if (data) {
+      //数据上传eventbus
+      (this as any).eventBus.$emit('totaldata', data);
+      let dataArr = [];
+      for (let i = 0; i < 26; i++) {
+        String.fromCharCode(65 + i);
+        dataArr[i] = {
+          name: String.fromCharCode(65 + i),
+          items: [],
+          color: ''
+        };
+      }
+      // 数据重排
+      for (let i = 0; i < data.length; i++) {
+        for (let j = 0; j < dataArr.length; j++) {
+          if (dataArr[j].name == this.pinyin(data[i].personName)) {
+            dataArr[j].items.push(data[i]);
+          }
+        }
+      }
+      //暂停动画效果
+      Indicator.close();
+      //数据过滤
+      for (var i = 0; i < dataArr.length; i++) {
+        if (dataArr[i].items.length != 0) {
+          dataArr[i].color = this.rgb();
+          this.listData.push(dataArr[i]);
+        }
+      }
+      //全局存储
+      this.$store.dispatch('total_message', this.listData);
+    } else {
+      //暂停动画效果
+      this.empty = true;
+      Indicator.close();
+    }
+  }
+  //切换拼音
+  private pinyin(name) {
+    if (name) {
+      let n = PinYin.chineseToPinYin(name.slice(0, 1)).slice(0, 1);
+      return n.toUpperCase();
+    }
+    return '?';
+  }
+  //姓
+  private firstName(data) {
+    return data.slice(0, 1);
+  }
+  private rgb() {
+    let r, g, b, color;
+    r = Math.floor(Math.random() * 240);
+    g = Math.floor(Math.random() * 240);
+    b = Math.floor(Math.random() * 240);
+    color = 'rgba(' + r + ',' + g + ',' + b + ',1)';
+    return color;
+  }
+  //联系人列表
+  private contactData() {
+    let that = this,
+      parma = {
+        "isInUser": "",
+        "keyWord": "",
+        "nowPage": 1,
+        "orgCode": "",
+        "pageSize": 10000,//确保请求全部
+        "personJob": ""
+      };
+    return new Promise(function(resolve, reject) {
+      linkmail
+        .GetLinkmanList(parma)
+        .then(function(response) {
+          if (response.data.data) {
+            that.sort(response.data.data.list);
+          }
+          resolve();
+        })
+        .catch(function(error) {
+          reject(error);
+          //暂停动画效果
+          that.empty = true;
+          Indicator.close();
+        });
+    });
+  }
+  private created() {
+    if (this.$store.getters.total_message) {
+      this.listData = this.$store.getters.total_message;
+    } else {
+      Indicator.open({
+        text: '加载中...',
+        spinnerType: 'fading-circle'
+      });
+      this.contactData();
+    }
+    this.$enJsBack(false)//true 为使用h5返回操作 false为使用android原生
+  }
+}
+</script>
+
+<style scoped lang="scss">
+#linkmanList {
+  height: 607px;
+  background: #fff;
+  .linkmanList_cube {
+    height: 100vh;
+  }
+  .noMainData {
+    width: 100%;
+    height: 300px;
+    background: url('../../../assets/images/noData.png') no-repeat 50% center;
+    background-size: 60% 60%;
+  }
+  .custom-item {
+    position: relative;
+    height: 70px;
+    line-height: 70px;
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    .textBox {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 36px;
+      span {
+        display: inline-block;
+        line-height: 14px;
+        font-size: 14px;
+      }
+      span:nth-of-type(2) {
+        color: gray;
+      }
+    }
+    .nameFirstText {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: inline-block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 20px;
+      color: #fff;
+    }
+  }
+}
+</style>

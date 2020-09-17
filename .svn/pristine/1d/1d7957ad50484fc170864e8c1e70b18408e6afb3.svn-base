@@ -1,0 +1,77 @@
+import axios from 'axios';
+import qs from 'qs'
+// 知识库
+const baseurl = 'http://106.37.227.29:53000/gemp-app';
+
+// 知识库应急预案
+const reserveplan = (data) => {
+        return axios({
+            method: 'post',
+            url: baseurl + '/api/plan/data/list/v1',
+            data: data
+        })
+    }
+    //预案详情
+const planDetails = (data) => {
+        return axios({
+            method: 'post',
+            url: baseurl + '/api/plan/data/details/' + data + '/v1',
+        })
+    }
+    //预案类型
+const planType = () => {
+        return axios({
+            method: 'get',
+            url: baseurl + '/api/base/plan/data/type/v1',
+        })
+    }
+    //预案等级
+const planLevel = () => {
+        return axios({
+            method: 'get',
+            url: baseurl + "/api/base/plan/data/level/v1"
+        })
+    }
+    //知识模块
+    // 知识列表  法律列表
+const knowlist = (data) => {
+        return axios({
+            method: 'post',
+            url: baseurl + "/api/knowledge/data/list/v1",
+            data: data
+        })
+    }
+    //知识事故类型
+const knowType = () => {
+        return axios({
+            method: 'get',
+            url: baseurl + '/api/base/kno/data/type/v1',
+        })
+    }
+    //法律事故类型
+const lawType = () => {
+        return axios({
+            method: 'get',
+            url: baseurl + '/api/base/event/data/type/v1',
+        })
+    }
+    //案例
+    //案例列表
+const caselist = () => {
+        return axios({
+            method: 'get',
+            url: baseurl + '/api/base/event/data/type/v1',
+        })
+    }
+    //导出
+const plan = {
+    reserveplan,
+    planDetails,
+    planType,
+    planLevel,
+    knowlist,
+    knowType,
+    lawType,
+    caselist
+}
+export default plan;

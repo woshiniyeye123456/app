@@ -1,0 +1,26 @@
+import axios from 'axios';
+
+const baseurl = "http://172.17.122.58:8085"
+    //视频监列表
+
+
+//视频监列表
+const industrytable = (data) => {
+    return axios({
+        method: 'get',
+        url: baseurl + '/hbjc/mobile/getStatiscalInfo.mvc' + jsonjoin(data),
+    })
+}
+
+function jsonjoin(data) {
+    let str = "?"
+    for (let key in data) {
+        str += "&" + key + "=" + data[key]
+    }
+    return str;
+}
+const industryData = {
+    industrytable
+
+}
+export default industryData;

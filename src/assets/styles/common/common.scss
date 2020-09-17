@@ -1,0 +1,342 @@
+html {
+    overflow: hidden;
+}
+
+//全局header
+.commonHeader.mint-header {
+    height: 16vw;
+    // background: url('assets/images/dataTitle.png') no-repeat 50% center;
+    // background-size: 100% 100%;
+    background: #67A551;
+    position: relative;
+    padding-top: 15px;
+    font-size: 16px;
+}
+
+#contingency-plan .mint-header,
+.knowledgeList-img .mint-header {
+    background: #67a551;
+    position: relative;
+    padding-top: 15px;
+    height: 60px;
+    font-size: 18px;
+}
+
+#app {
+    background: #eee;
+    height: 100%;
+}
+#app > div:nth-of-type(1){
+    height: 100%;
+}
+
+.mu-dialog-wrapper>div {
+    border-radius: 10px
+}
+
+#contingency-plan .mint-searchbar-cancel {
+    font-size: 14px;
+}
+
+#contingency-plan .mint-searchbar-inner {
+    font-size: 14px;
+}
+
+#addSearch .is-left a .mint-button-text {
+    font-size: 30px;
+}
+
+.mint-header-button {
+    padding-right: 5px
+}
+
+.mintui {
+    font-size: 20px !important;
+}
+
+.addressAdd-content {
+    .listBox-head {
+        height: 100px;
+    }
+    .mint-cell-title {
+        flex: 0.5;
+    }
+    input {
+        border-style: none;
+        border: none;
+    }
+}
+
+//通讯录-联系人列表样式修改
+#linkmanList {
+    //修改通讯录联系人列表索引栏的样式
+    .mint-indexlist-nav {
+        border-left: none;
+        background-color: rgba(0, 0, 0, 0)
+    }
+    //修改通讯录联系人列表整体的样式
+    .mint-indexlist-content {
+        width: 100vw;
+        margin-right: 0 !important;
+        //修改通讯录联系人列表title的样式
+        .mint-indexsection-index {
+            background-color: #e0e0e0;
+            font-size: 12px;
+            padding: 5px 0px 5px 10px;
+            width: 100%;
+        }
+        //修改通讯录联系人列表单个联系人的样式
+        .custom-item {
+            border-bottom: 1px solid #e0e0e0;
+        }
+    }
+}
+
+//通讯录-tab切换样式修改
+#addSearch {
+    .mint-navbar .mint-tab-item {
+        padding: 0;
+        height: 40px;
+        .mint-tab-item-label {
+            height: 100%;
+            a {
+                width: 100%;
+                display: inline-block;
+                height: 100%;
+                padding: 14px;
+            }
+        }
+    }
+    .mint-navbar .mint-tab-item.is-selected {
+        border-bottom: none;
+        box-sizing: border-box;
+        margin-bottom: 0;
+    }
+    //.mint-navbar .mint-tab-item.is-selected{
+    //  border-bottom: 3px solid #67A551;
+    //  box-sizing: border-box;
+    //  color: #67A551;
+    //  margin-bottom: 0;
+    //  a{
+    //    color: #67A551;
+    //  }
+    //}
+}
+
+//修改个人信息页面单选框样式修改
+#changeInformation {
+    .mint-radiolist {
+        width: 80%;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-around;
+        .mint-cell {
+            //border: 1px solid red;
+            .mint-cell-wrapper {
+                //border-top: 1px solid #fff;
+            }
+        }
+        .mint-radiolist-title {
+            display: none;
+        }
+        .mint-cell {
+            display: inline-block;
+            background: rgba(0, 0, 0, 0);
+        }
+        .mint-radio-input:checked+.mint-radio-core {
+            background-color: #67A551;
+            border-color: #67A551;
+        }
+    }
+}
+
+//修改 个人信息页面在手机端显示的边框
+#personalInformation {}
+
+// 修改添加分组下element的checkbox的选中颜色
+#addGroup {
+    .el-checkbox__input.is-checked .el-checkbox__inner,
+    .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+        border-color: #67A551!important;
+        background: #67A551!important;
+    }
+}
+
+#contingency-plan {
+    .mint-searchbar-core {
+        //width: 20%;
+        text-align: center;
+        // color: #c0ccda;
+        //padding-left: 0;
+    }
+}
+
+#contingency-plan .mint-search-list {
+    z-index: -1;
+}
+
+.mint-search-list {
+    z-index: -1;
+}
+
+.el-drawer {
+    width: 75%!important;
+}
+
+#el-drawer__title {
+    display: none;
+}
+
+//搜索文字字体样式
+.mint-searchbar-core {
+    color: gray;
+    font-size: 15px;
+}
+
+//上拉加载 下拉刷新
+.page-loadmore-wrapper {
+    overflow: scroll;
+    z-index: 100;
+}
+
+.hot-list {
+    padding: 0 8px;
+}
+
+.hot-item {
+    padding: 10px 0;
+}
+
+.hot-one {
+    overflow: hidden;
+    border-bottom: 1px dashed #ccc;
+}
+
+.hot-one a img {
+    padding-right: 10px;
+}
+
+.hot-item a img {
+    width: 135px;
+    height: 90px;
+}
+
+.fl {
+    float: left;
+}
+
+.hot-one a h5 {
+    margin-top: 2px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    margin-bottom: 6px;
+    font-size: 16px;
+    color: #000;
+}
+
+.hot-one a p {
+    font-size: 12px;
+    color: #828282;
+    margin: 0 0 3px;
+}
+
+.color_e85647 {
+    color: #e85647;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+}
+
+div.hot-list>div:first-child .img-box {
+    overflow: hidden;
+}
+
+div.hot-list>div:first-child img {
+    width: 100%;
+    height: auto;
+    padding-right: 0;
+}
+
+//   .mint-loadmore .mint-loadmore-content {
+//     min-height: 572px;
+//   }
+.mint-loadmore-top,
+.mint-loadmore-bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.mint-loadmore-top>span,
+.mint-loadmore-bottom>span {
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.mint-loadmore-top>span>div {
+    border-top-color: #666;
+    border-left-color: #666;
+    border-bottom-color: #666;
+    height: 28px;
+    width: 28px;
+}
+
+.data-none {
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    color: #999;
+}
+
+ul:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+// .list_item_empty {
+//     width: 345px;
+//     height: 80px;
+//     line-height: 80px;
+//     font-size: 16px;
+//     background: #fff;
+//     border-radius: 10px;
+//     margin: 10px 15px 10px 15px;
+//     box-shadow: 2px 2px 3px #999;
+//     text-align: center;
+// }
+div::after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.list_item_empty {
+    width: 300px;
+    height: 400px;
+    background: url('assets/images/notdata.png') no-repeat;
+    background-size: 150px 150px;
+    background-position: center;
+    margin: 0 auto;
+    box-shadow: none
+}
+
+.list_item_empty2 {
+    width: 300px;
+    height: 200px;
+    background: url('assets/images/notdata.png') no-repeat;
+    background-size: 150px 150px;
+    background-position: center;
+    margin: 0 auto;
+    box-shadow: none
+}
+
+.cube-picker-title {
+    font-size: 15px!important;
+}

@@ -1,0 +1,198 @@
+<template>
+  <div id="enterprise_search" style="height:100%">
+     
+    <mytitle title="法律法规" :showRight="false" :titleObj="{icon:'more'}" :whetherNotParent="false"></mytitle>
+    <mt-search @input="searchEvent" v-model.trim="value" cancel-text="取消" placeholder="输入法律法规关联词"></mt-search>
+    <div class="list_box">
+         <ul v-for="(item,index) in knowlist" :key="index" @click="jumpdetail(item)">
+            <li>{{item?item.lawName:""}}</li>
+            <li><span>{{item?item.publishOrgName:""}}</span>{{item?item.createTime:""}}</li>
+          </ul>
+
+
+      <!-- 无数据状态 -->
+       <div v-show="flag" class="list_item_empty"></div>
+    </div>
+    <!-- -------------------------------------------------------------------------------------- -->
+  </div>
+</template>
+
+<script lang="ts">
+import plan from '../../../assets/server/knowledge_base.js';
+import mytitle from "../../common/mytitle.vue";
+//loading效果
+import { Indicator } from 'mint-ui';
+import { Vue, Component,Watch} from 'vue-property-decorator';
+@Component({
+  name: 'ContingencyPlanSearch',
+  components:{mytitle}
+})
+export default class ContingencyPlanSearch extends Vue {
+  @Watch('value', { immediate: true, deep: true })
+  onValueChanged(val) {
+    // console.log("现在搜索的内容是"+val);
+    if(val.length>20) this.value = val.slice(0,19);
+    this.searchEvent();
+  }
+  private timer: any;
+  private value = '';
+  private knowlist = '';
+   private  flag = false;
+  //跳转详情
+  private jumpdetail(data) {
+    this.$router.push({
+      name: 'Lawdetail',
+      path: '/Lawdetail',
+      params: {
+        item: data
+      }
+    });
+  }
+  //实时搜索
+  private searchEvent() {
+    this.clearTimer();
+    if (this.value.length >= 0) {
+      //获取当前延时函数的ID，便于后面clearTimeout清除该ID对应的延迟函数
+      this.timer = setTimeout(() => {
+          let test = new RegExp('[^a-zA-Z0-9_\u4e00-\u9fa5]', 'i');
+        console.log(this.value);
+        if (test.test(this.value) == true) {
+          (this as any).$toast({ message: '搜索内容含有非法字符!', position: 'middle', duration: 3000 });
+          this.value = "";
+          return false;
+        } else {
+          this.genehcplan();
+        }
+      }, 500);
+    } else {
+    }
+  }
+  private clearTimer() {
+    if (this.timer) {
+      clearTimeout(this.timer);
+    }
+  }
+  private genehcplan() {
+    let that = this;
+    let parma = {
+      lawCategoryId: "",
+      keyWord: that.value,
+      nowPage: 1,
+      pageSize: 20
+    };
+    console.log(parma);
+    // Indicator.open({
+    //   text: '加载中...',
+    //   spinnerType: 'fading-circle'
+    // });
+    return new Promise(function(resolve, reject) {
+      plan
+        .lawlist(parma)
+        .then(function(response) {
+          if (response.data.data) {
+            console.log(response.data.data.list);
+            that.knowlist = response.data.data.list;
+             that.flag = false;
+          }else {
+            (that as any).knowlist = []
+            that.flag = true;
+          }
+          resolve();
+        })
+        .catch(function(error) {
+           that.flag = true;
+          reject(error);
+        });
+    });
+  }
+  private created(){
+    this.genehcplan()
+    this.$enJsBack(true)//true 为使用h5返回操作 false为使用android原生
+  }
+}
+</script>
+
+<style scoped lang="scss">
+ .mint-header {
+    height: 60px;
+    background: #5d944a;
+    font-size: 4.8vw;
+  }
+.list_box {
+  height: calc(100% - 100px);
+  overflow: auto;
+  background: #eee;
+  width: 100%;
+  padding:0 0 15px 0;
+  ul {
+    background: #fff;
+    width: 100%;
+    // height: 90px;
+    padding: 10px 15px 15px 15px;
+    margin-top: 8px;
+    border-top: 1px solid #eee;
+    li {
+      width: 100%;
+      font-size: 14px;
+    }
+    li:nth-of-type(1) {
+      font-weight: bold;
+      height: 25px;
+      line-height: 25px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    li:nth-of-type(2) {
+      height: 25px;
+      line-height: 25px;
+      span {
+        display: inline-block;
+        vertical-align: middle;
+      }
+      span:nth-of-type(1) {
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        margin-right: 10px;
+      }
+    }
+    li:nth-of-type(3) {
+      margin-top: 6px;
+      height: 22px;
+      line-height: 22px;
+      span {
+        height: 22px;
+        border-radius: 10px;
+        display: inline-block;
+        text-align: center;
+        padding: 0 10px;
+        font-size: 13px;
+      }
+      span:nth-of-type(1) {
+        border: 1px solid #7093db;
+        color: #7093db;
+        margin: 0 10px 0 0;
+      }
+      span:nth-of-type(2) {
+        border: 1px solid #e45050;
+        color: #e45050;
+      }
+    }
+  }
+}
+.mint-search-list {
+  height: 0;
+}
+#enterprise_search {
+  // height: 667px;
+  .mint-search {
+    height: 45px !important;
+    color: #eee;
+  }
+}
+.mint-loadmore .mint-loadmore-content {
+  min-height: 622px;
+}
+</style>

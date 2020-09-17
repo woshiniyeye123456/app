@@ -1,0 +1,29 @@
+import axios from 'axios';
+import qs from 'qs'
+// const baseurl = 'http://10.3.10.116:3000';
+//const baseurl ="http://220.179.173.29:8000"
+const baseurl = 'http://220.179.173.29:8000/gemp-user';
+const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzeWpnbGoiLCJleHAiOjE1ODY3Njg4MjUsImlhdCI6MTU4Njc0Mzc0Mn0.biMr505xmxh8E7DK0ckMI2aTQh5m5ySlIDpmPZ5BIsQ';
+//获取我的信息
+const getMineInfo = (data) => {
+    return axios({
+        method: 'post',
+        url: baseurl + '/api/gemp/user/baseuser/id/v1',
+        headers:{'token':token},
+        data: data
+    })
+}
+//修改用户的信息
+const editMineInfo = (data) => {
+    return axios({
+        method: 'post',
+        url: baseurl + '/api/user/manage/modify/v1',
+        headers:{'token':token},
+        data:data
+    })
+}
+const enterprise = {
+    editMineInfo,
+    getMineInfo
+}
+export default enterprise;

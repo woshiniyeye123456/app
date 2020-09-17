@@ -1,0 +1,77 @@
+import axios from 'axios';
+import qs from 'qs'
+// 请求常用分组
+// const baseurl = 'http://10.3.10.116:3000/gemp-app';
+const baseurl = 'http://220.179.173.29:8000/gemp-user';
+const token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzeWpnbGoiLCJleHAiOjE1ODYzNTA3OTAsImlhdCI6MTU4NjMyNTcwN30.90evX4Heb46g2HbNq62H_WTEV5j_ndBTmbaEJJ-1bMo';
+const getGroup = (data) => {
+        return axios({
+            method: 'post',
+            url: baseurl + '/api/maillist/group/list/v1',
+            data: data
+        })
+    }
+    // 根据分组查询联系人
+const getPeople = (data) => {
+        return axios({
+            method: 'post',
+            url: baseurl + '/api/gemp/user/maillist/mail/gorup/person/list/v1',
+            headers:{'token':token},
+            data: qs.stringify(data)
+        })
+    }
+    
+const getUserGroup = (data) => {
+    return axios({
+        method: 'post',
+        url: baseurl + '/api/gemp/user/maillist/mail/gorup/list/v1',
+        headers:{'token':token},
+        data: data
+    })
+}
+const deletePersons = (data) => {
+    return axios({
+        method: 'post',
+        url: baseurl + '/api/gemp/user/maillist/mail/gorup/person/delete/v1',
+        headers:{'token':token},
+        data: data
+    })
+}
+const AddPersons = (data) => {
+    return axios({
+        method: 'post',
+        url: baseurl + '/api/gemp/user/maillist/mail/gorup/person/add/v1',
+        headers:{'token':token},
+        data: data
+    })
+}
+const editGroupName = (data) => {
+    return axios({
+        method: 'post',
+        url: baseurl + '/api/gemp/user/maillist/mail/gorup/edit/v1',
+        headers:{'token':token},
+        data: data
+    })
+}
+const deleteGroup = (data) => {
+    return axios({
+        method: 'post',
+        url: baseurl + '/api/gemp/user/maillist/mail/gorup/delete/v1',
+        headers:{'token':token},
+        data:qs.stringify(data)
+    })
+}
+
+    //导出
+const useGroup = {
+    getGroup,
+    getPeople,
+    getUserGroup,
+    deletePersons,
+    AddPersons,
+    editGroupName,
+    deleteGroup
+
+}
+
+export default useGroup;

@@ -1,0 +1,542 @@
+<template>
+  <div id="enterprise_search">
+    
+    <mytitle title="企业搜索" :showRight="false"></mytitle>
+    <div class="mask" v-show="flag || flag2" @click="flag = false;flag2 = false"></div>
+    <mt-search @input="searchEvent" v-model.trim="value"></mt-search>
+    <div class="search_box" v-show="flag">
+      <p>
+        搜索
+        <span>{{ value }}</span> 相关
+        <span class="right_cout">{{ count }}条</span>
+      </p>
+      <ul>
+        <li v-for="(item, index) in nameList" :Key="index" @click="fuzzySearch(item.enterpName)">
+          <span></span>
+          {{ item.enterpName }}
+        </li>
+      </ul>
+    </div>
+    <div class="search_box2" v-show="flag2">
+      <p>暂无相关联词</p>
+    </div>
+    <div class="list_box">
+      <div class="page-loadmore-wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <mt-spinner type="fading-circle" v-show="listArr.length < 1 && InitialLoading" color="#26a2ff" class="center"></mt-spinner>
+        <mt-loadmore
+          :top-method="loadTop"
+          @top-status-change="handleTopChange"
+          :bottom-method="loadBottom"
+          @bottom-status-change="handleBottomChange"
+          :bottom-all-loaded="allLoaded"
+          :auto-fill="false"
+          ref="loadmore"
+        >
+          <!-- 单个 -->
+          <div style="min-height:562px;padding:1px 0 0 0 ;">
+            <ul
+              class="list_item"
+              v-for="(item, index) in listArr"
+              :Key="index"
+              @click="details(item.enterpId, item.industryCode)"
+            >
+              <li>
+                <img src="../../assets/images/enterprise.png" alt>
+                <div>
+                  <p>{{ item.enterpName }}</p>
+                  <p v-if="item.statusName">{{ item.statusName }}</p>
+                </div>
+              </li>
+              <li>
+                <div class="left">地址 ：</div>
+                <div class="right">{{ item.address }}</div>
+              </li>
+              <li>
+                电话 ：{{ item.tel }}
+                <span class="standardLevel">标准化等级 ：{{ item.standardlevel }}</span>
+              </li>
+              <li>行业 ：{{ item.industryName }}</li>
+            </ul>
+            <!-- 无数据状态 -->
+            <div v-show="listArr.length < 1 && InitialLoading == false" class="list_item_empty"></div>
+          </div>
+          <!-- 模拟数据 -->
+          <!-- :auto-fill="true" 时页面加载完毕时 默认执行loadBottom 值为false时 自己写一个加载 -->
+
+          <div slot="top" class="mint-loadmore-top" style="text-align:center">
+            <span v-show="topStatus !== 'loading'" :class="{ 'is-rotate': topStatus === 'drop' }">↓</span>
+            <mt-spinner type="fading-circle" v-show="topStatus == 'loading'" color="#26a2ff"></mt-spinner>
+          </div>
+          <div v-if="allLoaded" style="text-align:center;" class="data-none">没有更多数据了</div>
+          <div slot="bottom" class="mint-loadmore-bottom">
+            <span
+              v-show="bottomStatus !== 'loading'"
+              :class="{ 'is-rotate': bottomStatus === 'drop' }"
+            >↑</span>
+            <span v-show="bottomStatus === 'loading'">
+              <mt-spinner type="fading-circle" v-show="bottomStatus == 'loading'" color="#26a2ff"></mt-spinner>
+            </span>
+          </div>
+        </mt-loadmore>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import enterprise from '../../assets/server/enterprise_index.js';
+import { Vue, Component } from 'vue-property-decorator';
+import mytitle from "../common/mytitle.vue";
+
+export default {
+  name: 'App',
+  components:{
+    mytitle
+  },
+  data() {
+    return {
+      // 上拉刷新下拉加载
+      pageNum: 1, //页码
+      pageFlag: true,
+      InitialLoading: true, //初始加载
+      list: 0, //数据
+      allLoaded: false, //数据是否加载完毕
+      bottomStatus: 'loading', //底部上拉加载状态
+      wrapperHeight: 562, //容器高度
+      topStatus: '', //顶部下拉加载状态
+      flag: false,
+      flag2: false,
+      value: '', //模糊检索值
+      keyword: '', //公司昵称
+      count: 0, //模糊搜索总条数
+      pageId: 0, //页码
+      nameList: [], //模糊搜索数据列表
+      listArr: '', //要搜索的公司数据列表
+      timer: '' //延时器
+    };
+  },
+  methods: {
+    //实时搜索
+    searchEvent() {
+      this.clearTimer();
+      if (this.value && this.value.length > 0) {
+        //获取当前延时函数的ID，便于后面clearTimeout清除该ID对应的延迟函数
+        this.timer = setTimeout(() => {
+          let test = new RegExp('[^a-zA-Z0-9_\u4e00-\u9fa5]', 'i');
+          console.log(this.value);
+          if (test.test(this.value) == true) {
+            this.$toast({ message: '搜索内容含有非法字符!', position: 'middle', duration: 3000 });
+            // this.value = "";
+            return false;
+          } else {
+            this.interactiveNameList();
+          }
+        }, 500);
+      } else {
+        setTimeout(() => {
+          this.flag = false;
+        });
+        // this.interactiveNameList()
+      }
+    },
+    clearTimer() {
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }
+    },
+
+    //后台交互
+    // 模糊搜索列表
+    interactiveNameList() {
+      let that = this;
+      let parma = {
+        keyword: this.value
+      };
+      return new Promise(function(resolve, reject) {
+        enterprise
+          .enterpriseNameList(parma)
+          .then(function(response) {
+            if (response.data.data) {
+              console.log(response.data.data);
+              if (response.data.data.length > 0) {
+                that.nameList = response.data.data;
+                that.count = response.data.data.length;
+                that.flag = true;
+                that.flag2 = false;
+              } else {
+                that.flag = false;
+                that.flag2 = true;
+              }
+              resolve();
+            }
+          })
+          .catch(function(error) {
+            reject(error);
+          });
+      });
+    },
+     // 跳转到详情页
+    details(id, code) {
+      this.$router.push({
+        path: '/enterpriseDetails',
+        query: {
+          enterpId: id,
+          industryCode: code
+        }
+      });
+    },
+    //详细列表
+    enterpriseDetails() {
+      let that = this;
+      let parma = {
+        industrycode: '',
+        districtsCode: '',
+        statusCode: '',
+        keyword: this.keyword,
+        pageNo: this.pageNum,
+        pageSize: 10
+      };
+      console.log(this.bottom);
+      return new Promise(function(resolve, reject) {
+        enterprise
+          .enterpriseList(parma)
+          .then(function(response) {
+            if (response.data) {
+              console.log(response);
+              if (that.pageNum == 1) {
+                that.listArr = response.data.data;
+              } else {
+                that.listArr = [...that.listArr, ...response.data.data];
+                //模拟数据加载完毕 禁用上拉加载
+                that.allLoaded = response.data.data.length < 10 ? true : false;
+              }
+            }
+            resolve();
+          })
+          .catch(function(error) {
+            reject(error);
+          });
+      });
+    },
+    fuzzySearch(enterpName) {
+      this.flag = false;
+      this.pageNum = 1;
+      this.keyword = enterpName;
+      // 渲染页面
+      this.enterpriseDetails();
+    },
+    // 下拉刷新上拉加载
+    handleBottomChange(status) {
+      this.bottomStatus = status;
+    },
+    loadBottom() {
+      this.handleBottomChange('loading'); //上拉时 改变状态码
+      this.pageNum += 1;
+      setTimeout(() => {
+        //上拉加载更多 模拟数据请求这里为了方便使用一次性定时器
+        this.enterpriseDetails();
+        this.handleBottomChange('loadingEnd'); //数据加载完毕 修改状态码
+        this.$refs.loadmore.onBottomLoaded();
+      }, 1000);
+    },
+    handleTopChange(status) {
+      this.topStatus = status;
+    },
+    loadTop() {
+      //下拉刷新 模拟数据请求这里为了方便使用一次性定时器
+      this.handleTopChange('loading'); //下拉时 改变状态码
+      this.pageNum = 1; //页数
+      this.allLoaded = false; //下拉刷新时解除上拉加载的禁用
+      setTimeout(() => {
+        this.handleTopChange('loadingEnd'); //数据加载完毕 修改状态码
+        this.$refs.loadmore.onTopLoaded();
+        this.enterpriseDetails();
+      }, 1000);
+    }
+  },
+  mounted() {
+    setTimeout(() => {
+      //页面挂载完毕 模拟数据请求 这里为了方便使用一次性定时器
+      this.InitialLoading = false
+    }, 2000);
+  },
+  created() {
+    this.$enJsBack(true)//true 为使用h5返回操作 false为
+    this.enterpriseDetails();
+  }
+};
+</script>
+
+<style scoped lang="scss">
+.mint-search-list {
+  height: 0;
+}
+#enterprise_search {
+  // height: 667px;
+  .mint-header {
+    height: 60px;
+    background: #5d944a;
+    font-size: 4.8vw;
+  }
+  .mint-search {
+    height: 45px !important;
+  }
+  .search_box {
+    position: absolute;
+    top: 105px;
+    left: 0%;
+    background: #fff;
+    width: 375px;
+    z-index: 3;
+    border-bottom: 2px solid gray;
+    p {
+      height: 45px;
+      line-height: 45px;
+      padding: 0 15px;
+      font-size: 16px;
+      font-weight: bold;
+      span:nth-of-type(1) {
+        color: green;
+        vertical-align: middle;
+        display: inline-block;
+        max-width: 220px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      span:nth-of-type(2) {
+        font-size: 14px;
+        color: gray;
+      }
+    }
+    ul {
+      max-height: 290px;
+      overflow: auto;
+      padding: 0 0 10px 0;
+      li {
+        width: 90%;
+        height: 40px;
+        line-height: 40px;
+        font-size: 15px;
+        margin: 0 5%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        border-top: 1px solid #eee;
+      }
+    }
+  }
+  .search_box2 {
+    position: absolute;
+    top: 105px;
+    left: 0%;
+    background: #fff;
+    width: 375px;
+    z-index: 3;
+    height:45px;
+    line-height:45px;
+    font-size: 14px;
+    color: gray;
+    padding:0 0 0 15px;
+  }
+  .list_box {
+    width: 100%;
+    height: 562px;
+    background: #eee;
+    overflow: hidden;
+    padding-bottom: 20px;
+  }
+  .list_item {
+    width: 345px;
+    min-height: 10px;
+    background: #fff;
+    border-radius: 10px;
+    margin: 10px auto;
+    box-shadow: 2px 2px 3px #999;
+    padding: 10px 15px;
+    li {
+      font-size: 14px;
+      color: #666666;
+      img {
+        width: 45px;
+        height: 45px;
+        border-radius: 5px;
+        border: 1px solid #6fa45b;
+      }
+    }
+    li:nth-of-type(1) {
+      height: 70px;
+      width: 100%;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      border-bottom: 1px solid #dddddd;
+      div {
+        height: 70px;
+        width: 300px;
+        p:nth-of-type(1) {
+          padding: 0 15px 0 15px;
+          font-size: 16px;
+          color: black;
+          font-weight: bold;
+          height: 40px;
+          line-height: 40px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        p:nth-of-type(2) {
+          font-size: 12px;
+          height: 15px;
+          width: 60px;
+          color: #fff;
+          line-height: 15px;
+          background: green;
+          margin-left: 15px;
+          text-align: center;
+        }
+      }
+    }
+    li:nth-of-type(2) {
+      margin-top: 3px;
+    }
+    li:nth-of-type(3) {
+      height: 25px;
+      line-height: 22px;
+    }
+    li:nth-of-type(4) {
+      height: 20px;
+      line-height: 20px;
+    }
+  }
+  .right_cout {
+    float: right;
+  }
+  .mask {
+    width: 100%;
+    height: 562px;
+    position: absolute;
+    left: 0;
+    top: 105px;
+    background: rgba(1, 1, 1, 0.5);
+    z-index: 2;
+  }
+  .left {
+    width: 50px;
+    float: left;
+    padding: 5px 0;
+    line-height: 18px;
+  }
+  .right {
+    float: left;
+    width: 260px;
+    padding: 5px 0;
+    line-height: 18px;
+  }
+  .standardLevel {
+    margin-left: 30px;
+  }
+  li:after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+}
+.page-loadmore-wrapper {
+  overflow: scroll;
+  z-index: 100;
+}
+
+.hot-list {
+  padding: 0 8px;
+}
+
+.hot-item {
+  padding: 10px 0;
+}
+
+.hot-one {
+  overflow: hidden;
+  border-bottom: 1px dashed #ccc;
+}
+
+.hot-one a img {
+  padding-right: 10px;
+}
+
+.hot-item a img {
+  width: 135px;
+  height: 90px;
+}
+
+.fl {
+  float: left;
+}
+
+.hot-one a h5 {
+  margin-top: 2px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-bottom: 6px;
+  font-size: 16px;
+  color: #000;
+}
+
+.hot-one a p {
+  font-size: 12px;
+  color: #828282;
+  margin: 0 0 3px;
+}
+
+.color_e85647 {
+  color: #e85647;
+}
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80px;
+}
+div.hot-list > div:first-child .img-box {
+  overflow: hidden;
+}
+
+div.hot-list > div:first-child img {
+  width: 100%;
+  height: auto;
+  padding-right: 0;
+}
+.mint-loadmore .mint-loadmore-content {
+  min-height: 622px;
+}
+.mint-loadmore-top,
+.mint-loadmore-bottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mint-loadmore-top > span,
+.mint-loadmore-bottom > span {
+  display: flex;
+  justify-content: center;
+  font-size: 20px;
+}
+.mint-loadmore-top > span > div {
+  border-top-color: #666;
+  border-left-color: #666;
+  border-bottom-color: #666;
+  height: 28px;
+  width: 28px;
+}
+.data-none {
+  height: 40px;
+  line-height: 40px;
+  font-size: 15px;
+}
+ul:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+</style>
