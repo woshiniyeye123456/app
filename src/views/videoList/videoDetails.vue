@@ -179,11 +179,11 @@ export default class EnterpriseVideo extends Vue {
         .then(function(response) {
           if (response.data.data) {
               if (that.pageNo == 1) {
-                  that.workArr =response.data.data;
+                  that.workArr =response.data.data.getVideoMonitorById;
                   that.totalAccess= that.workArr.length;
               } else {
-                that.workArr = [...that.workArr, ...response.data.data];
-                that.allLoaded = response.data.data.length < 10 ? true : false;
+                that.workArr = [...that.workArr, ...response.data.data.getVideoMonitorById];
+                that.allLoaded = response.data.data.getVideoMonitorById.length < 10 ? true : false;
               }
           } 
         })

@@ -15,7 +15,7 @@ import qs from 'qs'
     //视频监列表
 const videoMonitorList = (data) => {
     // let requestUrl=window['g'].IP+"hbjc/mobile/enterprise/getVideoMonitorList.mvc"
-    let requestUrl= 'http://localhost:8080/json/videoList/videoMonitor.json'
+    let requestUrl= 'http://localhost:8080/json/videoList/videoMonitor.json';
     return axios({
         method: 'get',
         url: requestUrl + jsonjoin(data),
@@ -24,7 +24,8 @@ const videoMonitorList = (data) => {
 
 //视频监列表
 const videoDetails = (data) => {
-    let requestUrl=window['g'].IP+"hbjc/mobile/getVideoMonitorById.mvc"
+    // let requestUrl=window['g'].IP+"hbjc/mobile/getVideoMonitorById.mvc"
+    let requestUrl = 'http://localhost:8080/json/videoList/videoMonitor.json';
     return axios({
         method: 'get',
         url: requestUrl + jsonjoin(data),

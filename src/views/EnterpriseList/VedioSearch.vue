@@ -151,9 +151,9 @@ export default {
           .then(function(response) {
             if (response.data.data) {
               console.log(response.data.data);
-              if (response.data.data.length > 0) {
-                that.nameList = response.data.data;
-                that.count = response.data.data.length;
+              if (response.data.data.enterpriseNameList.length > 0) {
+                that.nameList = response.data.data.enterpriseNameList;
+                that.count = response.data.data.enterpriseNameList.length;
                 that.flag = true;
               } else {
                 that.flag = false;

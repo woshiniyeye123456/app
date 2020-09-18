@@ -239,11 +239,12 @@ export default class collieryIndustry extends Vue {
     });
     
     Promise.all([p1,p2,p3]).then(function (results) {
+      debugger
         if(results[0]['status']==200){
            _this.drawTopChart(results[0]['data'].data);
         }
         if(results[1]['status']==200){
-          _this.drawCenterChart(results[1]['data'].data);
+          _this.drawCenterChart(results[1]['data'].data.getEnterprisePoliceStatistcs);
         }
         if(results[2]['status']==200){
           _this.drawBottomChart(results[2]['data'].data,results[2]['data'].list);

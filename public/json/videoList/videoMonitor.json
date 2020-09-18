@@ -28,6 +28,29 @@
 			"appearanceTypeCode": "",
 			"appearanceTypeName": "",
 			"videoCount": 9     
-		   }]
+		   }],
+		   "getVideoMonitorById": [
+			{
+				"deviceCode": "fe9219a6f3e342ba91a2808129d3ee6b",
+				"deviceName": "-350主井大巷",
+				"deviceStatus": "1",
+				"deviceStatusName": "离线",
+				"enterpType": "03",
+				"latitude": 0,
+				"longitude": 0,
+				"monitorId": "8a8a8af67457c71f017457d208ae091f",
+				"updateTime": 1599201216000
+			  },{
+				"deviceCode": "bb2e4b89f6714355abc0367af8cf05ee",
+				"deviceName": "主井口",
+				"deviceStatus": "1",
+				"deviceStatusName": "离线",
+				"enterpType": "03",
+				"latitude": 0,
+				"longitude": 0,
+				"monitorId": "8a8a8af67457c71f017457d208b10a0b",
+				"updateTime": 1599201216000
+			  }
+		   ]
     }
 }

@@ -79,6 +79,46 @@
 					"commonly": 8  
            }
         }
-      ]
+	  ],
+	  "enterpriseNameList": [
+		{
+			"entShort": "俱进化工",
+			"enterpId": "1006001",
+			"enterpName": "中卫市俱进化工有限公司",
+			"address": "中卫市沙坡头区XXXX",
+			"tel": "15224585456",
+			"industryCode": "",
+			"industryName": "",
+			"standardlevel": "1",
+			"districtsCode": "640502",
+			"statusCode": "0",
+			"statusName": ""
+		  },
+		  {
+			"entShort": "鑫三元",
+			"enterpId": "1006007",
+			"enterpName": "中卫市鑫三元化工有限公司",
+			"address": "中卫市沙坡头区XXXX",
+			"tel": "15224585456",
+			"industryCode": "",
+			"industryName": "",
+			"standardlevel": "1",
+			"districtsCode": "640502",
+			"statusCode": "0",
+			"statusName": ""
+		  },{
+			  "entShort": "同辉气体",
+			"enterpId": "1006008",
+			"enterpName": "宁夏同辉气体有限公司",
+			"address": "中卫市沙坡头区XXXX",
+			"tel": "15224585456",
+			"industryCode": "",
+			"industryName": "",
+			"standardlevel": "1",
+			"districtsCode": "640502",
+			"statusCode": "0",
+			"statusName": ""
+		  }
+	  ]
     }
 }

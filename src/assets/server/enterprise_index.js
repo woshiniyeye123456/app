@@ -58,7 +58,8 @@ const enterpriseDetails = (data) => {
 const enterpriseNameList = (data) => {
     return axios({
         method: "get",
-        url: window['g'].IP + "hbjc/mobile/enterprise/getEnterpriseNameList.mvc" + jsonjoin(data),
+        // url: window['g'].IP + "hbjc/mobile/enterprise/getEnterpriseNameList.mvc" + jsonjoin(data),
+        url: 'http://localhost:8080/json/enterprise/enterpriseList.json',
     })
 }
 const enterprise = {
