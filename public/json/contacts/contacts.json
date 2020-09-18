@@ -1,11 +1,97 @@
 {
     "list": [{
-        "personId": "2c9287b06f132daa016f1c1bf77f002c",
-        "personName": "刘燕军",
-        "personJob": "副市长,党委书记",
-        "orgCode": "S010001",
-        "telNumber": "14335666666"
-    }],
+            "personId": "2c9287b06f132daa016f1c1bf77f002c",
+            "personName": "刘燕军",
+            "personJob": "副市长,党委书记",
+            "orgCode": "S010001",
+            "telNumber": "14335666666"
+        },
+        {
+            "personId": "2c9287b06f132daa016f1c1bf77f002c",
+            "personName": "李振",
+            "personJob": "副市长,党委书记",
+            "orgCode": "S010001",
+            "telNumber": "14335666666"
+        },
+        {
+            "personId": "2c9287b06f132daa016f1c1bf77f002c",
+            "personName": "孙彦泽",
+            "personJob": "副市长,党委书记",
+            "orgCode": "S010001",
+            "telNumber": "14335666666"
+        },
+        {
+            "personId": "2c9287b06f132daa016f1c1bf77f002c",
+            "personName": "王泽民",
+            "personJob": "副市长,党委书记",
+            "orgCode": "S010001",
+            "telNumber": "14335666666"
+        },
+        {
+            "personId": "2c9287b06f132daa016f1c1bf77f002c",
+            "personName": "刘海柱",
+            "personJob": "副市长,党委书记",
+            "orgCode": "S010001",
+            "telNumber": "14335666666"
+        },
+        {
+            "personId": "2c9287b06f132daa016f1c1bf77f002c",
+            "personName": "杨坤",
+            "personJob": "副市长,党委书记",
+            "orgCode": "S010001",
+            "telNumber": "14335666666"
+        },
+        {
+            "personId": "2c9287b06f132daa016f1c1bf77f002c",
+            "personName": "李长命",
+            "personJob": "副市长,党委书记",
+            "orgCode": "S010001",
+            "telNumber": "14335666666"
+        },
+        {
+            "personId": "2c9287b06f132daa016f1c1bf77f002c",
+            "personName": "王栋",
+            "personJob": "副市长,党委书记",
+            "orgCode": "S010001",
+            "telNumber": "14335666666"
+        },
+        {
+            "personId": "2c9287b06f132daa016f1c1bf77f002c",
+            "personName": "李栋梁",
+            "personJob": "副市长,党委书记",
+            "orgCode": "S010001",
+            "telNumber": "14335666666"
+        },
+        {
+            "personId": "2c9287b06f132daa016f1c1bf77f002c",
+            "personName": "林俊杰",
+            "personJob": "副市长,党委书记",
+            "orgCode": "S010001",
+            "telNumber": "14335666666"
+        },
+        {
+            "personId": "2c9287b06f132daa016f1c1bf77f002c",
+            "personName": "张胡军",
+            "personJob": "副市长,党委书记",
+            "orgCode": "S010001",
+            "telNumber": "14335666666"
+        },
+        {
+            "personId": "2c9287b06f132daa016f1c1bf77f002c",
+            "personName": "刘德华",
+            "personJob": "副市长,党委书记",
+            "orgCode": "S010001",
+            "telNumber": "14335665666"
+        },
+        {
+            "personId": "2c9287b06f132daa016f1c1bf77f002c",
+            "personName": "张柏芝",
+            "personJob": "副市长,党委书记",
+            "orgCode": "S010001",
+            "telNumber": "14335634666"
+        }
+
+    ],
     "orgCode": [{
         "orgCode": "1",
         "orgName": "组织机构",
