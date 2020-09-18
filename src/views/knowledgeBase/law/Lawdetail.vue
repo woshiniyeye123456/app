@@ -40,6 +40,9 @@ import { Vue, Component } from 'vue-property-decorator';
 export default class ContingencyPlanSearch extends Vue {
   private datadetail = {
     createTime: '2019-05-01 00:00:00',
+    lawName: '法律详情',
+    publishOrgName: '组织机构',
+    publishDate: '2020-9-18',
     fileList: [
       {
         fileId: '8a83939e6d94be79016d9563055c0160',
@@ -94,7 +97,7 @@ export default class ContingencyPlanSearch extends Vue {
 
   private created() {
     let that=this;
-    that.datadetail = (this as any).$route.params.item;
+    // that.datadetail = (this as any).$route.params.item;
     console.log("this.datadetail==",this.datadetail)
     return new Promise(function(resolve, reject) {
       plan
@@ -102,7 +105,7 @@ export default class ContingencyPlanSearch extends Vue {
         .then(function(response) {
           if(response.data.data){
             console.log(response.data.data)
-            that.datadetail=response.data.data;
+            // that.datadetail=response.data.data;
           }
           console.log(response)
           resolve();

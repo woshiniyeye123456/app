@@ -1,0 +1,32 @@
+{
+    "list": [{
+        "personId": "2c9287b06f132daa016f1c1bf77f002c",
+        "personName": "刘燕军",
+        "personJob": "副市长,党委书记",
+        "orgCode": "S010001",
+        "telNumber": "14335666666"
+    }],
+    "orgCode": [{
+        "orgCode": "1",
+        "orgName": "组织机构",
+        "parentCode": "0",
+        "orgDuty": null,
+        "dutyTel": null,
+        "fax": null,
+        "address": null,
+        "postCode": null,
+        "deleteFlag": 0,
+        "sourceDeptCode": "0",
+        "updateTime": "2019-10-17 15:53:14",
+        "dispOrder": 1,
+        "districtCode": null,
+        "orgTypeCode": null,
+        "isLeaf": "1",
+        "tenantId": "0",
+        "virtualNode": null,
+        "orgShortName": null,
+        "shortName": null,
+        "orgRoleType": null,
+        "inspecTime": "2019-10-17 15:53:14"
+    }]
+}

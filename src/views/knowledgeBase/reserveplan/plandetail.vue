@@ -104,8 +104,9 @@ export default class ContingencyPlanSearch extends Vue {
         .planDetails(id)
         .then(function(response) {
           console.log("planDetails==",response);
-          if (response.data.data) {
-            _this.datadetail=response.data.data
+          if (response.data) {
+             _this.datadetail = response.data.details;
+            // _this.datadetail=response.data.data
           }
           resolve();
         })

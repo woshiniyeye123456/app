@@ -59,21 +59,21 @@ export default class organization extends Vue {
   }
   private mounted(){
     
-    let titleArr = this.$store.state.organizationTitle;
-    this.nowOrgcode = titleArr[titleArr.length-1].orgCode;
+    // let titleArr = this.$store.state.organizationTitle;
+    // this.nowOrgcode = titleArr[titleArr.length-1].orgCode;
      let parma = {
       "orgCode": this.nowOrgcode
     };
     this.getData(parma);
-    if(this.nowOrgcode != "" && this.totalList.length > 0){
-      this.totalList.forEach(element => {
-        element.items.forEach(people => {
-          if(people.orgCode == this.nowOrgcode){
-            this.peopleList.push(people);
-          }
-        });
-      });
-    }
+    // if(this.nowOrgcode != "" && this.totalList.length > 0){
+    //   this.totalList.forEach(element => {
+    //     element.items.forEach(people => {
+    //       if(people.orgCode == this.nowOrgcode){
+    //         this.peopleList.push(people);
+    //       }
+    //     });
+    //   });
+    // }
   }
   // 封装请求数据方法
   private getData (parma) {
@@ -82,9 +82,8 @@ export default class organization extends Vue {
       groupServer
         .getAllGroup(parma)
         .then(function(response) {
-          console.log(response.data.data);
-          if (response.data.data) {
-            that.mechanismList = response.data.data;
+          if (response.data) {
+            that.mechanismList = response.data.orgCode;
             // that.peopleList = response.data.data;
           }
           resolve();

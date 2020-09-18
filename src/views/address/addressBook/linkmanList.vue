@@ -122,8 +122,8 @@ export default class linkmanList extends Vue {
       linkmail
         .GetLinkmanList(parma)
         .then(function(response) {
-          if (response.data.data) {
-            that.sort(response.data.data.list);
+          if (response.data) {
+            that.sort(response.data.list);
           }
           resolve();
         })

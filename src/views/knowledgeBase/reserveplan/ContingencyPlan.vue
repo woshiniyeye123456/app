@@ -203,7 +203,6 @@ export default class ContingencyPlan extends Vue {
     //   planParentTypeCode: '',
     //   planTypeCode: this.planTypeCode
     // };
-
   let parma={
       "eventTypeCode": this.code,
       "keyWord": "",
@@ -224,44 +223,37 @@ export default class ContingencyPlan extends Vue {
       plan
         .reserveplan(parma)
         .then(function(response) {
-          console.log(response);
+          console.log(response.data.data);
           //解除loading
           // Indicator.close();
-          if (response.data.data) {
-            // let arr = response.data.data.list;
-            // if (that.pageNo > 2) {
-            //   for (let i = 0; i < 5; i++) {
-            //     response.data.data.list.push(arr[0]);
-            //   }
+          if (response.data) {
+            //假接口逻辑
+             that.planlist = response.data.list;
+            //下方真接口逻辑
+            // console.log(response.data.data.list);
+            // if (that.pageNo == 1) {
+            //   //每次更新筛选数据  置顶
+            //   // that.planlist = [];
+            //   that.planlist = [
+            //     response.data.data.list[0],
+            //     response.data.data.list[1],
+            //     response.data.data.list[2],
+            //     response.data.data.list[3]
+            //   ];
+            //   setTimeout(() => {
+            //     that.planlist = response.data.data.list;
+            //     // response.data.data.list.forEach(element => {
+            //     //   that.planlist.push(element);
+            //     //   that.planlist.push(element);
+            //     // });
+            //   }, 100);
             // } else {
-            //   for (let i = 0; i < 9; i++) {
-            //     response.data.data.list.push(arr[0]);
-            //   }
+            //   console.log(that.planlist);
+            //   that.planlist = [...that.planlist, ...response.data.data.list];
+            //   console.log(response.data.data.list);
+            //   // that.firstRender = true;
+            //   that.allLoaded = response.data.data.list.length < 10 ? true : false;
             // }
-            console.log(response.data.data.list);
-            if (that.pageNo == 1) {
-              //每次更新筛选数据  置顶
-              // that.planlist = [];
-              that.planlist = [
-                response.data.data.list[0],
-                response.data.data.list[1],
-                response.data.data.list[2],
-                response.data.data.list[3]
-              ];
-              setTimeout(() => {
-                that.planlist = response.data.data.list;
-                // response.data.data.list.forEach(element => {
-                //   that.planlist.push(element);
-                //   that.planlist.push(element);
-                // });
-              }, 100);
-            } else {
-              console.log(that.planlist);
-              that.planlist = [...that.planlist, ...response.data.data.list];
-              console.log(response.data.data.list);
-              // that.firstRender = true;
-              that.allLoaded = response.data.data.list.length < 10 ? true : false;
-            }
           } else {
             (that as any).$toast({ message: '暂无更多数据', position: 'bottom', duration: 3000 });
           }

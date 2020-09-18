@@ -1,0 +1,22 @@
+{
+    "data": [{
+        "date": "2019-10-17 07:42:06",
+        "dateFlag": "0",
+        "dutyList": [{
+            "code": "1006",
+            "dutyArrangeId": "8d59a49c4b5a43d3be13589cc5efef5455",
+            "dutyDate": "2019-10-17 07:42:06",
+            "groupId": "8d59a49c4b5a43d3be13589cc5efef5455",
+            "groupName": "沙坡头企业",
+            "orgCode": "1006007",
+            "personId": "8d59a49c4b5a43d3be13589cc5efef5455",
+            "personName": "张海",
+            "personPhone": "15225845456",
+            "personStatus": "0"
+        }],
+        "week": "值班"
+    }],
+    "msg": "string",
+    "requesttime": "2019-10-17 07:42:06",
+    "status": 0
+}

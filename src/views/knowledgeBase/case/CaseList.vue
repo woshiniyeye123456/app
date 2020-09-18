@@ -314,30 +314,21 @@ export default class Case extends Vue {
         .then(function(response) {
           //解除loading
           // Indicator.close();
-          if (response.data.data) {
-            // let arr = response.data.data.list;
-            // if (that.pageNo > 2) {
-            //   for (let i = 0; i < 5; i++) {
-            //     response.data.data.list.push(arr[0]);
-            //   }
+          if (response.data) {
+              that.knowlist = response.data.data.list;
+            //对接真数据 下方接口注释解开
+            // if (that.pageNo == 1) {
+            //   //每次更新筛选数据  置顶
+            //   setTimeout(() => {
+            //     that.knowlist = response.data.data.list;
+            //   }, 100);
             // } else {
-            //   for (let i = 0; i < 9; i++) {
-            //     response.data.data.list.push(arr[0]);
-            //   }
+            //   console.log(that.knowlist);
+            //   that.knowlist = [...that.knowlist, ...response.data.data.list];
+            //   console.log(response.data.data.list);
+            //   // that.firstRender = true;
+            //   that.allLoaded = response.data.data.list.length < 10 ? true : false;
             // }
-            console.log(response.data.data.list);
-            if (that.pageNo == 1) {
-              //每次更新筛选数据  置顶
-              setTimeout(() => {
-                that.knowlist = response.data.data.list;
-              }, 100);
-            } else {
-              console.log(that.knowlist);
-              that.knowlist = [...that.knowlist, ...response.data.data.list];
-              console.log(response.data.data.list);
-              // that.firstRender = true;
-              that.allLoaded = response.data.data.list.length < 10 ? true : false;
-            }
           }
           resolve();
         })

@@ -19,9 +19,11 @@ const getGroup = (data) => {
 const getAllGroup = (data) => {
     let token = localStorage.getItem("token");
     return axios({
-        method: 'post',
-        url: window['g'].IP + 'gemp-user/api/gemp/user/org/findEmsOrgListByOrgCode/v1',
-        headers:{'token':token},
+        // method: 'post',
+        // url: window['g'].IP + 'gemp-user/api/gemp/user/org/findEmsOrgListByOrgCode/v1',
+        method: 'get',
+        url: './json/contacts/contacts.json',
+        headers: { 'token': token },
         data: qs.stringify(data)
     })
 }

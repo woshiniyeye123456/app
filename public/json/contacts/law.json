@@ -1,0 +1,38 @@
+{
+    "data": {
+        "list": [{
+            "address": "WEIZHi",
+            "attachmentList": [{
+                "attachId": "8d59a49c4b5a43d3be13589cc5efef5412",
+                "msg": "附件",
+                "name": "案例",
+                "status": "1",
+                "url": "string"
+            }],
+            "caseId": "8d59a49c4b5a43d3be13589cc5efef55623",
+            "caseKeyword": "案例",
+            "caseName": "测试案例",
+            "conResume": "测试案例示例",
+            "createOrgCode": "1006007",
+            "createTime": "2019-10-17 07:42:06",
+            "levelCode": "",
+            "levelName": "",
+            "lawName": "法律",
+            "publishOrgName": "法律",
+            "parentOrgCode": "1006",
+            "precaution": "string",
+            "startTime": "2019-10-17 07:42:06",
+            "publishDate": "2019-10-17 07:42:06",
+            "typeCode": "",
+            "typeName": "",
+            "content": "法律条文 编制修订说明法律条文 编制修订说明法律条文 编制修订说明法律条文 编制修订说明法律条文 编制修订说明法律条文 编制修订说明",
+            "updateTime": "2019-10-17 07:42:06",
+            "userId": "8d59a49c4b5a43d3be13589cc5efef5455"
+        }],
+        "nowPage": 0,
+        "pageSize": 0,
+        "pages": 0,
+        "total": 0,
+        "unReadTotalCount": 0
+    }
+}

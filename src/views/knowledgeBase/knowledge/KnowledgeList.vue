@@ -189,32 +189,25 @@ export default class ContingencyPlan extends Vue {
         .then(function(response) {
           //解除loading
            Indicator.close();
-          if (response.data.data) {
-            // let arr = response.data.data.list;
-            // if (that.pageNo > 2) {
-            //   for (let i = 0; i < 5; i++) {
-            //     response.data.data.list.push(arr[0]);
-            //   }
-            // } else {
-            //   for (let i = 0; i < 9; i++) {
-            //     response.data.data.list.push(arr[0]);
-            //   }
-            // }
-            console.log(response.data.data.list);
-            if (that.pageNo == 1) {
-              //每次更新筛选数据  置顶
+          if (response.data) {
+            console.log(response.data)
+           //假接口逻辑
+             that.knowlist = response.data.processList.list;
+            //下方真接口逻辑
+            // if (that.pageNo == 1) {
+            //   //每次更新筛选数据  置顶
 
-              that.knowlist = [that.knowlist[0]];
-              setTimeout(() => {
-                that.knowlist = response.data.data.list;
-              }, 100);
-            } else {
-              console.log(that.knowlist);
-              that.knowlist = [...that.knowlist, ...response.data.data.list];
-              console.log(response.data.data.list);
-              // that.firstRender = true;
-              that.allLoaded = response.data.data.list.length < 10 ? true : false;
-            }
+            //   that.knowlist = [that.knowlist[0]];
+            //   setTimeout(() => {
+            //     that.knowlist = response.data.data.list;
+            //   }, 100);
+            // } else {
+            //   console.log(that.knowlist);
+            //   that.knowlist = [...that.knowlist, ...response.data.data.list];
+            //   console.log(response.data.data.list);
+            //   // that.firstRender = true;
+            //   that.allLoaded = response.data.data.list.length < 10 ? true : false;
+            // }
           } else {
             (that as any).$toast({ message: '暂无更多数据', position: 'bottom', duration: 3000 });
           }

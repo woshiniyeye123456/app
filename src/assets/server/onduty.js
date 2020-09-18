@@ -11,21 +11,25 @@ const currenttime = () => {
     }
     //每天的份值班表
 const dutydaylist = (data) => {
-    let token = localStorage.getItem("token");
+        let token = localStorage.getItem("token");
         return axios({
-            method: 'post',
-            url: window['g'].IP + 'gemp-duty/api/gemp/duty/plan/govern/intraday/v1',
-            headers:{'token':token},
+            // method: 'post',
+            // url: window['g'].IP + 'gemp-duty/api/gemp/duty/plan/govern/intraday/v1',
+            method: 'get',
+            url: './json/contacts/duty.json',
+            headers: { 'token': token },
             data: data
         })
     }
     //月分值班表
 const dutymounthlist = (data) => {
-    let token = localStorage.getItem("token");
+        let token = localStorage.getItem("token");
         return axios({
-            method: 'post',
-            url: window['g'].IP + 'gemp-duty/api/gemp/duty/plan/govern/day/search/v1',
-            headers:{'token':token},
+            // method: 'post',
+            // url: window['g'].IP + 'gemp-duty/api/gemp/duty/plan/govern/day/search/v1',
+            method: 'get',
+            url: './json/contacts/duty.json',
+            headers: { 'token': token },
             data: data
         })
     }

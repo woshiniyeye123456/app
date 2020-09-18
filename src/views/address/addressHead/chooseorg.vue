@@ -247,8 +247,9 @@ export default class chooseorg extends Vue {
       linkmail
         .getAllGroup(parma)
         .then(function(response) {
-          if (response.data.data) {
-            that.initialList = response.data.data;
+          if (response.data) {
+            console.log(response.data.orgCode)
+            that.initialList = response.data.orgCode;
             // console.log(that.initialList);
             for (let value of that.initialList) {
               // if (value.org_name == '指挥中心') {

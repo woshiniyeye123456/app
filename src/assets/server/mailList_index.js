@@ -18,57 +18,61 @@ const linkmanList = (data) => {
             data: data
         })
     }
-//联系人列表(新接口，上面接口作废)
+    //联系人列表(新接口，上面接口作废)
 const GetLinkmanList = (data) => {
-    let token = localStorage.getItem("token");
-    return axios({
-        method: 'post',
-        url: window['g'].IP + "gemp-user/api/gemp/user/maillist/person/list/v1",
-        headers:{'token':token},
-        data: data
-    })
-}
+        let token = localStorage.getItem("token");
+        return axios({
+            // method: 'post',
+            method: 'get',
+            // url: window['g'].IP + "gemp-user/api/gemp/user/maillist/person/list/v1",
+            url: './json/contacts/contacts.json',
+            // headers: { 'token': token },
+            data: data
+        })
+    }
     // 添加通讯录人员
 const addlinkman = (data) => {
-    let token = localStorage.getItem("token");
+        let token = localStorage.getItem("token");
         return axios({
             method: 'post',
             // url: baseurl + "/gemp-app/api/maillist/add/v1",
             url: window['g'].IP + "gemp-user/api/gemp/user/maillist/person/add/v1",
-            headers:{'token':token},
+            headers: { 'token': token },
             data: data
         })
     }
     // 联系人信息更改保存
 const editSave = (data) => {
-    let token = localStorage.getItem("token");
+        let token = localStorage.getItem("token");
         return axios({
             method: 'post',
             // url: baseurl + "/gemp-app/api/maillist/modify/v1",
             url: window['g'].IP + "gemp-user/api/gemp/user/maillist/person/modify/v1",
-            headers:{'token':token},
+            headers: { 'token': token },
             data: data
         })
     }
     // 联系人信息更改保存
 const getGroup = (data) => {
-    let token = localStorage.getItem("token");
+        let token = localStorage.getItem("token");
         return axios({
             method: 'post',
             url: window['g'].IP + "/gemp-app/api/maillist/getallorgslist/v1",
             data: data
         })
     }
-     // 获取所有的组织机构
+    // 获取所有的组织机构
 const getAllGroup = (data) => {
-    let token = localStorage.getItem("token");
-    return axios({
-        method: 'post',
-        url: window['g'].IP + 'gemp-user/api/gemp/user/org/list/v1',
-        headers:{'token':token},
-        data: qs.stringify(data)
-    })
-}
+        let token = localStorage.getItem("token");
+        return axios({
+            // method: 'post',
+            // url: window['g'].IP + 'gemp-user/api/gemp/user/org/list/v1',
+            // headers: { 'token': token },
+            method: 'get',
+            url: './json/contacts/contacts.json',
+            data: qs.stringify(data)
+        })
+    }
     //导出
 const linkmail = {
     linkmanList,

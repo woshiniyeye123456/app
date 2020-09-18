@@ -5,7 +5,7 @@
     <mytitle title="知识详情" :showRight="false" :titleObj="{icon:'more'}" :whetherNotParent="false" ></mytitle>
     <div v-if="datadetail.qtype=='0'" class="contingency-plan">
       <p class="info_title">
-        <span class=""></span> 基本信息:
+        <span class=""></span> 基本信息
       </p>
       <p>
         <ul>
@@ -15,25 +15,25 @@
         </ul>
       </p>
       <p class="info_title">
-        <span class=""></span> 危险性类别:
+        <span class=""></span> 危险性类别
       </p>
       <p class="info_content_p">
         <span class="info_content_single">{{datadetail.hazardClass}}</span> 
       </p>
       <p class="info_title">
-        <span class=""></span> 危害描述:
+        <span class=""></span> 危害描述
       </p>
       <p class="info_content_p">
         <span class="info_content_single">{{datadetail.hazardDesc}}</span> 
       </p>
       <p class="info_title">
-        <span class=""></span> 成分组成信息:
+        <span class=""></span> 成分组成信息
       </p>
       <p class="info_content_p">
         <span class="info_content_single">{{datadetail.component}}</span> 
       </p>
       <p class="info_title">
-        <span class=""></span> 急救措施:
+        <span class=""></span> 急救措施
       </p>
       <p class="info_content_p">
         <span class="info_content_single">{{datadetail.emergency}}</span> 
@@ -61,7 +61,7 @@
     </div>
     <div v-if="datadetail.qtype=='1'" class="contingency-plan">
       <p class="info_title">
-        <span class=""></span> 基本信息:
+        <span class=""></span> 基本信息
       </p>
       <p>
         <ul>
@@ -70,25 +70,25 @@
         </ul>
       </p>
       <p class="info_title">
-        <span class=""></span> 工艺简介:
+        <span class=""></span> 工艺简介
       </p>
       <p class="info_content_p">
         <span class="info_content_single">{{datadetail.processDesc}}</span> 
       </p>
       <p class="info_title">
-        <span class=""></span>  工艺危险特点:
+        <span class=""></span>  工艺危险特点
       </p>
       <p class="info_content_p">
         <span class="info_content_single">{{datadetail.hazardChara}}</span> 
       </p>
       <p class="info_title">
-        <span class=""></span> 典型工艺:
+        <span class=""></span> 典型工艺
       </p>
       <p class="info_content_p">
         <span class="info_content_single">{{datadetail.process}}</span> 
       </p>
       <p class="info_title">
-        <span class=""></span> 重点监控工艺参数:
+        <span class=""></span> 重点监控工艺参数
       </p>
       <p class="info_content_p">
         <span class="info_content_single">{{datadetail.processParam}}</span> 

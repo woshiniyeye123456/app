@@ -211,33 +211,26 @@ export default class Lawlist extends Vue {
         .then(function(response) {
           //解除loading
           // Indicator.close();
-          if (response.data.data) {
-            // let arr = response.data.data.list;
-            // if (that.pageNo > 2) {
-            //   for (let i = 0; i < 5; i++) {
-            //     response.data.data.list.push(arr[0]);
-            //   }
+          if (response.data) {
+            //假数据
+             that.knowlist = response.data.data.list;
+            //对接真数据 解开注释
+            // console.log(response.data.data.list);
+            // if (that.pageNo == 1) {
+            //   //每次更新筛选数据  置顶
+            //   // that.knowlist = [
+            //   //   response.data.data.list[0],
+            //   //   response.data.data.list[1],
+            //   //   response.data.data.list[2],
+            //   //   response.data.data.list[3]
+            //   // ];
+            //   that.knowlist = response.data.data.list;
             // } else {
-            //   for (let i = 0; i < 9; i++) {
-            //     response.data.data.list.push(arr[0]);
-            //   }
+            //   console.log(that.knowlist);
+            //   that.knowlist = [...that.knowlist, ...response.data.data.list];
+            //   console.log(response.data.data.list);
+            //   that.allLoaded = response.data.data.list.length < 10 ? true : false;
             // }
-            console.log(response.data.data.list);
-            if (that.pageNo == 1) {
-              //每次更新筛选数据  置顶
-              // that.knowlist = [
-              //   response.data.data.list[0],
-              //   response.data.data.list[1],
-              //   response.data.data.list[2],
-              //   response.data.data.list[3]
-              // ];
-              that.knowlist = response.data.data.list;
-            } else {
-              console.log(that.knowlist);
-              that.knowlist = [...that.knowlist, ...response.data.data.list];
-              console.log(response.data.data.list);
-              that.allLoaded = response.data.data.list.length < 10 ? true : false;
-            }
           } else {
             (that as any).$toast({ message: '暂无更多数据', position: 'bottom', duration: 3000 });
           }
