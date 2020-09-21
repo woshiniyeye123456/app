@@ -120,46 +120,52 @@ export default class dynamic extends Vue {
     this.person_name = (this as any).radio.peopleName;
   }
   private save() {
-    let that = this as any;
-    if (that.searchTime == '请选择日期') {
-      that.$toast({ message: '请选择日期!', position: 'bottom', duration: 3000 });
-      return;
-    }
-    if (that.type_code === '') {
-      that.$toast({ message: '请选择值班类型!', position: 'bottom', duration: 3000 });
-      return;
-    }
-    console.log(that.radio);
-    if (that.radio.length == 0) {
-      that.$toast({ message: '请选择值班人!', position: 'bottom', duration: 3000 });
-      return;
-    }
-    let prame = {
-      code: that.type_code,
-      dutyArrangeId: '',
-      dutyDate: that.searchTime,
-      groupId: that.radio.groupId,
-      orgCode: '',
-      personId: that.radio.peopleId,
-      personName: that.radio.peopleName
-    };
-    console.log(prame);
-    return new Promise(function(resolve, reject) {
-      onduty
-        .duty_save(prame)
-        .then(function(response) {
-          console.log(response);
-          if (response.status == 200) {
-            (that as any).$toast({ message: '新增排班成功!', position: 'bottom', duration: 3000 });
-          } else {
-            (that as any).$toast({ message: '新增排班失败!', position: 'bottom', duration: 3000 });
-          }
-        })
-        .catch(function(error) {
-          (that as any).$toast({ message: '新增排班失败!', position: 'bottom', duration: 3000 });
-          reject(error);
-        });
+    // let that = this as any;
+    // if (that.searchTime == '请选择日期') {
+    //   that.$toast({ message: '请选择日期!', position: 'bottom', duration: 3000 });
+    //   return;
+    // }
+    // if (that.type_code === '') {
+    //   that.$toast({ message: '请选择值班类型!', position: 'bottom', duration: 3000 });
+    //   return;
+    // }
+    // console.log(that.radio);
+    // if (that.radio.length == 0) {
+    //   that.$toast({ message: '请选择值班人!', position: 'bottom', duration: 3000 });
+    //   return;
+    // }
+    //对接时删除下三行
+    (this as any).$toast({ message: '新增排班成功!', position: 'bottom', duration: 3000 });
+     (this as any).$router.push({
+      path: '/dynamic'
     });
+    //对接时解开注释
+    // let prame = {
+    //   code: that.type_code,
+    //   dutyArrangeId: '',
+    //   dutyDate: that.searchTime,
+    //   groupId: that.radio.groupId,
+    //   orgCode: '',
+    //   personId: that.radio.peopleId,
+    //   personName: that.radio.peopleName
+    // };
+    // console.log(prame);
+    // return new Promise(function(resolve, reject) {
+    //   onduty
+    //     .duty_save(prame)
+    //     .then(function(response) {
+    //       console.log(response);
+    //       if (response.status == 200) {
+    //         (that as any).$toast({ message: '新增排班成功!', position: 'bottom', duration: 3000 });
+    //       } else {
+    //         (that as any).$toast({ message: '新增排班失败!', position: 'bottom', duration: 3000 });
+    //       }
+    //     })
+    //     .catch(function(error) {
+    //       (that as any).$toast({ message: '新增排班失败!', position: 'bottom', duration: 3000 });
+    //       reject(error);
+    //     });
+    // });
   }
   //获取值班类型
   private duty_type() {
@@ -188,11 +194,11 @@ export default class dynamic extends Vue {
               });
             }
           } else {
-            (that as any).$toast({ message: '值班类型获取失败!', position: 'bottom', duration: 3000 });
+            // (that as any).$toast({ message: '值班类型获取失败!', position: 'bottom', duration: 3000 });
           }
         })
         .catch(function(error) {
-          (that as any).$toast({ message: '值班类型获取失败!', position: 'bottom', duration: 3000 });
+          // (that as any).$toast({ message: '值班类型获取失败!', position: 'bottom', duration: 3000 });
           reject(error);
         });
     });

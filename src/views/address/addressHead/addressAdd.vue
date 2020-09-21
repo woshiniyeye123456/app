@@ -129,68 +129,74 @@ export default class personalInformation extends Vue {
       }
     }
     let jobArr = this.jobmessage.split(' ');
-    let that = this,
-      parma = {
-        contactAddress: that.linkAddress,
-        dutyNumber: that.landline,
-        // orgCode: '378420e3b12d4b3784525abbc5431666', // 组织机构
-        orgCode: that.organization_code,
-        personId: '',
-        personJob: that.jobmessage,
-        personName: that.namemessage, //姓名
-        telNumber: that.phone, //电话
-        unitAddress: that.unitAddress,
-        personJobArr:jobArr
-      };
-    console.log(parma);
-    console.log(
-      PinYin.chineseToPinYin(that.namemessage.slice(0, 1))
-        .slice(0, 1)
-        .toUpperCase()
-    );
-    return new Promise(function(resolve, reject) {
-      linkmail
-        .addlinkman(parma)
-        .then(function(response) {
-          console.log(response);
-          if (response.data.data) {
-            (that as any).$toast({ message: '保存成功', position: 'bottom', duration: 3000 });
-            //遍历联系人列表
-            let n = PinYin.chineseToPinYin(that.namemessage.slice(0, 1)).slice(0, 1);
-            for (let item of that.totalList) {
-              if ((item as any).name == n) {
-                (item as any).items.push({
-                  contactAddress: that.linkAddress,
-                  deleflag: '',
-                  email: null,
-                  fax: null,
-                  personJob: that.jobmessage,
-                  telNumber: that.phone,
-                  dutyNumber: that.landline,
-                  orgCode: that.organization_code,
-                  orgName: that.organization_name,
-                  parentorgcode: '',
-                  personId: '',
-                  personName: that.namemessage, //姓名
-                  unitAddress: that.unitAddress,
-                  updateTime: '',
-                  remark:null
-                });
-              }
-            }
-            //本地保存
-            that.$store.dispatch('total_message', that.totalList);
-            that.$store.dispatch('org_messageadd', '');
-            localStorage.removeItem('addparma');
-          }
-          that.$router.go(-1);
-          resolve();
-        })
-        .catch(function(error) {
-          (that as any).$toast({ message: '保存失败', position: 'bottom', duration: 3000 });
-          reject(error);
-        });
+      //对接时删除下三行
+    (this as any).$toast({ message: '保存成功', position: 'bottom', duration: 3000 });
+     (this as any).$router.push({
+      path: '/addSearch/linkmanList'
     });
+    //对接时解开注释
+    // let that = this,
+    //   parma = {
+    //     contactAddress: that.linkAddress,
+    //     dutyNumber: that.landline,
+    //     // orgCode: '378420e3b12d4b3784525abbc5431666', // 组织机构
+    //     orgCode: that.organization_code,
+    //     personId: '',
+    //     personJob: that.jobmessage,
+    //     personName: that.namemessage, //姓名
+    //     telNumber: that.phone, //电话
+    //     unitAddress: that.unitAddress,
+    //     personJobArr:jobArr
+    //   };
+    // console.log(parma);
+    // console.log(
+    //   PinYin.chineseToPinYin(that.namemessage.slice(0, 1))
+    //     .slice(0, 1)
+    //     .toUpperCase()
+    // );
+    // return new Promise(function(resolve, reject) {
+    //   linkmail
+    //     .addlinkman(parma)
+    //     .then(function(response) {
+    //       console.log(response);
+    //       if (response.data.data) {
+    //         (that as any).$toast({ message: '保存成功', position: 'bottom', duration: 3000 });
+    //         //遍历联系人列表
+    //         let n = PinYin.chineseToPinYin(that.namemessage.slice(0, 1)).slice(0, 1);
+    //         for (let item of that.totalList) {
+    //           if ((item as any).name == n) {
+    //             (item as any).items.push({
+    //               contactAddress: that.linkAddress,
+    //               deleflag: '',
+    //               email: null,
+    //               fax: null,
+    //               personJob: that.jobmessage,
+    //               telNumber: that.phone,
+    //               dutyNumber: that.landline,
+    //               orgCode: that.organization_code,
+    //               orgName: that.organization_name,
+    //               parentorgcode: '',
+    //               personId: '',
+    //               personName: that.namemessage, //姓名
+    //               unitAddress: that.unitAddress,
+    //               updateTime: '',
+    //               remark:null
+    //             });
+    //           }
+    //         }
+    //         //本地保存
+    //         that.$store.dispatch('total_message', that.totalList);
+    //         that.$store.dispatch('org_messageadd', '');
+    //         localStorage.removeItem('addparma');
+    //       }
+    //       that.$router.go(-1);
+    //       resolve();
+    //     })
+    //     .catch(function(error) {
+    //       (that as any).$toast({ message: '保存失败', position: 'bottom', duration: 3000 });
+    //       reject(error);
+    //     });
+    // });
   }
   private mounted() {
     this.totalList = this.$store.getters.total_message;

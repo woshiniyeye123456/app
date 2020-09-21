@@ -232,11 +232,11 @@ export default class dynamic extends Vue {
             that.year_mounth = response.data.data.currentTime.split('-')[0] + '-' + response.data.data.currentTime.split('-')[1];
             that.mounth = response.data.data.currentTime.split('-')[1];
           } else {
-            (that as any).$toast({ message: '当天日期获取失败!', position: 'bottom', duration: 3000 });
+            // (that as any).$toast({ message: '当天日期获取失败!', position: 'bottom', duration: 3000 });
           }
         })
         .catch(function(error) {
-          (that as any).$toast({ message: '当天日期获取失败!', position: 'bottom', duration: 3000 });
+          // (that as any).$toast({ message: '当天日期获取失败!', position: 'bottom', duration: 3000 });
           reject(error);
         });
     });

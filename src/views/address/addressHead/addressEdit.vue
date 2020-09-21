@@ -132,58 +132,64 @@ export default class personalInformation extends Vue {
     }
     let jobArr = this.jobmessage.split(' ');
     localStorage.removeItem('addparma');
-    let that = this,
-      parma = {
-        contactAddress: that.linkAddress,
-        dutyNumber: that.landline,
-        // orgCode: '378420e3b12d4b3784525abbc5431666', // 组织机构
-        orgCode: that.organization_code,
-        personId: that.personId,
-        personJob: that.jobmessage,
-        personName: that.namemessage, //姓名
-        telNumber: that.phone, //电话
-        unitAddress: that.unitAddress,
-        personJobArr:jobArr
-      };
-    console.log(parma);
-    console.log(this.organization_code);
-    console.log(this.organization_name);
-    return new Promise(function(resolve, reject) {
-      linkmail
-        .editSave(parma)
-        .then(function(response) {
-          console.log(response);
-          if (response.data.data) {
-            (that as any).$toast({ message: '保存成功', position: 'bottom', duration: 3000 });
-            //遍历联系人列表
-            let n = PinYin.chineseToPinYin(that.namemessage.slice(0, 1)).slice(0, 1);
-            for (let i in (that as any).totalList) {
-              if ((that as any).totalList[i].name == n) {
-                for (let j in (that as any).totalList[i].items) {
-                  if ((that as any).totalList[i].items[j].personName === that.namemessage) {
-                    (that as any).totalList[i].items[j].contactAddress = that.linkAddress;
-                    (that as any).totalList[i].items[j].personJob = that.jobmessage;
-                    (that as any).totalList[i].items[j].telNumber = that.phone;
-                    (that as any).totalList[i].items[j].dutyNumber = that.landline;
-                    (that as any).totalList[i].items[j].orgCode = that.organization_code;
-                    (that as any).totalList[i].items[j].orgName = that.organization_name;
-                    (that as any).totalList[i].items[j].personName = that.namemessage; //姓名
-                    (that as any).totalList[i].items[j].unitAddress = that.unitAddress;
-                  }
-                }
-              }
-            }
-            //本地保存
-            that.$store.dispatch('total_message', that.totalList);
-          }
-          that.$router.push({ name: 'linkmanList' });
-          resolve();
-        })
-        .catch(function(error) {
-          (that as any).$toast({ message: '保存失败', position: 'bottom', duration: 3000 });
-          reject(error);
-        });
+    //对接时删除下三行
+    (this as any).$toast({ message: '保存成功', position: 'bottom', duration: 3000 });
+     (this as any).$router.push({
+      path: '/addSearch/linkmanList'
     });
+     //对接时解开注释
+    // let that = this,
+    //   parma = {
+    //     contactAddress: that.linkAddress,
+    //     dutyNumber: that.landline,
+    //     // orgCode: '378420e3b12d4b3784525abbc5431666', // 组织机构
+    //     orgCode: that.organization_code,
+    //     personId: that.personId,
+    //     personJob: that.jobmessage,
+    //     personName: that.namemessage, //姓名
+    //     telNumber: that.phone, //电话
+    //     unitAddress: that.unitAddress,
+    //     personJobArr:jobArr
+    //   };
+    // console.log(parma);
+    // console.log(this.organization_code);
+    // console.log(this.organization_name);
+    // return new Promise(function(resolve, reject) {
+    //   linkmail
+    //     .editSave(parma)
+    //     .then(function(response) {
+    //       console.log(response);
+    //       if (response.data.data) {
+    //         (that as any).$toast({ message: '保存成功', position: 'bottom', duration: 3000 });
+    //         //遍历联系人列表
+    //         let n = PinYin.chineseToPinYin(that.namemessage.slice(0, 1)).slice(0, 1);
+    //         for (let i in (that as any).totalList) {
+    //           if ((that as any).totalList[i].name == n) {
+    //             for (let j in (that as any).totalList[i].items) {
+    //               if ((that as any).totalList[i].items[j].personName === that.namemessage) {
+    //                 (that as any).totalList[i].items[j].contactAddress = that.linkAddress;
+    //                 (that as any).totalList[i].items[j].personJob = that.jobmessage;
+    //                 (that as any).totalList[i].items[j].telNumber = that.phone;
+    //                 (that as any).totalList[i].items[j].dutyNumber = that.landline;
+    //                 (that as any).totalList[i].items[j].orgCode = that.organization_code;
+    //                 (that as any).totalList[i].items[j].orgName = that.organization_name;
+    //                 (that as any).totalList[i].items[j].personName = that.namemessage; //姓名
+    //                 (that as any).totalList[i].items[j].unitAddress = that.unitAddress;
+    //               }
+    //             }
+    //           }
+    //         }
+    //         //本地保存
+    //         that.$store.dispatch('total_message', that.totalList);
+    //       }
+    //       that.$router.push({ name: 'linkmanList' });
+    //       resolve();
+    //     })
+    //     .catch(function(error) {
+    //       (that as any).$toast({ message: '保存失败', position: 'bottom', duration: 3000 });
+    //       reject(error);
+    //     });
+    // });
   }
   created(){
     this.$enJsBack(true)//true 为使用h5返回操作 false为使用android原生
