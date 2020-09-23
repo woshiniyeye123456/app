@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <!-- 合并到master -->
+       <!-- 合并到master -->
     <!-- keep-alive 页面缓存组件 -->
     <!--<keep-alive :include="['Sticky', 'Home']">-->
     <router-view></router-view>
