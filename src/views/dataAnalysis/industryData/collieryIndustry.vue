@@ -239,7 +239,6 @@ export default class collieryIndustry extends Vue {
     });
     
     Promise.all([p1,p2,p3]).then(function (results) {
-      debugger
         if(results[0]['status']==200){
            _this.drawTopChart(results[0]['data'].data);
         }

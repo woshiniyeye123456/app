@@ -259,7 +259,6 @@ export default class enterpriseData extends Vue {
     });
     
     Promise.all([p1,p3,p4]).then(function (results) {
-      debugger
         if(results[0]['status']==200){
            _this.drawLine(results[0]['data'].data);
         }

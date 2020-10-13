@@ -100,7 +100,6 @@ export default class nonCoalMine extends Vue {
       industryData
         .industryMiddleTypeData(parma)
         .then(function(response) {
-          debugger
           resolve(response)
         })
         .catch(function(error) {
@@ -120,7 +119,6 @@ export default class nonCoalMine extends Vue {
     });
     
     Promise.all([p1,p2,p3]).then(function (results) {
-      debugger
         if(results[0]['status']==200){
            _this.drawTopChart(results[0]['data'].data);
         }

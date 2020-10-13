@@ -177,7 +177,6 @@ export default class EnterpriseDetails extends Vue {
         .enterpriseDetails(parma)
         .then(function(response) {
           if (response.data.data) {
-            debugger
             console.log(response.data.data);
             that.listArr = response.data.data;
             console.warn("listArr",that.listArr)
