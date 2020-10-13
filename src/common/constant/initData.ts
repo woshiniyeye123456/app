@@ -125,30 +125,32 @@ let resultStr = {
 export const initData = (callback) => {
   console.log("init data user==================================")
   console.log("isandroid==>"+isAndroid_ios())
-  if(isAndroid_ios()){
-    window['gsmdp'].getStorage({
-        key: 'store',
-        success(res) {
-          console.log('store==android====>');
-          console.log(JSON.stringify(res.data));
-          if(res.data){
-            let resultObj=JSON.parse(res.data);
-            //window['gsmdp'].showToast(res.data);
-            callback(resultObj)
-          }else{
-            window['gsmdp'].showToast({title: '用户信息已过期请重新登录！'})
-            window['app'].exit();
-          }
-        }
-      });
-  }else{
+//   if(isAndroid_ios()){
+//     window['gsmdp'].getStorage({
+//         key: 'store',
+//         success(res) {
+//           console.log('store==android====>');
+//           console.log(JSON.stringify(res.data));
+//           if(res.data){
+//             let resultObj=JSON.parse(res.data);
+//             //window['gsmdp'].showToast(res.data);
+//             callback(resultObj)
+//           }else{
+//             window['gsmdp'].showToast({title: '用户信息已过期请重新登录！'})
+//             window['app'].exit();
+//           }
+//         }
+//       });
+//   }else{
+//     console.log(" console.log('store==ios====>');")
+//     callback(resultStr);
+//     //return resultStr
+//     // callback=()=>{
+//     //     console.log("1111111111111111122222222222222")
+//     //   return resultStr;
+//     // }
+//   }
     console.log(" console.log('store==ios====>');")
     callback(resultStr);
-    //return resultStr
-    // callback=()=>{
-    //     console.log("1111111111111111122222222222222")
-    //   return resultStr;
-    // }
-  }
 };
 
