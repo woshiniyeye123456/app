@@ -259,26 +259,42 @@ export default class enterpriseData extends Vue {
     });
     
     Promise.all([p1,p3,p4]).then(function (results) {
-        if(results[0]['status']==200){
-           _this.drawLine(results[0]['data'].data);
-        }
-        if(results[1]['status']==200){
-          _this.drawPie(results[1]['data'].data);
-        }
-        if(results[2]['status']==200){
-            _this.data=results[2]['data'].data;
-            console.log(_this.data)
-            console.log("enterpriseTopTypeData",results[2]['data'])
-        }
-        // if(results[2]['status']==200){
-        //   _this.drawBottomChart(results[2]['data'].data);
-        // }
-        console.log("getlineMonitorStatistics==>",results)
+      // 原来代码
+      // if(results[0]['status']==200){
+      //    _this.drawLine(results[0]['data'].data);
+      // }
+      // if(results[1]['status']==200){
+      //   _this.drawPie(results[1]['data'].data);
+      // }
+      // if(results[2]['status']==200){
+      //     _this.data=results[2]['data'].data;
+      //     console.log(_this.data)
+      //     console.log("enterpriseTopTypeData",results[2]['data'])
+      // }
+
+      if(results[0]['status']==200){
+          if(_this.cur === 0) {
+            _this.drawLine(results[1]['data'].data.getEnterpriseAlarmNumStatistics[2].data[0]);
+          } else if (_this.cur === 1) {
+            _this.drawLine(results[1]['data'].data.getEnterpriseAlarmNumStatistics[1].data);
+          } else {
+            _this.drawLine(results[1]['data'].data.getEnterpriseAlarmNumStatistics[0].data);
+          }
+      }
+
+      if(results[2]['status']==200){
+        _this.drawPie(results[2]['data'].data.getEnterpriseAlarmTypeStatistics[0].data);
+      }
+
+      // if(results[2]['status']==200){
+      //   _this.drawBottomChart(results[2]['data'].data);
+      // }
+      console.log("getlineMonitorStatistics==>",results)
         
-      }).catch(function (status) {
+    }).catch(function (status) {
+      
         
-         
-      });
+    });
 
   }
   findLiWith(value){

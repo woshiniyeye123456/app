@@ -61,8 +61,8 @@ const industryLifeWarnTypeData = (data) => {
 const industryTopTypeData = (data) => {
     return axios({
         method: 'get',
-        url: window['g'].IP  + 'hbjc/mobile/getEnterpriseAlarmNumStatistics.mvc'+jsonjoin(data),
-        // url: 'http://localhost:8080/json/dataAnalysis/industrydata.json',
+        // url: window['g'].IP  + 'hbjc/mobile/getEnterpriseAlarmNumStatistics.mvc'+jsonjoin(data),
+        url: 'http://localhost:8080/json/dataAnalysis/industrydata.json',
     })
 }
 //行业数据企业报警统计
@@ -77,8 +77,8 @@ const industryMiddleTypeData = (data) => {
 const industrybottomTypeData = (data) => {
     return axios({
         method: 'get',
-        url: window['g'].IP  + 'hbjc/mobile/getEnterpriseAlarmTypeStatistics.mvc'+jsonjoin(data),
-        // url: 'http://localhost:8080/json/dataAnalysis/industrydata.json',
+        // url: window['g'].IP  + 'hbjc/mobile/getEnterpriseAlarmTypeStatistics.mvc'+jsonjoin(data),
+        url: 'http://localhost:8080/json/dataAnalysis/industrydata.json',
     })
 }
 //企业数据 统计头

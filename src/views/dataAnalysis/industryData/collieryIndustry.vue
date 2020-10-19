@@ -240,14 +240,30 @@ export default class collieryIndustry extends Vue {
     
     Promise.all([p1,p2,p3]).then(function (results) {
         if(results[0]['status']==200){
-           _this.drawTopChart(results[0]['data'].data);
+            if(_this.cur === 0) {
+              _this.drawTopChart(results[1]['data'].data.getEnterpriseAlarmNumStatistics[2].data[0]);
+            } else if (_this.cur === 1) {
+              _this.drawTopChart(results[1]['data'].data.getEnterpriseAlarmNumStatistics[1].data);
+            } else {
+              _this.drawTopChart(results[1]['data'].data.getEnterpriseAlarmNumStatistics[0].data);
+            }
         }
         if(results[1]['status']==200){
           _this.drawCenterChart(results[1]['data'].data.getEnterprisePoliceStatistcs);
         }
         if(results[2]['status']==200){
-          _this.drawBottomChart(results[2]['data'].data,results[2]['data'].list);
+          _this.drawBottomChart(results[2]['data'].data.getEnterpriseAlarmTypeStatistics[0].data, results[2]['data'].data.getEnterpriseAlarmTypeStatistics[0].list);
         }
+
+        // if(results[0]['status']==200){
+        //    _this.drawTopChart(results[0]['data'].data);
+        // }
+        // if(results[1]['status']==200){
+        //   _this.drawCenterChart(results[1]['data'].data);
+        // }
+        // if(results[2]['status']==200){
+        //   _this.drawBottomChart(results[2]['data'].data,results[2]['data'].list);
+        // }
         console.log("getLifelineMonitorStatistics==>",results)
         // if(resultsObj==null||resultsObj['status']!=200){
         //   console.log("处理异常");
