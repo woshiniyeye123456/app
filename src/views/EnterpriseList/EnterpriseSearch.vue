@@ -87,6 +87,7 @@
 import enterprise from '../../assets/server/enterprise_index.js';
 import { Vue, Component,Watch} from 'vue-property-decorator';
 import mytitle from "../common/mytitle.vue";
+const enterpriseListData = require('../../../public/json/enterprise/enterpriseList.json');
 
 export default {
   
@@ -159,28 +160,32 @@ export default {
       let parma = {
         keyword: this.value
       };
-      return new Promise(function(resolve, reject) {
-        enterprise
-          .enterpriseNameList(parma)
-          .then(function(response) {
-            if (response.data.data) {
-              console.log(response.data.data);
-              if (response.data.data.enterpriseNameList.length > 0) {
-                that.nameList = response.data.data.enterpriseNameList;
-                that.count = response.data.data.enterpriseNameList.length;
-                that.flag = true;
-                that.flag2 = false;
-              } else {
-                that.flag = false;
-                that.flag2 = true;
-              }
-              resolve();
-            }
-          })
-          .catch(function(error) {
-            reject(error);
-          });
-      });
+      // return new Promise(function(resolve, reject) {
+      //   enterprise
+      //     .enterpriseNameList(parma)
+      //     .then(function(response) {
+      //       if (response.data.data) {
+      //         console.log(response.data.data);
+      //         if (response.data.data.enterpriseNameList.length > 0) {
+      //           that.nameList = response.data.data.enterpriseNameList;
+      //           that.count = response.data.data.enterpriseNameList.length;
+      //           that.flag = true;
+      //           that.flag2 = false;
+      //         } else {
+      //           that.flag = false;
+      //           that.flag2 = true;
+      //         }
+      //         resolve();
+      //       }
+      //     })
+      //     .catch(function(error) {
+      //       reject(error);
+      //     });
+      // });
+      that.nameList = enterpriseListData.data.enterpriseNameList;
+      that.count = enterpriseListData.data.enterpriseNameList.length;
+      that.flag = true;
+      that.flag2 = false;
     },
      // 跳转到详情页
     details(id, code) {

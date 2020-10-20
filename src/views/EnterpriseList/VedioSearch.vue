@@ -85,6 +85,7 @@
 
 <script>
 import enterprise from '../../assets/server/enterprise_index.js';
+const enterpriseListData = require('../../../public/json/enterprise/enterpriseList.json');
 export default {
   name: 'App',
   data() {
@@ -145,26 +146,29 @@ export default {
       let parma = {
         keyword: this.value
       };
-      return new Promise(function(resolve, reject) {
-        enterprise
-          .enterpriseNameList(parma)
-          .then(function(response) {
-            if (response.data.data) {
-              console.log(response.data.data);
-              if (response.data.data.enterpriseNameList.length > 0) {
-                that.nameList = response.data.data.enterpriseNameList;
-                that.count = response.data.data.enterpriseNameList.length;
-                that.flag = true;
-              } else {
-                that.flag = false;
-              }
-              resolve();
-            }
-          })
-          .catch(function(error) {
-            reject(error);
-          });
-      });
+      // return new Promise(function(resolve, reject) {
+      //   enterprise
+      //     .enterpriseNameList(parma)
+      //     .then(function(response) {
+      //       if (response.data.data) {
+      //         console.log(response.data.data);
+      //         if (response.data.data.enterpriseNameList.length > 0) {
+      //           that.nameList = response.data.data.enterpriseNameList;
+      //           that.count = response.data.data.enterpriseNameList.length;
+      //           that.flag = true;
+      //         } else {
+      //           that.flag = false;
+      //         }
+      //         resolve();
+      //       }
+      //     })
+      //     .catch(function(error) {
+      //       reject(error);
+      //     });
+      // });
+      that.nameList = enterpriseListData.data.enterpriseNameList;
+      that.count = enterpriseListData.data.enterpriseNameList.length;
+      that.flag = true;
     },
 
     //详细列表

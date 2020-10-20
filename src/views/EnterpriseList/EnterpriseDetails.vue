@@ -115,6 +115,7 @@
 import enterprise from '../../assets/server/enterprise_index.js';
 import { Vue, Component } from 'vue-property-decorator';
 import mytitle from "../common/mytitle.vue";
+const enterpriseListData = require('../../../public/json/enterprise/enterpriseList.json');
 @Component({
   name: 'EnterpriseDetails',
   components:{mytitle}
@@ -172,21 +173,21 @@ export default class EnterpriseDetails extends Vue {
       industryCode: (this.$route.query as any).industryCode
     };
     console.log(parma);
-    return new Promise(function(resolve, reject) {
-      enterprise
-        .enterpriseDetails(parma)
-        .then(function(response) {
-          if (response.data.data) {
-            console.log(response.data.data);
-            that.listArr = response.data.data;
-            console.warn("listArr",that.listArr)
-            resolve();
-          }
-        })
-        .catch(function(error) {
-          reject(error);
-        });
-    });
+    // return new Promise(function(resolve, reject) {
+    //   enterprise
+    //     .enterpriseDetails(parma)
+    //     .then(function(response) {
+    //       if (response.data.data) {
+    //         console.log(response.data.data);
+    //         that.listArr = response.data.data;
+    //         console.warn("listArr",that.listArr)
+    //         resolve();
+    //       }
+    //     })
+    //     .catch(function(error) {
+    //       reject(error);
+    //     });
+    // });
   }
   private alarm() {
     if ((this.listArr as any).alarmStatus as any) {

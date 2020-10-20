@@ -135,6 +135,7 @@ import { setTimeout } from 'timers';
 import { Vue, Component } from 'vue-property-decorator';
 import enterprise from '../../assets/server/enterprise_index.js';
 import axios from 'axios';
+const enterpriseListData = require('../../../public/json/enterprise/enterpriseList.json');
 
 @Component({
   name: 'EnterpriseList',
@@ -420,102 +421,108 @@ export default class EnterpriseList extends Vue {
       pageSize: 10
     };
     console.log(parma);
-    return new Promise(function(resolve, reject) {
-      enterprise
-        .enterpriseList(parma,that)
-        .then(function(response) {
-          if (response.data) {
-            // console.log(response);
-            if (that.pageNum == 1) {
-              //每次更新筛选数据  置顶
-              that.listArr = [];
-              setTimeout(() => {
-                // that.listArr = response.data.data;
-                that.listArr = response.data.data.getEnterpriseList;
-              }, 100);
-              if (response.data.data.getEnterpriseList.length < 10 &&response.data.data.getEnterpriseList.length > 0) {
-                that.allLoaded = true;
-                that.firstRender = true;
-                that.bottom = false;
-              } else if (response.data.data.getEnterpriseList.length == 0) {
-                that.bottom = false;
-                that.firstRender = false;
-              }
-            } else {
-              that.listArr = [...that.listArr, ...response.data.data.getEnterpriseList];
-              that.firstRender = true;
-            }
-            //模拟数据加载完毕 禁用上拉加载
-            that.allLoaded = response.data.data.getEnterpriseList.length < 10 ? true : false;
-          }
-          // console.log(that.listArr)
-          resolve();
-        })
-        .catch(function(error) {
-          reject(error);
-        });
-    });
+    // return new Promise(function(resolve, reject) {
+    //   enterprise
+    //     .enterpriseList(parma,that)
+    //     .then(function(response) {
+    //       debugger
+    //       if (response.data) {
+    //         // console.log(response);
+    //         if (that.pageNum == 1) {
+    //           //每次更新筛选数据  置顶
+    //           that.listArr = [];
+    //           setTimeout(() => {
+    //             // that.listArr = response.data.data;
+    //             that.listArr = response.data.data.getEnterpriseList;
+    //           }, 100);
+    //           if (response.data.data.getEnterpriseList.length < 10 &&response.data.data.getEnterpriseList.length > 0) {
+    //             that.allLoaded = true;
+    //             that.firstRender = true;
+    //             that.bottom = false;
+    //           } else if (response.data.data.getEnterpriseList.length == 0) {
+    //             that.bottom = false;
+    //             that.firstRender = false;
+    //           }
+    //         } else {
+    //           that.listArr = [...that.listArr, ...response.data.data.getEnterpriseList];
+    //           that.firstRender = true;
+    //         }
+    //         //模拟数据加载完毕 禁用上拉加载
+    //         that.allLoaded = response.data.data.getEnterpriseList.length < 10 ? true : false;
+    //       }
+    //       // console.log(that.listArr)
+    //       resolve();
+    //     })
+    //     .catch(function(error) {
+    //       reject(error);
+    //     });
+    // });
+    
+    that.listArr = enterpriseListData.data.getEnterpriseList;
   }
   // 行政区域
   private interactiveListDistricts() {
     let that = this;
     let parma = {};
-    return new Promise(function(resolve, reject) {
-      enterprise
-        .districts(parma)
-        .then(function(response) {
-          if (response.data.data) {
-            console.log(response);
-            // that.administrativeArr = response.data.data;
-            // 中卫演示数据
-            that.administrativeArr = response.data.data.getDistricts;
-          }
-          resolve();
-        })
-        .catch(function(error) {
-          reject(error);
-        });
-    });
+    // return new Promise(function(resolve, reject) {
+    //   enterprise
+    //     .districts(parma)
+    //     .then(function(response) {
+    //       if (response.data.data) {
+    //         console.log(response);
+    //         // that.administrativeArr = response.data.data;
+    //         // 中卫演示数据
+    //         that.administrativeArr = response.data.data.getDistricts;
+    //       }
+    //       resolve();
+    //     })
+    //     .catch(function(error) {
+    //       reject(error);
+    //     });
+    // });
+    that.administrativeArr = enterpriseListData.data.getDistricts;
   }
   //行业
   private interactiveIndustry() {
     let that = this;
     let parma = {};
-    return new Promise(function(resolve, reject) {
-      enterprise
-        .industry()
-        .then(function(response) {
-          if (response.data.data) {
-            // that.industryArr = response.data.data;
-            // 中卫演示数据
-            that.industryArr = response.data.data.getIndustry;
-          }
-          resolve();
-        })
-        .catch(function(error) {
-          reject(error);
-        });
-    });
+    // return new Promise(function(resolve, reject) {
+    //   enterprise
+    //     .industry()
+    //     .then(function(response) {
+    //       if (response.data.data) {
+    //         // that.industryArr = response.data.data;
+    //         // 中卫演示数据
+    //         that.industryArr = response.data.data.getIndustry;
+    //       }
+    //       resolve();
+    //     })
+    //     .catch(function(error) {
+    //       reject(error);
+    //     });
+    // });
+    that.industryArr = enterpriseListData.data.getIndustry;
   }
   // 企业状态
   private interactiveStatus() {
     let that = this;
     let parma = {};
-    return new Promise(function(resolve, reject) {
-      enterprise
-        .enterpriseStatus()
-        .then(function(response) {
-          if (response.data.data) {
-            // that.statusArr = response.data.data;
-            // 中卫演示数据
-            that.statusArr = response.data.data.getEnterpriseStatus;
-          }
-          resolve();
-        })
-        .catch(function(error) {
-          reject(error);
-        });
-    });
+    // return new Promise(function(resolve, reject) {
+    //   enterprise
+    //     .enterpriseStatus()
+    //     .then(function(response) {
+    //       if (response.data.data) {
+    //         // that.statusArr = response.data.data;
+    //         // 中卫演示数据
+    //         that.statusArr = response.data.data.getEnterpriseStatus;
+    //       }
+    //       resolve();
+    //     })
+    //     .catch(function(error) {
+    //       reject(error);
+    //     });
+    // });
+    that.statusArr = enterpriseListData.data.getEnterpriseStatus;
   }
   // 搜索页
   private search() {

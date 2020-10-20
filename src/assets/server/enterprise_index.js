@@ -13,7 +13,7 @@ const districts = (data) => {
             method: "get",
             // url: window['g'].IP + "hbjc/mobile/enterprise/getDistricts.mvc",
             // 中卫演示数据
-            url: '/json/enterprise/enterpriseList.json',
+            url: './json/enterprise/enterpriseList.json',
             data: qs.stringify(data),
             // params: qs.stringify(data)
         })
@@ -24,7 +24,7 @@ const industry = (data) => {
             method: "get",
             // url: window['g'].IP + "hbjc/mobile/enterprise/getIndustry.mvc",
             // 中卫演示数据
-            url: '/json/enterprise/enterpriseList.json',
+            url: './json/enterprise/enterpriseList.json',
             data: qs.stringify(data),
             // params: qs.stringify(data)
         })
@@ -35,7 +35,7 @@ const enterpriseStatus = (data) => {
             method: "get",
             // url: window['g'].IP + "hbjc/mobile/enterprise/getEnterpriseStatus.mvc",
             // 中卫演示数据
-            url: '/json/enterprise/enterpriseList.json',
+            url: './json/enterprise/enterpriseList.json',
             data: qs.stringify(data),
             // params: qs.stringify(data)
         })
@@ -46,7 +46,7 @@ const enterpriseList = (data,_this) => {
             method: "get",
             // url: window['g'].IP + "hbjc/mobile/enterprise/getEnterpriseList.mvc" + jsonjoin(data),
             // 中卫演示数据
-            url: '/json/enterprise/enterpriseList.json',
+            url: './json/enterprise/enterpriseList.json',
         })
     }
     //企业列表详情页
@@ -60,7 +60,7 @@ const enterpriseNameList = (data) => {
     return axios({
         method: "get",
         // url: window['g'].IP + "hbjc/mobile/enterprise/getEnterpriseNameList.mvc" + jsonjoin(data),
-        url: '/json/enterprise/enterpriseList.json',
+        url: './json/enterprise/enterpriseList.json',
     })
 }
 const enterprise = {
