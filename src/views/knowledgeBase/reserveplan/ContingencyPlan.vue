@@ -112,6 +112,7 @@ import mytitle from "../../common/mytitle.vue";
 //loading效果
 import { Indicator } from 'mint-ui';
 import { Vue, Component } from 'vue-property-decorator';
+const knowledgeData = require('../../../../public/json/contacts/knowledge.json');
 @Component({
   name: 'ContingencyPlan',
   components:{mytitle}
@@ -219,53 +220,56 @@ export default class ContingencyPlan extends Vue {
     // setTimeout(() => {
     //   //页面挂载完毕 模拟数据请求 这里为了方便使用一次性定时器
     // }, 1000);
-    return new Promise(function(resolve, reject) {
-      plan
-        .reserveplan(parma)
-        .then(function(response) {
-          console.log(response.data.data);
-          //解除loading
-          // Indicator.close();
-          if (response.data) {
-            //假接口逻辑
-             that.planlist = response.data.list;
-            //下方真接口逻辑
-            // console.log(response.data.data.list);
-            // if (that.pageNo == 1) {
-            //   //每次更新筛选数据  置顶
-            //   // that.planlist = [];
-            //   that.planlist = [
-            //     response.data.data.list[0],
-            //     response.data.data.list[1],
-            //     response.data.data.list[2],
-            //     response.data.data.list[3]
-            //   ];
-            //   setTimeout(() => {
-            //     that.planlist = response.data.data.list;
-            //     // response.data.data.list.forEach(element => {
-            //     //   that.planlist.push(element);
-            //     //   that.planlist.push(element);
-            //     // });
-            //   }, 100);
-            // } else {
-            //   console.log(that.planlist);
-            //   that.planlist = [...that.planlist, ...response.data.data.list];
-            //   console.log(response.data.data.list);
-            //   // that.firstRender = true;
-            //   that.allLoaded = response.data.data.list.length < 10 ? true : false;
-            // }
-          } else {
-            (that as any).$toast({ message: '暂无更多数据', position: 'bottom', duration: 3000 });
-          }
-          resolve();
-          // that.InitialLoading = true
-        })
-        .catch(function(error) {
-          // Indicator.close();
-          that.planlist = [];
-          reject(error);
-        });
-    });
+    // return new Promise(function(resolve, reject) {
+    //   plan
+    //     .reserveplan(parma)
+    //     .then(function(response) {
+    //       console.log(response.data.data);
+    //       //解除loading
+    //       // Indicator.close();
+    //       if (response.data) {
+    //         //假接口逻辑
+    //          that.planlist = response.data.list;
+    //         //下方真接口逻辑
+    //         // console.log(response.data.data.list);
+    //         // if (that.pageNo == 1) {
+    //         //   //每次更新筛选数据  置顶
+    //         //   // that.planlist = [];
+    //         //   that.planlist = [
+    //         //     response.data.data.list[0],
+    //         //     response.data.data.list[1],
+    //         //     response.data.data.list[2],
+    //         //     response.data.data.list[3]
+    //         //   ];
+    //         //   setTimeout(() => {
+    //         //     that.planlist = response.data.data.list;
+    //         //     // response.data.data.list.forEach(element => {
+    //         //     //   that.planlist.push(element);
+    //         //     //   that.planlist.push(element);
+    //         //     // });
+    //         //   }, 100);
+    //         // } else {
+    //         //   console.log(that.planlist);
+    //         //   that.planlist = [...that.planlist, ...response.data.data.list];
+    //         //   console.log(response.data.data.list);
+    //         //   // that.firstRender = true;
+    //         //   that.allLoaded = response.data.data.list.length < 10 ? true : false;
+    //         // }
+    //       } else {
+    //         (that as any).$toast({ message: '暂无更多数据', position: 'bottom', duration: 3000 });
+    //       }
+    //       resolve();
+    //       // that.InitialLoading = true
+    //     })
+    //     .catch(function(error) {
+    //       // Indicator.close();
+    //       that.planlist = [];
+    //       reject(error);
+    //     });
+    // });
+
+    that.planlist = knowledgeData.list;
+    debugger
   }
   //预案类型
   private plantype() {

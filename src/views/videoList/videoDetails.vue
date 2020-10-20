@@ -87,6 +87,7 @@ import { Vue, Component,Watch } from 'vue-property-decorator';
 import videoMonitor from '../../assets/server/vedioMonitor.js';
 import mytitle from "../common/mytitle.vue";
 import showVideo from './showVideo.vue'
+const videoListData = require('../../../public/json/videoList/videoMonitor.json');
 @Component({
   name: 'EnterpriseVideo',
   components:{mytitle,showVideo}
@@ -173,25 +174,33 @@ export default class EnterpriseVideo extends Vue {
       searchKey:that.inputvalue,
     };
     console.log(parma)
-    return new Promise(function(resolve, reject) {
-      videoMonitor
-        .videoDetails(parma)
-        .then(function(response) {
-          if (response.data.data) {
-              if (that.pageNo == 1) {
-                  that.workArr =response.data.data.getVideoMonitorById;
-                  that.totalAccess= that.workArr.length;
-              } else {
-                that.workArr = [...that.workArr, ...response.data.data.getVideoMonitorById];
-                that.allLoaded = response.data.data.getVideoMonitorById.length < 10 ? true : false;
-              }
-          } 
-        })
-        .catch(function(error) {
-          that.workArr = [];
-          reject(error);
-        });
-    });
+    // return new Promise(function(resolve, reject) {
+    //   videoMonitor
+    //     .videoDetails(parma)
+    //     .then(function(response) {
+    //       if (response.data.data) {
+    //           if (that.pageNo == 1) {
+    //               that.workArr =response.data.data.getVideoMonitorById;
+    //               that.totalAccess= that.workArr.length;
+    //           } else {
+    //             that.workArr = [...that.workArr, ...response.data.data.getVideoMonitorById];
+    //             that.allLoaded = response.data.data.getVideoMonitorById.length < 10 ? true : false;
+    //           }
+    //       } 
+    //     })
+    //     .catch(function(error) {
+    //       that.workArr = [];
+    //       reject(error);
+    //     });
+    // });
+
+    if (that.pageNo == 1) {
+        that.workArr =videoListData.data.getVideoMonitorById;
+        that.totalAccess= that.workArr.length;
+    } else {
+      that.workArr = [...that.workArr, ...videoListData.data.getVideoMonitorById];
+      that.allLoaded = videoListData.data.getVideoMonitorById.length < 10 ? true : false;
+    }
   }
   //时间选择器
   // private showDateTimePicker() {

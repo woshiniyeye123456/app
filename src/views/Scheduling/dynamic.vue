@@ -74,6 +74,7 @@ import onduty from '../../assets/server/onduty.js';
 import Calendar from 'mpvue-calendar';
 import 'mpvue-calendar/src/browser-style.css';
 import { Vue, Component } from 'vue-property-decorator';
+const dutydaylistData = require('../../../public/json/contacts/duty.json');
 @Component({
   name: 'dynamic',
   components: {
@@ -180,23 +181,23 @@ export default class dynamic extends Vue {
       updateTime: '',
       userId: ''
     };
-    return new Promise(function(resolve, reject) {
-      linkmail
-        .getGroup(parma)
-        .then(function(response) {
-          if (response.data.data) {
-            // console.log(response.data.data);
-            that.orgList = that.filterArray(response.data.data.list, '0');
-          } else {
-            (that as any).$toast({ message: '请求数据异常!', position: 'bottom', duration: 3000 });
-          }
-          resolve();
-        })
-        .catch(function(error) {
-          (that as any).$toast({ message: '请求数据异常!', position: 'bottom', duration: 3000 });
-          reject(error);
-        });
-    });
+    // return new Promise(function(resolve, reject) {
+    //   linkmail
+    //     .getGroup(parma)
+    //     .then(function(response) {
+    //       if (response.data.data) {
+    //         // console.log(response.data.data);
+    //         that.orgList = that.filterArray(response.data.data.list, '0');
+    //       } else {
+    //         (that as any).$toast({ message: '请求数据异常!', position: 'bottom', duration: 3000 });
+    //       }
+    //       resolve();
+    //     })
+    //     .catch(function(error) {
+    //       (that as any).$toast({ message: '请求数据异常!', position: 'bottom', duration: 3000 });
+    //       reject(error);
+    //     });
+    // });
   }
 
   private filterArray(data, id) {
@@ -223,23 +224,23 @@ export default class dynamic extends Vue {
   //交互获取当天值班信息
   private currenttime() {
     let that = this;
-    return new Promise(function(resolve, reject) {
-      onduty
-        .currenttime()
-        .then(function(response) {
-          if (response.data.data) {
-            console.log(response.data.data);
-            that.year_mounth = response.data.data.currentTime.split('-')[0] + '-' + response.data.data.currentTime.split('-')[1];
-            that.mounth = response.data.data.currentTime.split('-')[1];
-          } else {
-            // (that as any).$toast({ message: '当天日期获取失败!', position: 'bottom', duration: 3000 });
-          }
-        })
-        .catch(function(error) {
-          // (that as any).$toast({ message: '当天日期获取失败!', position: 'bottom', duration: 3000 });
-          reject(error);
-        });
-    });
+    // return new Promise(function(resolve, reject) {
+    //   onduty
+    //     .currenttime()
+    //     .then(function(response) {
+    //       if (response.data.data) {
+    //         console.log(response.data.data);
+    //         that.year_mounth = response.data.data.currentTime.split('-')[0] + '-' + response.data.data.currentTime.split('-')[1];
+    //         that.mounth = response.data.data.currentTime.split('-')[1];
+    //       } else {
+    //         // (that as any).$toast({ message: '当天日期获取失败!', position: 'bottom', duration: 3000 });
+    //       }
+    //     })
+    //     .catch(function(error) {
+    //       // (that as any).$toast({ message: '当天日期获取失败!', position: 'bottom', duration: 3000 });
+    //       reject(error);
+    //     });
+    // });
   }
   private mounthnamic_list() {
     let that = this;
@@ -250,26 +251,29 @@ export default class dynamic extends Vue {
       "startTime": ""
     };
     console.log(parma);
-    return new Promise(function(resolve, reject) {
-      onduty
-        .dutymounthlist(parma)
-        .then(function(response) {
-          console.log(response);
-          if (response.data.data) {
-            if (response.data.data[0].dutyList) {
-              that.listArr = response.data.data;
-              that.allDuty = response.data.data; 
-              console.log(that.listArr);
-            }
-          } else {
-            that.listArr = [];
-          }
-        })
-        .catch(function(error) {
-          that.listArr = [];
-          reject(error);
-        });
-    });
+    // return new Promise(function(resolve, reject) {
+    //   onduty
+    //     .dutymounthlist(parma)
+    //     .then(function(response) {
+    //       console.log(response);
+    //       if (response.data.data) {
+    //         if (response.data.data[0].dutyList) {
+    //           that.listArr = response.data.data;
+    //           that.allDuty = response.data.data; 
+    //           console.log(that.listArr);
+    //         }
+    //       } else {
+    //         that.listArr = [];
+    //       }
+    //     })
+    //     .catch(function(error) {
+    //       that.listArr = [];
+    //       reject(error);
+    //     });
+    // });
+
+    that.listArr = dutydaylistData.data;
+    that.allDuty = dutydaylistData.data; 
   }
   //取月份数据遍历方法
   private sort(data) {}

@@ -18,7 +18,7 @@
         </div>
       </transition>
 
-      <div class="listTitleBox">
+      <div class="listTitleBox" style="display: none;">
         <span
           v-for="(i,index) in listTitleObj"
           :key="index"
@@ -91,6 +91,8 @@ import enterprise from '../../assets/server/enterprise_index.js';
 import videoMonitor from '../../assets/server/vedioMonitor.js';
 import mytitle from "../common/mytitle.vue";
 import { Vue, Component,Watch} from 'vue-property-decorator';
+const enterpriseListData = require('../../../public/json/enterprise/enterpriseList.json');
+const videoListData = require('../../../public/json/videoList/videoMonitor.json');
 @Component({
   name: 'videoListTitle',
   components:{mytitle}
@@ -184,21 +186,25 @@ export default class videoListTitle extends Vue {
   private interactiveIndustry() {
     let that = this;
     let parma = {};
-    return new Promise(function(resolve, reject) {
-      enterprise
-        .industry()
-        .then(function(response) {
-          if (response.data.data) {
-            console.log(response.data.data);
-            that.listTitleObj = response.data.data;
-            // that.code = response.data.data[0].code;
-          }
-          resolve();
-        })
-        .catch(function(error) {
-          reject(error);
-        });
-    });
+    // return new Promise(function(resolve, reject) {
+    //   enterprise
+    //     .industry()
+    //     .then(function(response) {
+    //       if (response.data.data) {
+    //         console.log(response.data.data);
+    //         that.listTitleObj = response.data.data;
+    //         // that.code = response.data.data[0].code;
+    //       }
+    //       resolve();
+    //     })
+    //     .catch(function(error) {
+    //       reject(error);
+    //     });
+    // });
+
+    that.listTitleObj = enterpriseListData.data.data;
+    console.log(enterpriseListData);
+    debugger
   }
   //视频监控列表
   private videoMonitorLists() {
@@ -214,40 +220,53 @@ export default class videoListTitle extends Vue {
       pageSize: 10
     };
     console.log(parma);
-    return new Promise(function(resolve, reject) {
-      videoMonitor
-        .videoMonitorList(parma)
-        .then(function(response) {
-          if (response.data) {
-            //   let arr = response.data.info;
-            // if (that.pageNo > 1) {
-            //   for (let i = 0; i < 5; i++) {
-            //     response.data.info.push(arr[0]);
-            //   }
-            // } else {
-            //   for (let i = 0; i < 9; i++) {
-            //     response.data.info.push(arr[0]);
-            //   }
-            // }
-            console.log(response);
-            if (that.pageNo == 1) {
-              //每次更新筛选数据  置顶
+    // return new Promise(function(resolve, reject) {
+    //   videoMonitor
+    //     .videoMonitorList(parma)
+    //     .then(function(response) {
+    //       if (response.data) {
+    //         //   let arr = response.data.info;
+    //         // if (that.pageNo > 1) {
+    //         //   for (let i = 0; i < 5; i++) {
+    //         //     response.data.info.push(arr[0]);
+    //         //   }
+    //         // } else {
+    //         //   for (let i = 0; i < 9; i++) {
+    //         //     response.data.info.push(arr[0]);
+    //         //   }
+    //         // }
+    //         console.log(response);
+    //         if (that.pageNo == 1) {
+    //           //每次更新筛选数据  置顶
 
-              that.listData = [response.data.data.info[0], response.data.data.info[1]];
-              setTimeout(() => {
-                that.listData = response.data.data.info;
-              }, 100);
-            } else {
-              that.listData = [...that.listData, ...response.data.data.info];
-              that.allLoaded = response.data.data.info.length < 10 ? true : false;
-            }
-          }
-          resolve();
-        })
-        .catch(function(error) {
-          reject(error);
-        });
-    });
+    //           that.listData = [response.data.data.info[0], response.data.data.info[1]];
+    //           debugger
+    //           setTimeout(() => {
+    //             that.listData = response.data.data.info;
+    //           }, 100);
+    //         } else {
+    //           that.listData = [...that.listData, ...response.data.data.info];
+    //           debugger
+    //           that.allLoaded = response.data.data.info.length < 10 ? true : false;
+    //         }
+    //       }
+    //       resolve();
+    //     })
+    //     .catch(function(error) {
+    //       reject(error);
+    //     });
+    // });
+
+    if (that.pageNo == 1) {
+      //每次更新筛选数据  置顶
+      that.listData = [videoListData.data.info[0], videoListData.data.info[1]];
+      setTimeout(() => {
+        that.listData = videoListData.data.info;
+      }, 100);
+    } else {
+      that.listData = [...that.listData, ...videoListData.data.info];
+      that.allLoaded = videoListData.data.info.length < 10 ? true : false;
+    }
   }
   //阻止浏览器冒泡事件
   private retClick(e) {
@@ -331,10 +350,10 @@ export default class videoListTitle extends Vue {
     }).show();
   }
   private created() {
-    // this.videoMonitorLists();
-    this.interactiveIndustry().then(() => {
-      this.videoMonitorLists();
-    });
+    this.videoMonitorLists();
+    // this.interactiveIndustry().then(() => {
+    //   this.videoMonitorLists();
+    // });
     this.$enJsBack(false)//true 为使用h5返回操作 false为使用android原生
   }
   // 下拉刷新上拉加载

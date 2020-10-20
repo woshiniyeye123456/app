@@ -28,6 +28,7 @@ import PinYin from '../../../utils/linkmanList/cechange.js';
 import { Indicator } from 'mint-ui';
 // ts
 import { Vue, Component } from 'vue-property-decorator';
+const contactListJson = require('../../../../public/json/contacts/contacts.json');
 @Component({
   name: 'linkmanList'
 })
@@ -118,31 +119,33 @@ export default class linkmanList extends Vue {
         "pageSize": 10000,//确保请求全部
         "personJob": ""
       };
-    return new Promise(function(resolve, reject) {
-      linkmail
-        .GetLinkmanList(parma)
-        .then(function(response) {
-          if (response.data) {
-            that.sort(response.data.list);
-          }
-          resolve();
-        })
-        .catch(function(error) {
-          reject(error);
-          //暂停动画效果
-          that.empty = true;
-          Indicator.close();
-        });
-    });
+    // return new Promise(function(resolve, reject) {
+    //   linkmail
+    //     .GetLinkmanList(parma)
+    //     .then(function(response) {
+    //       if (response.data) {
+    //         that.sort(response.data.list);
+    //       }
+    //       resolve();
+    //     })
+    //     .catch(function(error) {
+    //       reject(error);
+    //       //暂停动画效果
+    //       that.empty = true;
+    //       Indicator.close();
+    //     });
+    // });
+
+    that.sort(contactListJson.list);
   }
   private created() {
     if (this.$store.getters.total_message) {
       this.listData = this.$store.getters.total_message;
     } else {
-      Indicator.open({
-        text: '加载中...',
-        spinnerType: 'fading-circle'
-      });
+      // Indicator.open({
+      //   text: '加载中...',
+      //   spinnerType: 'fading-circle'
+      // });
       this.contactData();
     }
     this.$enJsBack(false)//true 为使用h5返回操作 false为使用android原生
