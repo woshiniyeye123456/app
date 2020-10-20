@@ -213,16 +213,16 @@ export default class enterpriseData extends Vue {
     };
     
     //行业数据报警综合统计
-    let p1= new Promise(function(resolve, reject) {
-      industryData
-        .industryTopTypeData(parma)
-        .then(function(response) {
-           resolve(response)
-        })
-        .catch(function(error) {
-          reject(error);
-        });
-    });
+    // let p1= new Promise(function(resolve, reject) {
+    //   industryData
+    //     .industryTopTypeData(parma)
+    //     .then(function(response) {
+    //        resolve(response)
+    //     })
+    //     .catch(function(error) {
+    //       reject(error);
+    //     });
+    // });
     //行业数据企业报警统计
     // let p2 = new Promise(function(resolve, reject) {
     //   industryData
@@ -235,66 +235,82 @@ export default class enterpriseData extends Vue {
     //     });
     // });
     //行业数据企业类型报警统计
-    let p3 = new Promise(function(resolve, reject) {
-      industryData
-        .industrybottomTypeData(parma)
-        .then(function(response) {
-          resolve(response)
-        })
-        .catch(function(error) {
-          reject(error);
-        });
-    });
-    let parmadata={"maxMenuCode":"1","TabCode":"03","enterpId":_this.enterpId}
-    let p4 = new Promise(function(resolve, reject) {
-      industryData
-        .enterpriseTopTypeData(parmadata)
-        .then(function(response) {
-          resolve(response)
+    // let p3 = new Promise(function(resolve, reject) {
+    //   industryData
+    //     .industrybottomTypeData(parma)
+    //     .then(function(response) {
+    //       resolve(response)
+    //     })
+    //     .catch(function(error) {
+    //       reject(error);
+    //     });
+    // });
+    // let parmadata={"maxMenuCode":"1","TabCode":"03","enterpId":_this.enterpId}
+    // let p4 = new Promise(function(resolve, reject) {
+    //   industryData
+    //     .enterpriseTopTypeData(parmadata)
+    //     .then(function(response) {
+    //       resolve(response)
           
-        })
-        .catch(function(error) {
-          console.log("request error")
-        });
-    });
+    //     })
+    //     .catch(function(error) {
+    //       console.log("request error")
+    //     });
+    // });
     
-    Promise.all([p1,p3,p4]).then(function (results) {
-      // 原来代码
-      // if(results[0]['status']==200){
-      //    _this.drawLine(results[0]['data'].data);
-      // }
-      // if(results[1]['status']==200){
-      //   _this.drawPie(results[1]['data'].data);
-      // }
-      // if(results[2]['status']==200){
-      //     _this.data=results[2]['data'].data;
-      //     console.log(_this.data)
-      //     console.log("enterpriseTopTypeData",results[2]['data'])
-      // }
+    // Promise.all([p1,p3,p4]).then(function (results) {
+    //   // 原来代码
+    //   // if(results[0]['status']==200){
+    //   //    _this.drawLine(results[0]['data'].data);
+    //   // }
+    //   // if(results[1]['status']==200){
+    //   //   _this.drawPie(results[1]['data'].data);
+    //   // }
+    //   // if(results[2]['status']==200){
+    //   //     _this.data=results[2]['data'].data;
+    //   //     console.log(_this.data)
+    //   //     console.log("enterpriseTopTypeData",results[2]['data'])
+    //   // }
 
-      if(results[0]['status']==200){
-          if(_this.cur === 0) {
-            _this.drawLine(results[1]['data'].data.getEnterpriseAlarmNumStatistics[2].data[0]);
-          } else if (_this.cur === 1) {
-            _this.drawLine(results[1]['data'].data.getEnterpriseAlarmNumStatistics[1].data);
-          } else {
-            _this.drawLine(results[1]['data'].data.getEnterpriseAlarmNumStatistics[0].data);
-          }
-      }
+    //   if(results[0]['status']==200){
+    //       if(_this.cur === 0) {
+    //         _this.drawLine(results[1]['data'].data.getEnterpriseAlarmNumStatistics[2].data[0]);
+    //       } else if (_this.cur === 1) {
+    //         _this.drawLine(results[1]['data'].data.getEnterpriseAlarmNumStatistics[1].data);
+    //       } else {
+    //         _this.drawLine(results[1]['data'].data.getEnterpriseAlarmNumStatistics[0].data);
+    //       }
+    //   }
 
-      if(results[2]['status']==200){
-        _this.drawPie(results[2]['data'].data.getEnterpriseAlarmTypeStatistics[0].data);
-      }
+    //   if(results[2]['status']==200){
+    //     _this.drawPie(results[2]['data'].data.getEnterpriseAlarmTypeStatistics[0].data);
+    //   }
 
-      // if(results[2]['status']==200){
-      //   _this.drawBottomChart(results[2]['data'].data);
-      // }
-      console.log("getlineMonitorStatistics==>",results)
+    //   // if(results[2]['status']==200){
+    //   //   _this.drawBottomChart(results[2]['data'].data);
+    //   // }
+    //   console.log("getlineMonitorStatistics==>",results)
         
-    }).catch(function (status) {
+    // }).catch(function (status) {
       
         
-    });
+    // });
+
+    // 为中卫系统做演示数据调取本地数据
+    const industryDataJson = require('../../../public/json/dataAnalysis/industrydata.json');
+
+    setTimeout(() => {
+      if(_this.cur === 0) {
+        _this.drawLine(industryDataJson.data.getEnterpriseAlarmNumStatistics[2].data[0]);
+      } else if (_this.cur === 1) {
+        _this.drawLine(industryDataJson.data.getEnterpriseAlarmNumStatistics[1].data);
+      } else {
+        _this.drawLine(industryDataJson.data.getEnterpriseAlarmNumStatistics[0].data);
+      }
+
+      _this.drawPie(industryDataJson.data.getEnterpriseAlarmTypeStatistics[0].data);
+    },500)
+    
 
   }
   findLiWith(value){

@@ -66,6 +66,7 @@
 import * as echarts from 'echarts';
 import industryData  from '../../../assets/server/industrydata.js';
 import { Vue, Component } from 'vue-property-decorator';
+const industryDataJson = require('../../../../public/json/dataAnalysis/industrydata.json');
 @Component({
   name: 'collieryIndustry'
 })
@@ -205,82 +206,100 @@ export default class collieryIndustry extends Vue {
       dateType:_day
     };
     //行业数据报警综合统计
-    let p1= new Promise(function(resolve, reject) {
-      industryData
-        .industryTopTypeData(parma)
-        .then(function(response) {
-           resolve(response)
-        })
-        .catch(function(error) {
-          reject(error);
-        });
-    });
-    //行业数据企业报警统计
-    let p2 = new Promise(function(resolve, reject) {
-      industryData
-        .industryMiddleTypeData(parma)
-        .then(function(response) {
-          resolve(response)
-        })
-        .catch(function(error) {
-          reject(error);
-        });
-    });
-    //行业数据企业类型报警统计
-    let p3 = new Promise(function(resolve, reject) {
-      industryData
-        .industrybottomTypeData(parma)
-        .then(function(response) {
-          resolve(response)
-        })
-        .catch(function(error) {
-          reject(error);
-        });
-    });
+    // let p1= new Promise(function(resolve, reject) {
+    //   industryData
+    //     .industryTopTypeData(parma)
+    //     .then(function(response) {
+    //        resolve(response)
+    //     })
+    //     .catch(function(error) {
+    //       reject(error);
+    //     });
+    // });
+    // //行业数据企业报警统计
+    // let p2 = new Promise(function(resolve, reject) {
+    //   industryData
+    //     .industryMiddleTypeData(parma)
+    //     .then(function(response) {
+    //       resolve(response)
+    //     })
+    //     .catch(function(error) {
+    //       reject(error);
+    //     });
+    // });
+    // //行业数据企业类型报警统计
+    // let p3 = new Promise(function(resolve, reject) {
+    //   industryData
+    //     .industrybottomTypeData(parma)
+    //     .then(function(response) {
+    //       resolve(response)
+    //     })
+    //     .catch(function(error) {
+    //       reject(error);
+    //     });
+    // });
     
-    Promise.all([p1,p2,p3]).then(function (results) {
-        if(results[0]['status']==200){
-            if(_this.cur === 0) {
-              _this.drawTopChart(results[1]['data'].data.getEnterpriseAlarmNumStatistics[2].data[0]);
-            } else if (_this.cur === 1) {
-              _this.drawTopChart(results[1]['data'].data.getEnterpriseAlarmNumStatistics[1].data);
-            } else {
-              _this.drawTopChart(results[1]['data'].data.getEnterpriseAlarmNumStatistics[0].data);
-            }
-        }
-        if(results[1]['status']==200){
-          _this.drawCenterChart(results[1]['data'].data.getEnterprisePoliceStatistcs);
-        }
-        if(results[2]['status']==200){
-          _this.drawBottomChart(results[2]['data'].data.getEnterpriseAlarmTypeStatistics[0].data, results[2]['data'].data.getEnterpriseAlarmTypeStatistics[0].list);
-        }
+    // Promise.all([p1,p2,p3]).then(function (results) {
+    //     if(results[0]['status']==200){
+    //       debugger
+    //       console.log(industryDataJson);
+    //       if(_this.cur === 0) {
+    //         _this.drawTopChart(industryDataJson.data.getEnterpriseAlarmNumStatistics[2].data[0]);
+    //       } else if (_this.cur === 1) {
+    //         _this.drawTopChart(industryDataJson.data.getEnterpriseAlarmNumStatistics[1].data);
+    //       } else {
+    //         _this.drawTopChart(industryDataJson.data.getEnterpriseAlarmNumStatistics[0].data);
+    //       }
+    //     }
+    //     if(results[1]['status']==200){
+    //       debugger
+    //       _this.drawCenterChart(industryDataJson.data.getEnterprisePoliceStatistcs);
+    //     }
+    //     if(results[2]['status']==200){
+    //       debugger
+    //       _this.drawBottomChart(industryDataJson.data.getEnterpriseAlarmTypeStatistics[0].data, industryDataJson.data.getEnterpriseAlarmTypeStatistics[0].list);
+    //     }
 
-        // if(results[0]['status']==200){
-        //    _this.drawTopChart(results[0]['data'].data);
-        // }
-        // if(results[1]['status']==200){
-        //   _this.drawCenterChart(results[1]['data'].data);
-        // }
-        // if(results[2]['status']==200){
-        //   _this.drawBottomChart(results[2]['data'].data,results[2]['data'].list);
-        // }
-        console.log("getLifelineMonitorStatistics==>",results)
-        // if(resultsObj==null||resultsObj['status']!=200){
-        //   console.log("处理异常");
-        // }else{
-        //   console.log("data==>",resultsObj['data'])
-        //   let dataObj=resultsObj['data'].data;
-        //   console.log(dataObj)
-        //   _this.drawTopList=dataObj.dateAlarm;
-        //   _this.drawTopChart();
+    //     // if(results[0]['status']==200){
+    //     //    _this.drawTopChart(results[0]['data'].data);
+    //     // }
+    //     // if(results[1]['status']==200){
+    //     //   _this.drawCenterChart(results[1]['data'].data);
+    //     // }
+    //     // if(results[2]['status']==200){
+    //     //   _this.drawBottomChart(results[2]['data'].data,results[2]['data'].list);
+    //     // }
+    //     console.log("getLifelineMonitorStatistics==>",results)
+    //     // if(resultsObj==null||resultsObj['status']!=200){
+    //     //   console.log("处理异常");
+    //     // }else{
+    //     //   console.log("data==>",resultsObj['data'])
+    //     //   let dataObj=resultsObj['data'].data;
+    //     //   console.log(dataObj)
+    //     //   _this.drawTopList=dataObj.dateAlarm;
+    //     //   _this.drawTopChart();
           
-        //   _this.drawCenterChart();
-        //   _this.drawBottomChart();
-        // }
-      }).catch(function (status) {
+    //     //   _this.drawCenterChart();
+    //     //   _this.drawBottomChart();
+    //     // }
+    //   }).catch(function (status) {
         
          
-      });
+    //   });
+
+    // 为了中卫演示系统调取本地数据
+    setTimeout(() => {
+      console.log(industryDataJson);
+      if(_this.cur === 0) {
+        _this.drawTopChart(industryDataJson.data.getEnterpriseAlarmNumStatistics[2].data[0]);
+      } else if (_this.cur === 1) {
+        _this.drawTopChart(industryDataJson.data.getEnterpriseAlarmNumStatistics[1].data);
+      } else {
+        _this.drawTopChart(industryDataJson.data.getEnterpriseAlarmNumStatistics[0].data);
+      }
+      _this.drawCenterChart(industryDataJson.data.getEnterprisePoliceStatistcs);
+      _this.drawBottomChart(industryDataJson.data.getEnterpriseAlarmTypeStatistics[0].data, industryDataJson.data.getEnterpriseAlarmTypeStatistics[0].list);
+    },500)
 
   }
   
