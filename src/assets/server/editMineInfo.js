@@ -17,7 +17,7 @@ const getMineInfo = (data) => {
         method: 'post',
         // url: window['g'].IP + 'gemp-user/api/gemp/user/baseuser/id/v1',
         // 中卫演示数据
-        url: 'http://localhost:8080/json/information/editMineInfo.json',
+        url: '/json/information/editMineInfo.json',
         headers:{'token':token},
         data: data
     })
@@ -29,7 +29,7 @@ const editMineInfo = (data) => {
         method: 'post',
         // url: window['g'].IP  + 'gemp-user/api/user/manage/modify/v1',
         // 中卫演示数据
-        url: 'http://localhost:8080/json/information/editMineInfo.json',
+        url: '/json/information/editMineInfo.json',
         headers:{'token':token},
         data:data
     })
