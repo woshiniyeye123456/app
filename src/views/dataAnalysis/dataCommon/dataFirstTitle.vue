@@ -73,12 +73,8 @@ export default class firstTitle extends Vue {
   }
   private GoBack(){
     let _this=this;    
-    console.log("go back")
-    if(_this.$isAndroid()){
-       window['app'].closePage()
-    }else{
-      _this.$router.push("/")
-    }
+    console.log("go back");
+    _this.$router.push("/");
   }
 }
 </script>

@@ -164,13 +164,8 @@ export default class videoListTitle extends Vue {
   }
   GoBack(){
       let _this=this;    
-      console.log("go back")
-      if(_this.$isAndroid()){
-        //关闭webview
-        window['app'].close()
-      }else{
-        _this.$router.go(-1)
-      }
+      console.log("go back");
+      _this.$router.go(-1);
       
       //_this.$isAndroid()
     }
@@ -196,7 +191,7 @@ export default class videoListTitle extends Vue {
           if (response.data.data) {
             console.log(response.data.data);
             that.listTitleObj = response.data.data;
-            that.code = response.data.data[0].code;
+            // that.code = response.data.data[0].code;
           }
           resolve();
         })

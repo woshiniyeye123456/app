@@ -26,21 +26,7 @@ export default {
       if(_this.isNotRoute){
         _this.$emit("close")
       }else{
-        
-        if(_this.$isAndroid()){
-          if(this.whetherNotParent){
-            // window['dsBridge'].register('GoBack', function (ret) {
-            //   return useHtml;
-            // })
-            //alert("close")
-            window['app'].closePage()
-          }else{
-             _this.$router.go(-1)
-          }
-        }else{
-           _this.$router.go(-1)
-        }
-        
+        _this.$router.go(-1)
       }
       //_this.$isAndroid()
     },
