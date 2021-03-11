@@ -1,7 +1,7 @@
 <template>
   <div class="index-list-top">
       <span @click="goback" class="cubeic-back"></span>
-      <p class="desc">{{title}}</p>
+      <p class="desc">修改{{title}}</p>
     </div>
 </template>
 <script lang="ts">
